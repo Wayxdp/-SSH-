@@ -1,0 +1,64 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: liu
+  Date: 2017/8/31
+  Time: 8:51
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/css/zhang/main.css" rel="stylesheet" />
+</head>
+<body>
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,  <!--是否支持多选-->
+        collapsible:true,   <!--是否可以查询-->
+        rownumbers:true,    <!--是否显示行数-->
+        pagination:true,    <!--是否标记页码-->
+        pageSize:20,        <!--分页的大小-->
+        toolbar:'#tb',      <!--工具栏-->
+        url:'<%=path %>/user/pagerUser',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id',width:60,checkbox:true">用户id</th>
+        <th data-options="field:'email'">用户邮箱</th>
+        <th data-options="field:'phone',align:'right'">用户手机</th>
+        <th data-options="field:'qq',align:'right'">用户QQ</th>
+        <th data-options="field:'wechat',align:'center'">用户微信</th>
+        <th data-options="field:'gender',align:'center'">用户性别</th>
+        <th data-options="field:'birthday',align:'center',formatter:formatDate">用户生日</th>
+        <th data-options="field:'nickname',align:'center'">用户昵称</th>
+        <th data-options="field:'name',align:'center'">用户姓名</th>
+        <th data-options="field:'headicon',align:'center'">用户头像</th>
+        <th data-options="field:'status',align:'center',formatter:formatStatus">是否可用</th>
+    </tr>
+    </thead>
+
+    <div id="tb">
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validUser(0);">冻结用户</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validUser(1);">激活用户</a>
+    </div>
+
+</table>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path %>/public/js/liu/user.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</body>
+</html>

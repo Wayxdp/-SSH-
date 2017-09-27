@@ -1,0 +1,166 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Article;
+import com.ht.bean.ArticleType;
+import com.ht.bean.Customer;
+import com.ht.common.ControllerResult;
+import com.ht.common.FileUtil;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.ArticleService;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/29.
+ */
+public class ArticleController extends AppController {
+    private Article article; // getter setter
+
+    private ArticleService articleService;
+    private ArticleType articleType;
+    private Short status;
+    private String typeId;
+    private String id;
+    private File logo;
+    private String logoFileName;
+    private Integer page;
+
+    private ControllerResult controllerResult;
+    private List<Article> rows;
+    private Integer total;
+
+
+    //文章添加
+    public String saveArticle(){
+        System.out.println(typeId);
+        try {
+            if (logoFileName!=null) {
+                article.setLogo(FileUtil.PATH + "/" + logoFileName);
+            }
+            ArticleType articleType = new ArticleType();
+            articleType.setId(typeId);
+            article.setArticleType(articleType);
+            articleService.save(article);
+            controllerResult = ControllerResult.getSuccessResult("添加活动成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加活动失败！");
+        }
+        articleService.save(article);
+        return "saveArticle";
+    }
+    //文章修改
+    public String updateArticle(){
+        try{
+            System.out.println(article);
+            articleService.update(article);
+            controllerResult = ControllerResult.getSuccessResult("修改文章成功");
+        }catch (Exception e){
+            controllerResult = ControllerResult.getFailResult("修改文章失败");
+        }
+        return SUCCESS;
+    }
+    //文章冻结/激活
+    public String statusArticle(){
+
+        if(status == 1){
+            controllerResult = ControllerResult.getSuccessResult("激活成功");
+            System.out.println("激活成功");
+        }else if(status==0){
+            controllerResult = ControllerResult.getSuccessResult("冻结成功");
+            System.out.println("冻结成功");
+        }
+        articleService.updateStatus(id,status);
+        return SUCCESS;
+    }
+
+    //文章分页查看
+    public String pagerArticle(){
+        int pageSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Article> pager = new Pager<Article>();
+        pager.setPageSize(pageSize);
+        pager.setPage(page);
+        pager = articleService.listPager(pager);
+        rows = pager.getResult();
+        total = articleService.count(pager).intValue();
+        return SUCCESS;
+    }
+//liu 管理员查看单篇文章详情
+    public String adminArticleDetail(){
+        if (id!=null){
+            article = articleService.foundById(id);
+        }
+        return "adminArticleDetail";
+    }
+    //打开文章修改的页面
+    public String adminArticleEdit(){
+        article = articleService.foundById(id);
+        return "adminArticleEdit";
+    }
+    //图片的上传和更新
+    public String articleImg(){
+        if (logo != null) {
+            try {
+                FileUtils.copyFile(logo, new File(FileUtil.upload() + File.separator + logoFileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "articleImg";
+    }
+    public Article getArticle() {
+        return article;
+    }
+
+    public void setArticle(Article article) {
+        this.article = article;
+    }
+
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    public void setArticleType(ArticleType articleType) {
+        this.articleType = articleType;
+    }
+
+    public void setTypeId(String typeId) {
+        this.typeId = typeId;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setLogo(File logo) {
+        this.logo = logo;
+    }
+
+    public void setLogoFileName(String logoFileName) {
+        this.logoFileName = logoFileName;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public List<Article> getRows() {
+        return rows;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+}

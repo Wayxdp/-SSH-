@@ -1,0 +1,79 @@
+package com.ht.controller;
+
+import com.ht.bean.Agency;
+import com.ht.bean.Customer;
+import com.ht.bean.Employee;
+import com.ht.common.Constants;
+import com.ht.service.CustomerService;
+
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+
+public class EmployeeController extends AppController {
+
+    private CustomerService customerService;
+
+    //员工添加客户
+    public String addCustomer(){
+        Agency agency = new Agency();
+        agency.setId("94a7fc4ce3e54230b15c85fefcc76dcd");
+        Employee employee = new Employee();//员工
+        employee.setId("96f02910cfa848c69b333d2a15a83e1e");
+        Customer customer = new Customer();
+        customer.setName("客户01");
+        customer.setGender("男");
+        customer.setBirthday(Calendar.getInstance().getTime());
+        customer.setEmail("abc@qq.com");
+        customer.setAddress("赣州市章贡区沙石镇赣州技师学院");
+        customer.setIdentity_id("360726201701012333");
+        customer.setPhone("12345678801");
+        customer.setCustomer_type("购房客户");
+        customer.setTogether("zhangsan,lisi");//共同购房人
+        customer.setContract("src/doc/path");//电子版购房合同路径
+        customer.setArchives("src/zip/path");//zip合同路径
+        customer.setStatus(Constants.YES_STATUS);
+        customer.setCreated_time(Calendar.getInstance().getTime());
+        customer.setAgency(agency);
+        customer.setEmployee(employee);
+        Set<Customer> customers = new HashSet<Customer>();
+        employee.setCustomers(customers);
+        agency.setCustomers(customers);
+        customerService.save(customer);
+        return SUCCESS;
+    }
+
+    //员工修改客户资料
+    public String updateCustomer(){
+        Agency agency = new Agency();
+        agency.setId("94a7fc4ce3e54230b15c85fefcc76dcd");
+        Employee employee = new Employee();//员工
+        employee.setId("96f02910cfa848c69b333d2a15a83e1e");
+        Customer customer = new Customer();
+        customer.setId("402880fa5e1c9145015e1c918f7a0000");
+        customer.setName("客户02");
+        customer.setGender("女");
+        customer.setBirthday(Calendar.getInstance().getTime());
+        customer.setEmail("abc@qq.com");
+        customer.setAddress("赣州市章贡区沙石镇赣州技师学院");
+        customer.setIdentity_id("360726201701012333");
+        customer.setPhone("12345678801");
+        customer.setCustomer_type("预约客户");
+        customer.setTogether("zhangsan,lisi");//共同购房人
+        customer.setContract("src/doc/path");//电子版购房合同路径
+        customer.setArchives("src/zip/path");//zip合同路径
+        customer.setStatus(Constants.NO_STATUS);
+        customer.setCreated_time(Calendar.getInstance().getTime());
+        customer.setEmployee(employee);
+        customer.setAgency(agency);
+        Set<Customer> customers = new HashSet<Customer>();
+        employee.setCustomers(customers);
+        agency.setCustomers(customers);
+        customerService.update(customer);
+        return SUCCESS;
+    }
+
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+}

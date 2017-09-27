@@ -1,0 +1,24 @@
+var canAlter = false;
+function  showEditWin(javaObject, objStrNum) {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        var inputs = $("input");
+        for (var i = 0, len = inputs.length; i < len; i++) {
+            var input = $(inputs[i]);
+            var name = input.attr("name");
+            if (name != undefined) {
+                if (canAlter) {
+                    input.attr("name", name.substr(objStrNum));
+                }
+            }
+        }
+        $("#form").form("load", row);
+        for (var i = 0, len = inputs.length; i < len; i++) {
+            var input = $(inputs[i]);
+            var name = input.attr("name");
+            input.attr("name", javaObject + name);
+        }
+        canAlter = true;
+        openWin("win");
+    }
+}

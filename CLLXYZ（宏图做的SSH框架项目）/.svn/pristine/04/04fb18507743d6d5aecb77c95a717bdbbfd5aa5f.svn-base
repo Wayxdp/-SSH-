@@ -1,0 +1,194 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/4
+  Time: 11:17
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+</head>
+<body>
+<div class="col-lg-12">
+
+    <form class="form-horizontal" id="detailForm">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">名称</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.name} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">区域</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.area} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">地址</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.address} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">占地面积</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.floor_area} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">建筑面积</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.building_area} />
+            </div>
+        </div><div class="form-group">
+            <label class="col-sm-2 control-label">住房类型</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.house_type} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">建筑类型</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                           data-options="required:true, novalidate:true" value=${requestScope.buildings.building_type} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">平均价格</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.avg_price} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开发公司</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.company} />
+            </div>
+        </div><div class="form-group">
+            <label class="col-sm-2 control-label">开盘时间</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.open_date} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">总房间数</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.total_rooms} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">接待地址</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.reception_address} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">售楼电话</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.tel} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">绿化率</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.green_ratio} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">容积率</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.plot_ratio} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">物业公司</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.property_company} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">物业费</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.property_fee} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">车位数</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.car_station} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">交通状况</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.traffic} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">楼盘封面</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.logo} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">简介</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.intro} />
+            </div>
+        </div><div class="form-group">
+            <label class="col-sm-2 control-label">创建时间</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.buildings.created_time} />
+            </div>
+        </div>
+        <%--<div class="form-group">--%>
+            <%--<label class="col-sm-2 control-label">所属经销商</label>--%>
+            <%--<div class="col-sm-6">--%>
+                <%--<input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"--%>
+                       <%--data-options="required:true, novalidate:true" value=${requestScope.buildings.} />--%>
+            <%--</div>--%>
+        <%--</div>--%>
+    </form>
+</div>
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</body>
+</html>

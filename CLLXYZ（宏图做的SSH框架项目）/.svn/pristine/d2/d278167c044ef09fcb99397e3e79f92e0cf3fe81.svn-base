@@ -1,0 +1,95 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/7
+  Time: 20:16
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>文章添加</title>
+    <link rel="stylesheet" href="<%=path%>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/css/fileinput.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/themes/explorer/theme.css"/>
+</head>
+<body>
+<div class="col-lg-12" style="margin-top: 30px;margin-bottom: 300px;">
+    <form class="form-horizontal" id="addForm">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文章标题</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control   easyui-textbox"
+                       data-options="required:true, novalidate:true" name="article.title"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文章详情</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control  easyui-textbox"
+                       data-options="required:true, novalidate:true" name="article.abstract"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文章内容</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control   easyui-textbox" name="article.content"
+                       data-options="required:true, novalidate:true"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">创建时间</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control  easyui-datebox" name="article.create_time"
+                       data-options="required:true, novalidate:true"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">文章类型</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control  easyui-textbox" name="article.type_id"
+                       data-options="required:true, novalidate:true"  />
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="article_image" class="col-sm-2 control-label">文章图片</label>
+            <div class="col-sm-6" style="height: 290px;">
+                <input type="file" multiple class="form-control file-preview" id="article_image" name="logo"
+                       data-overwrite-initial="false" data-max-file-count="1" placeholder="文章图片" style="height: 200px;width:auto;">
+            </div>
+        </div>
+
+        <div  style="margin-right: auto;margin-left: auto;margin-top: 80px;">
+            <a class="btn btn-primary btn-lg" href="javascript:void(0);" onclick="addArticle();">添加</a>
+        </div>
+    </form>
+</div>
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path%>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/themes/fa/theme.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/js/fileinput.js"></script>
+<script src="<%=path%>/public/js/liu/article.js"></script>
+<script>
+    $("#article_image").fileinput({
+        language: 'zh',
+        uploadUrl: '/article/articleImg', // you must set a valid URL here else you will get an error
+        allowedFileExtensions: ['jpg', 'png', 'gif','mp4','txt'],   //文件格式
+        overwriteInitial: false,  // 覆盖初始的选中文件
+        maxFileSize: 409600,   //单个文件大小的最大值
+        maxFilesNum: 1, //
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');  // 更改默认的名字
+        }
+    });
+</script>
+</body>
+</html>

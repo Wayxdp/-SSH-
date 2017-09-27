@@ -1,0 +1,10 @@
+package com.ht.service;
+
+import com.ht.bean.Sale;
+import org.springframework.remoting.caucho.BurlapServiceExporter;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public interface SaleService extends BaseService<String,Sale> {
+}

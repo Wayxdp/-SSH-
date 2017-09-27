@@ -1,0 +1,17 @@
+/**
+ * Created by Administrator on 2017/9/4.
+ */
+
+function showBuildingsDetail() {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        window.location.href=contextPath + "/buildings/adminBuildingsDetail?id=" + row.id;
+    }
+}
+function  showBuildingsImg() {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        window.location.href =contextPath + "/buildings/buildingsImg?id=" + row.id;
+    }
+
+}

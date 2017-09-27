@@ -1,0 +1,54 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Appointment;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.AppointmentService;
+
+import java.util.List;
+
+/**
+ * Created by Administrator on 2017/8/28.
+ */
+public class AppointmentController extends AppController {
+    private List<Appointment> rows; // getter
+
+    private AppointmentService appointmentService; //setter
+    private String id;       // setter
+    private int total;      // setter
+    private int page;   //setter
+
+    public List<Appointment> getRows() {
+        return rows;
+    }
+
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    //预约的分页
+    public String appointmentPager(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据 获取从页面上传递过来的数据个数
+        Pager<Appointment> pager = new Pager<Appointment>(); //  组装pager对象 在分页查询中使用到 该对象
+        pager.setPage(Integer.valueOf(page));
+        pager.setPageSize(pageSize);
+        pager = appointmentService.listPager(pager); // 查询出的结果
+        rows = pager.getResult();
+        total = appointmentService.count();
+        return SUCCESS;
+    }
+    //预约的修改
+
+}

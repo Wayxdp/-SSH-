@@ -1,0 +1,21 @@
+/**
+ * 失去焦点，验证原密码
+ */
+function checkOldPwd() {
+    $.post(
+        contextPath+"/employee/checkOldPwd",
+        $("#pwdEmpForm").serialize(),
+        function (data) {
+            var pwdTip = document.getElementById("pwdTip");
+            var msg = data.controllerResult.message;
+            pwdTip.innerHTML=msg;
+            if (msg=="正确！"){
+                document.getElementById("pwdTip").style.color='\n' +
+                    '#009933 ';
+            }else{
+                document.getElementById("pwdTip").style.color='red';
+            }
+        },
+        "json"
+    );
+}

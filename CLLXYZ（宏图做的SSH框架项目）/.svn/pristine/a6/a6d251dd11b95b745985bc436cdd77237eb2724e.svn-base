@@ -1,0 +1,74 @@
+var buildingsPageCount = 0;
+var buildingsCurrentPage = 1;
+
+function getAllBuildingsData(page) {
+    $("#buildingsCurrentPage").text(page);
+    var showCount = 5;
+    $.post("/buildings/pagerBuildingsIndexVO?page=" + page,
+        function (data) {
+            var jsonList = data.buildingsIndexVOList;
+            buildingsCurrentPage = data.page;
+            buildingsPageCount = data.total;
+            $("#buildingsTotalPage").text(buildingsPageCount);
+            console.log("buildingsCurrentPage:" + buildingsCurrentPage);
+            console.log("buildingsPageCount:" + buildingsPageCount);
+            var length = showCount;
+            if (jsonList.length < showCount) {
+                length = jsonList.length;
+                var hideCount = showCount - length;
+                for (var i = 0; i < hideCount; i++) {
+                    $("#row" + (4 - i)).hide();
+                }
+            } else {
+                for (var i = 0; i < length; i++) {
+                    $("#row" + i).show();
+                }
+            }
+            for (var i = 0; i < length; i++) {
+                var jsonObj = jsonList[i];
+                for (var objKey in jsonObj) {
+                    $("#" + objKey + i).text(jsonObj[objKey]);
+                    if (objKey == "logo") {
+                        $("#logoSrc" + i).attr("src", contextPath + "/public/images/upload/" + jsonObj[objKey]);
+                    }
+                    if (objKey == "id") {
+                        $("#logoHref" + i).attr("href", contextPath + "/buildings/buildingsInfoIndex?id=" + jsonObj[objKey]);
+                        $("#pictureHref" + i).attr("href", contextPath + "/buildingsImg/showBuildingsPicture?id=" + jsonObj[objKey]);
+                        $("#name" + i).attr("href", contextPath + "/buildings/buildingsInfoIndex?id=" + jsonObj[objKey]);
+                    }
+                    if (objKey == "longitudeLatitude") {
+                        $("#mapHref" + i).attr("href", contextPath + "/buildings/showMap?" + jsonObj[objKey]);
+                    }
+                    if (objKey == "agencyId") {
+                        $("#agencyName" + i).attr("href", contextPath + "/agency/agencyInfoIndex?id=" + jsonObj[objKey]);
+                    }
+                }
+            }
+        }, "json"
+    );
+
+}
+
+function lastBuildingsPage() {
+    var page = buildingsCurrentPage - 1;
+    if (page < 1) {
+        page = 1;
+        $("#lastLi").hide();
+        $("#nextLi").show();
+    }
+    getAllBuildingsData(page);
+}
+
+function nextBuildingsPage() {
+    var page = buildingsCurrentPage + 1;
+    if (page > buildingsPageCount) {
+        page = buildingsPageCount;
+        $("#nextLi").hide();
+        $("#lastLi").show();
+    }
+    getAllBuildingsData(page);
+}
+
+function finallyBuildingsPage() {
+    getAllBuildingsData(buildingsPageCount);
+}

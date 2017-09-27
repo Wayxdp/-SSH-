@@ -1,0 +1,53 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.Article;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.ArticleDAO;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public class ArticleDAOImpl extends HibernateSessionFactoryBean implements ArticleDAO {
+    @Override
+    public void save(Article article) {
+        getSessionFactory().getCurrentSession().save(article);
+    }
+
+    @Override
+    public void remove(Article article) {
+        getSessionFactory().getCurrentSession().remove(article);
+    }
+
+    @Override
+    public void update(Article article) {
+        getSessionFactory().getCurrentSession().update(article);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+
+    }
+
+    @Override
+    public Article foundById(String id) {
+        return null;
+    }
+
+    @Override
+    public Pager<Article> listPager(Pager<Article> pager) {
+        return null;
+    }
+
+    @Override
+    public List<Article> listAll() {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+}

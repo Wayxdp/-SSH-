@@ -1,0 +1,60 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: qm
+  Date: 2017/8/29
+  Time: 20:23
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path = request.getContextPath(); %>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+</head>
+<body>
+<div class="col-sm-12">
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        <div class="form-group" style="margin-top: 20px;">
+            <label for="file_input1" class="col-sm-2 control-label">头像图片</label>
+            <div class="col-sm-3">
+                <%--文件框--%>
+                <input type="file"class="form-control" id="file_input1"
+                       onchange="fileSelected('preview_img1','file_input1')"
+                       name="name_file1" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">头像预览</label>
+            <div class="col-sm-4">
+                <%--图片显示--%>
+                <img class="img-responsive" id="preview_img1"
+                     src="<%=path %>/${sessionScope.company.logo }">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-2">
+                <input type="submit" class="btn btn-primary" onclick="updateIcon()"/>
+            </div>
+            <div class=" col-sm-2">
+                <input type="reset" class="btn btn-danger"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label "></label>
+            <div class="col-xm-12 col-sm-10 col-md-4 col-lg-5">
+                <span id="hint_span" style="color:green">${requestScope.okSave }</span>
+            </div>
+        </div>
+    </form>
+</div>
+
+    <script src="<%=path %>/public/plugins/jquery.min.js"></script>
+    <script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+    <script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+    <script src="<%=path %>/public/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="<%=path %>/public/js/zhang/preview_image.js"></script>
+</body>
+</html>

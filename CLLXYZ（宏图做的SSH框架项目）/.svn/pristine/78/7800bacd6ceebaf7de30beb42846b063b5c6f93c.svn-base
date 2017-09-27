@@ -1,0 +1,280 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
+<html>
+<head>
+    <title>资讯</title>
+    <link rel="stylesheet" href="../../public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="../../public/plugins/bootstrap/css/bootstrap-theme.css"/>
+</head>
+<body>
+<div class="col-lg-12">
+
+    <!-- 导航条-->
+    <div>
+        <jsp:include page="/include_page/top.jsp" flush="true"></jsp:include>
+    </div>
+
+    <div id="left" class="col-lg-9 " style="float: left; margin-left: 20px;">
+        <div class="newsClassList">
+
+            <ul class="ml">
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[圣煜颐山居]</a>
+                    <a
+                            href="#"
+                            title=" 五指山圣煜颐山居目前在售房源"
+                            style="background: none;font-size: 17px;">圣煜颐山居在售房源不多 购房一口价单价约11000元/平
+                    </a>
+                    <em>08.09</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[懿品香格里]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="均为准现房，面积约为142平、156平、213平，均为大户型，仅余40套房源，其购房均价约15000—18000元/平，含2000元/平硬装。"
+                            style="background: none;font-size: 17px;">懿品香格里在售一期别墅准现房 均价约15000—18000元/平
+                    </a>
+                    <em>08.05</em>
+                </li>
+
+                <li><a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[五指山圣河湾]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山圣河湾现尾盘在售中，仅余十几套房源，其在售户型面积约为67平、68平、90平、104平，购房均价约11000—13000元/平，含1200元/平硬装。"
+                            style="background: none;font-size: 17px;">五指山圣河湾尾盘在售 购房均价约11000-13000元/平含硬装
+                    </a>
+                    <em>08.05</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[五指山六艺王宫]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山六艺王宫项目已于2017年6月底开盘，五证齐全，现有推出85栋124套泳池别墅，均按照五星级酒店装修配置，每户均有专属泳池和庭院，别墅交付标准为全装修、全配置、含酒店布草，按高端酒店管理运营。"
+                            style="background: none;font-size: 17px;">五指山六艺王宫开盘在售中 独栋别墅总价约378万/套
+                    </a>
+                    <em>08.05</em>
+                </li>
+
+            </ul>
+
+            <ul class="ml">
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[泺海蝶泉湾]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山泺海蝶泉湾现房在售中，购房全款可享98折优惠，无按揭。项目现在售公寓及别墅尾盘，其中①公寓在售户型面积约为40平、80—90平，均价约9000元/平，均位于二层房源以下。"
+                            style="background: none;font-size: 17px;">泺海蝶泉湾现购房全款可享98折优惠 养生休闲度假社区
+                    </a>
+                    <em>07.11</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[卓达山水青城]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山卓达山水青城现购房均价约13000元/平，赠送1200元/平精装修，全款可享88折优惠，无按揭，准现房在售中，在售户型面积约为38平、55平、69平一房；79平两房。"
+                            style="background: none;font-size: 17px;">卓达山水青城现购房均价约13000元/平 准现房在售中
+                    </a>
+                    <em>07.11</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[天山丽田]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山天山丽田项目目前仅余6号楼房源在售中，在售户型面积约为57平（一房）、58平（一房）、93平（两房），其购房均价约9600元/平，全款可享97折优惠，不做按揭，预计2017年年底可交房。"
+                            style="background: none;font-size: 17px;">天山丽田6号楼购房均价约9600元/平 预计2017年底可交房
+                    </a>
+                    <em>07.11</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[圣煜颐山居]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山圣煜颐山居目前二期房源已售完，现一期尾盘在售中，在售户型面积约为47—111平（一至三房），均已是现房，其购房一口价单价约8500元/平，房源有限，欲购从速！"
+                            style="background: none;font-size: 17px;">圣煜颐山居现房在售 购房一口价单价约8500元/平
+                    </a>
+                    <em>07.11</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[天山丽田]</a>
+                    <a
+                            href="#" target="_blank"
+                            title="五指山天山丽田现5号楼已售完，目前在售1—4号楼、6号楼房源中，在售户型面积约为57—92平（一至两房），其中1—4号楼均价约7000元/平，仅余南面低楼层在售；6号楼均价约8800元/平，房源充足。"
+                            style="background: none;font-size: 17px;">天山丽田现购房均价约7000—8800元/平 在售一至两房户型
+                    </a>
+                    <em>06.03</em>
+                </li>
+
+            </ul>
+
+            <ul class="ml">
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[泺海蝶泉湾]</a>
+                    <a href="#"
+                        target="_blank"
+                        title="五指山泺海蝶泉湾目前现房在售中"
+                        style="background: none;font-size: 17px;">泺海蝶泉湾现房在售中
+                    购房均价约9000—20000元/平
+                    </a>
+                    <em>06.03</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[卓达山水青城]</a>
+                    <a
+                        href="#" target="_blank"
+                        title="五指山卓达山水青城准现房在售中"
+                        style="background: none;font-size: 17px;">卓达山水青城准现房在售 折后均价约13000元/平含精装
+                    </a>
+                    <em>05.17</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank"
+                       style="color: #B48443;font-size: 17px;">[四季南山]
+                    </a>
+                    <a href="#"
+                       target="_blank"
+                       title="五指山四季南山项目目前仅有少量房源在售中,"
+                       style="background: none;font-size: 17px;">四季南山购房均价约15000元/平
+                    全龄化养生度假高品质居所
+                    </a>
+                    <em>05.17</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[天山丽田]</a>
+                    <a href="#"
+                       target="_blank"
+                       title="五指山天山丽田一期现推出6号楼140套房源"
+                       style="background: none;font-size: 17px;">天山丽田一期现推出6号楼房源 小户型价格约8100元/平
+                    </a>
+                    <em>05.14</em>
+                </li>
+
+                <li>
+                    <a href="#" target="_blank" style="color: #B48443;font-size: 20px;">[卓达山水青城]</a>
+                    <a
+                        href="#" target="_blank"
+                        title="五指山卓达山水青城目前准现房在售中（一期A/B组团房源）"
+                        style="background: none;font-size: 17px;">卓达山水青城购房均价约9000元/平含精装 一期准现房在售中
+                    </a><em>04.05</em>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <div class="col-lg-offset-4">
+            <nav aria-label="Page navigation">
+                <ul class="pagination pagination-sm">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li><a href="#">1</a></li>
+                    <li><a href="#">2</a></li>
+                    <li><a href="#">3</a></li>
+                    <li><a href="#">4</a></li>
+                    <li><a href="#">5</a></li>
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+    <div id="right">
+        <div class="SideNewsHot">
+            <h3 class="mt">阅读排行</h3>
+            <ul>
+
+                <li>
+                    <a target="_blank" title="泺海蝶泉湾8月优惠" href="#">独栋别墅购房总价约600万/套</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="圣煜颐山居在售房源不多" href="#">购房一口价单价约11000元/平</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="懿品香格里" href="#">均价约15000—18000元/平</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="五指山圣河湾尾盘" href="#">购房均价约11000-13000元/平含硬装</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="五指山六艺王宫" href="#">独栋别墅总价约378万/套   </a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="泺海蝶泉湾现购房" href="#">养生休闲度假社区</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="卓达山水青城现购房" href="#">准现房在售中</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="天山丽田6号楼购房" href="#">预计2017年底可交房</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="圣煜颐山居现房" href="#">购房一口价单价约8500元/平</a>
+                </li>
+
+                <li>
+                    <a target="_blank" title="天山丽田现购房" href="#">在售一至两房户型</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+        <ul id="sideMenu">
+            <li class="current">
+                <h3>热门楼盘</h3>
+                <!--新开楼盘：开始-->
+                <div class="sideNewHouse sideBox" style="display: block;">
+                    <ul>
+
+                        <li><a target="_blank" href="#"><span>圣煜颐山居</span><em>五指山市区</em><b>4980元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>世景翠城</span><em>五指山市区</em><b>0元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>水晶国际佳苑</span><em>五指山市区</em><b>0元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>翡翠新城南区</span><em>五指山市区</em><b>5000元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>福安泰隆酒店</span><em>五指山市区</em><b>0元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>海建瑞景山庄</span><em>五指山市区</em><b>4300元/㎡</b></a></li>
+
+                        <li><a target="_blank" href="#"><span>海晟逸清园</span><em>五指山市区</em><b>6170元/㎡</b></a></li>
+
+                    </ul>
+                </div>
+                <!--新开楼盘：结束-->
+            </li>
+
+        </ul>
+    </div>
+    <p style="clear: both;"></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+//点击评论的时候隐藏留言，户型的div
+function showComment() {
+    $("#commentDiv").show();
+    $("#messageDiv").hide();
+    $("houseDiv").hide();
+}
+//点击留言的时候隐藏评论，户型的div
+function showMessage() {
+    $("#messageDiv").show();
+    $("#commentDiv").hide();
+    $("houseDiv").hide();
+}
+//点击户型的时候隐藏评论，留言的div
+function showHouse() {
+    $("houseDiv").show();
+    $("#commentDiv").hide();
+    $("#messageDiv").hide();
+}
+
+//默认显示评论的div，整个页面跑完的时候执行脚本方法
+function defaultComment() {
+    $("#messageDiv").hide();
+}

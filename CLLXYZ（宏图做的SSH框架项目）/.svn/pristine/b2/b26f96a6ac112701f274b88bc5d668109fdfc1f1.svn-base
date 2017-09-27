@@ -1,0 +1,9 @@
+package com.ht.dao;
+
+import com.ht.bean.Employee;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public interface EmployeeDAO extends BaseDAO<String,Employee> {
+}

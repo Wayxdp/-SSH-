@@ -1,0 +1,110 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Article;
+import com.ht.bean.ArticleType;
+import com.ht.bean.Customer;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.ArticleService;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/29.
+ */
+public class ArticleController extends AppController {
+    private ArticleService articleService;
+    private Short status;
+    private String id;
+    private Integer page;
+
+    private ControllerResult controllerResult;
+    private List<Article> rows;
+    private Integer total;
+
+
+    //文章添加
+    public String saveArticle(){
+        ArticleType articleType = new ArticleType();
+        articleType.setId(id);
+        Article article = new Article();
+        article.setTitle("晒房");
+        article.setAbstracts("文章摘要");
+        article.setContent("文章的空内容");
+        article.setLogo("/article.jsp");
+        article.setCreated_time(Calendar.getInstance().getTime());
+        article.setStatus((short)0);
+        article.setArticleType(articleType);
+        articleService.save(article);
+        return SUCCESS;
+    }
+    //文章修改
+    public String updateArticle(){
+        Article article = new Article();
+        article.setId(id);
+        article.setTitle("蜗居小屋");
+        article.setAbstracts("蜗居小屋摘要");
+        article.setContent("文章内容----");
+        article.setLogo("/article1.jsp");
+        article.setCreated_time(Calendar.getInstance().getTime());
+        article.setStatus((short)1);
+        articleService.update(article);
+        return SUCCESS;
+    }
+    //文章冻结/激活
+    public String statusArticle(){
+
+        if(status == 1){
+            controllerResult = ControllerResult.getSuccessResult("激活成功");
+            System.out.println("激活成功");
+        }else if(status==0){
+            controllerResult = ControllerResult.getSuccessResult("冻结成功");
+            System.out.println("冻结成功");
+        }
+        articleService.updateStatus(id,status);
+        return SUCCESS;
+    }
+
+    //文章分页查看
+    public String pagerArticle(){
+        int pageSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Article> pager = new Pager<Article>();
+        pager.setPageSize(pageSize);
+        pager.setPage(page);
+        pager = articleService.listPager(pager);
+        rows = pager.getResult();
+        total = articleService.count(pager).intValue();
+        return SUCCESS;
+    }
+
+
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public List<Article> getRows() {
+        return rows;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+}

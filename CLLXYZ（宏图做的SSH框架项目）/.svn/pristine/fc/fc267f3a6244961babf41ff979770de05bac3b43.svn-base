@@ -1,0 +1,38 @@
+
+//修改经销商基本信息
+function updateBaseMessage() {
+    if (formValidate("editForm")) {
+        $.post(contextPath + "/agency/updateAgency",
+            $("#editForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                    $("#editForm").form("clear");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+
+            }, 'json'
+        );
+    }
+}
+
+//增加经销商基本信息
+function addBaseMessage() {
+    if (formValidate("addForm")) {
+        $.post(contextPath + "/agency/saveBaseMessage",
+            $("#addForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                    $("#addForm").form("clear");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, 'json'
+        );
+        closeWin("addWin");
+    }
+}

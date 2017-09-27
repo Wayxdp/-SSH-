@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ht.bean">
+    <class name="User" table="t_user">
+        <id name="id" column="id">
+            <generator class="uuid"/>
+        </id>
+        <property name="email" />
+        <property name="phone" />
+        <property name="pwd" />
+        <property name="qq" />
+        <property name="gender" />
+        <property name="wechat" />
+        <property name="birthday" />
+        <property name="nickname" />
+        <property name="name" />
+        <property name="headicon" />
+        <property name="status" />
+
+        <!--1,一个用户对应多条留言-->
+        <!--<set name="messages">-->
+            <!--<key column="user_id"></key>-->
+            <!--<one-to-many class="com.ht.bean.Message"></one-to-many>-->
+        <!--</set>-->
+
+        <!--&lt;!&ndash;2，一个用户对应多条评论&ndash;&gt;-->
+        <!--<set name="comments">-->
+            <!--<key column="user_id"></key>-->
+            <!--<one-to-many class="com.ht.bean.Comment"></one-to-many>-->
+        <!--</set>-->
+
+        <!--&lt;!&ndash;3，一个用户对应多个点赞&ndash;&gt;-->
+        <!--<set name="likes">-->
+            <!--<key column="user_id"></key>-->
+            <!--<one-to-many class="com.ht.bean.Like"></one-to-many>-->
+        <!--</set>-->
+
+        <!--&lt;!&ndash;4，一个用户对应多条历史记录&ndash;&gt;-->
+        <!--<set name="histories">-->
+            <!--<key column="user_id"></key>-->
+            <!--<one-to-many class="com.ht.bean.History"></one-to-many>-->
+        <!--</set>-->
+
+
+        <!--&lt;!&ndash;5，一个用户对应多个预约&ndash;&gt;-->
+        <!--<set name="appointments">-->
+            <!--<key column="user_id"></key>-->
+            <!--<one-to-many class="com.ht.bean.Appointment"></one-to-many>-->
+        <!--</set>-->
+
+        <!--&lt;!&ndash;6，一个用户对应一个角色&ndash;&gt;-->
+        <!--<many-to-one name="role" column="role_id" class="com.ht.bean.User"></many-to-one>-->
+    </class>
+</hibernate-mapping>

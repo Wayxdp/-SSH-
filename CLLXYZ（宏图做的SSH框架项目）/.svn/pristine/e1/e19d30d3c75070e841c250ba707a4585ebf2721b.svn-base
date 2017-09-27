@@ -1,0 +1,139 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.*;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.SaleService;
+
+import java.util.Calendar;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class SaleController extends AppController {
+
+    private SaleService saleService;
+    private short status;
+    private String updateId;
+    private int page;
+
+    private ControllerResult controllerResult;
+    private int total;
+    private List<Sale> rows;
+
+    //销售记录的添加
+    public String saveSale(){
+        Sale sale = new Sale();
+        sale.setCreated_time(Calendar.getInstance().getTime());
+        sale.setDiscount(0.99);
+        sale.setUnit_price(123.45);
+        sale.setTotal_cost(234.85);
+        sale.setStatus(Constants.YES_STATUS);
+        sale.setSale_time(Calendar.getInstance().getTime());
+        Set<Sale> sales = new HashSet<Sale>();
+        sales.add(sale);
+        Employee employee = new Employee();
+        employee.setId(request.getParameter("emp_id"));
+        employee.setSales(sales);
+        Agency agency = new Agency();
+        agency.setId(request.getParameter("agency_id"));
+        agency.setSales(sales);
+        Customer customer = new Customer();
+        customer.setId(request.getParameter("customer_id"));
+        Room room = new Room();
+        room.setId("402880fa5e174d76015e174dcd500000");
+        room.setSale(sale);
+        sale.setAgency(agency);
+        sale.setEmployee(employee);
+        sale.setCustomer(customer);
+        sale.setRoom(room);
+        saleService.save(sale);
+        return SUCCESS;
+    }
+
+
+    //销售记录的修改
+    public String updateSale(){
+        Sale sale = new Sale();
+        sale.setId(request.getParameter("sale_id"));
+        sale.setCreated_time(Calendar.getInstance().getTime());
+        sale.setDiscount(0.19);
+        sale.setUnit_price(100.45);
+        sale.setTotal_cost(200.85);
+        sale.setStatus(Constants.NO_STATUS);
+        sale.setSale_time(Calendar.getInstance().getTime());
+        Set<Sale> sales = new HashSet<Sale>();
+        sales.add(sale);
+        Employee employee = new Employee();
+        employee.setId(request.getParameter("emp_id"));
+        employee.setSales(sales);
+        Agency agency = new Agency();
+        agency.setId(request.getParameter("agency_id"));
+        agency.setSales(sales);
+        Customer customer = new Customer();
+        customer.setId(request.getParameter("customer_id"));
+        Room room = new Room();
+        room.setId("402880fa5e174d76015e174dcd500000");
+        room.setSale(sale);
+        sale.setAgency(agency);
+        sale.setEmployee(employee);
+        sale.setCustomer(customer);
+        sale.setRoom(room);
+        saleService.update(sale);
+        return SUCCESS;
+    }
+
+    //销售记录的分页查看
+    public String pagerSale(){
+        System.out.println("sale");
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据 获取从页面上传递过来的数据个数
+        Pager<Sale> pager = new Pager<Sale>(); //  组装pager对象 在分页查询中使用到 该对象
+        pager.setPage(Integer.valueOf(page));
+        pager.setPageSize(pageSize);
+        pager = saleService.listPager(pager); // 查询出的结果
+        rows = pager.getResult();
+        total = saleService.count();
+        return SUCCESS;
+    }
+
+    //销售记录的激活与冻结
+    public String statusSale(){
+        saleService.updateStatus(updateId,status);
+        if(status == 1) {
+            controllerResult = ControllerResult.getSuccessResult("激活成功！");
+        }else if(status == 0) {
+            controllerResult = ControllerResult.getFailResult("冻结成功！");
+        }
+        return SUCCESS;
+    }
+
+    public void setSaleService(SaleService saleService) {
+        this.saleService = saleService;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
+
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Sale> getRows() {
+        return rows;
+    }
+}

@@ -1,0 +1,97 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Ads;
+import com.ht.bean.Employee;
+import com.ht.bean.Mission;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.MissionService;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class MissionController extends AppController {
+
+
+    private MissionService missionService;
+    private int page;
+
+    private List<Mission> rows;
+    private int total;
+    /**
+     * 绩效管理
+     * 对员工进行任务分配，设置销售提成
+     */
+
+    /**
+     * 给所有员工设置提成百分比
+     */
+    public String updateMissionPercent(){
+        Mission mission = new Mission();
+        mission.setBonus_percent(Double.valueOf(request.getParameter("bonus_percent")));
+        missionService.updatePercent(mission);
+        return SUCCESS;
+    }
+
+
+    /**
+     *修改绩效
+     * 给员工设置任务量，可指定某个月
+     */
+    public String updateMission(){
+        Mission mission = new Mission();
+        mission.setId(request.getParameter("mission_id"));
+        mission.setMonthes(1);
+        mission.setQuantity(10);
+        mission.setBonus_percent(0.23);
+        Employee employee = new Employee();
+        employee.setId(request.getParameter("emp_id"));
+        Set<Mission> missions = new HashSet<Mission>();
+        mission.setEmployee(employee);
+        missions.add(mission);
+        employee.setMissions(missions);
+        missionService.update(mission);
+        return SUCCESS;
+    }
+
+
+    /**
+     * 绩效的分页
+     */
+    public String pagerMission(){
+        Pager<Mission> pager = new Pager<Mission>();
+        int pageSize =1; //Integer.valueOf(request.getParameter("rows"));
+        pager.setPageSize(pageSize);
+        pager.setPage(2);//page
+        pager = missionService.listPager(pager);
+        total = missionService.count();
+        rows = pager.getResult();
+        return SUCCESS;
+    }
+
+
+    public void setMissionService(MissionService missionService) {
+        this.missionService = missionService;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setResults(List<Mission> rows){
+        this.rows = rows;
+    }
+
+    public List<Mission> getRows() {
+        return rows;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+}

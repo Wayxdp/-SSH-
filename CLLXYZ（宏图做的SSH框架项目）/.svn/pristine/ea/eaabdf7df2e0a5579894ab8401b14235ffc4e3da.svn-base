@@ -1,0 +1,217 @@
+package com.ht.controller;
+
+
+import com.ht.bean.Agency;
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.bean.Employee;
+import com.ht.common.*;
+import com.ht.service.EmployeeService;
+import org.apache.commons.io.FileUtils;
+
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.Calendar;
+import java.util.List;
+
+public class EmployeeController extends AppController {
+
+    private Employee employee;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Employee> rows;
+
+    //提供set
+    private EmployeeService employeeService;
+    private Short status;
+    private Integer page;
+    private String id;
+    private File fil;
+    private String filFileName;
+    private String filContentType;
+
+
+
+
+    /***
+     * 查看单个员工详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        employee = employeeService.foundById(id);
+        return "showAlterPage";
+    }
+
+    /***
+     * 添加员工
+     * @return
+     */
+    public  String saveEmployee() {
+       try {
+//           employee.setCreated_time(Calendar.getInstance().getTime());
+           employeeService.save(employee);
+           controllerResult = ControllerResult.getSuccessResult("添加员工成功");
+       }catch (Exception e) {
+           controllerResult = ControllerResult.getFailResult("添加员工失败");
+       }
+        return SUCCESS;
+    }
+
+    /***
+     * 修改员工
+     * @return
+     */
+    public String updateEmployee() {
+        try{
+            employeeService.update(employee);
+            controllerResult = ControllerResult.getSuccessResult("修改员工成功");
+        }catch (Exception e) {
+            employeeService.update(employee);
+            controllerResult =  ControllerResult.getFailResult("修改员工失败");
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 更改员工状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                employeeService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("员工已可用");
+            } else if (status == 0) {
+                employeeService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("员工冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+
+    /***
+     * 员工的分页查看
+     * @return
+     */
+    public String pagerEmployee() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Employee> employeePager = new Pager<>();
+        employeePager.setPage(page); //得到用户在页面选择的第几页数据
+        employeePager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        employeePager = employeeService.listPager(employeePager);
+        List<Employee> employees = employeePager.getResult();//获取到所有的员工
+        rows = employeePager.getResult();//查询出所有员工
+        total = employeeService.count(employeePager).intValue();//查询出员工商总数
+        return SUCCESS;
+    }
+
+
+    /**
+     * 测试：模拟登陆
+     */
+    public String loginTest(){
+        employee = employeeService.foundById(request.getParameter("id"));
+        HttpSession session = request.getSession();
+        session.setAttribute("employee",employee);
+        return SUCCESS;
+    }
+
+    /**
+     * 员工修改自己的信息
+     */
+    public String updateEmployeeSelf(){
+        employeeService.updateEmployeeSelf(employee.getId(),employee);
+        controllerResult = ControllerResult.getSuccessResult("修改成功！");
+        return SUCCESS;
+    }
+
+    /**
+     * 员工修改自己的的登入密码（已实现，未加数据验证）
+     */
+    public String updateEmpPwd(){
+        //id,prePwd,==>bean if null==>return else==>update;
+        String newPwd = request.getParameter("newPwd");
+        String conPwd = request.getParameter("conPwd");
+        if(newPwd.equals(conPwd)){
+            Employee emp = employeeService.queryByIdPwd(employee.getId(),EncryptUtil.md5(employee.getPwd()));
+            if (!(null==emp)){
+                controllerResult = ControllerResult.getSuccessResult("修改成功！");
+                employeeService.updateEmpPwd(emp.getId(),EncryptUtil.md5(newPwd));
+            }else{
+                controllerResult = ControllerResult.getFailResult("原密码错误！");
+            }
+        }else{
+            controllerResult = ControllerResult.getFailResult("两次密码不一致！");
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 上传头像
+     */
+//    public String uploadHeadIcon() throws IOException {
+//        FileUtils.copyFile(fil,new File(FileUtil.uploadsPath()+File.separator+filFileName));
+//        System.out.print(File.separator);
+//        System.out.println("upload:"+filFileName);
+//        return SUCCESS;
+//    }
+
+    /**
+     * setter,getter
+     * @return
+     */
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setEmployeeService(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setFil(File fil) {
+        this.fil = fil;
+    }
+
+    public void setFilFileName(String filFileName) {
+        this.filFileName = filFileName;
+    }
+
+    public void setFilContentType(String filContentType) {
+        this.filContentType = filContentType;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Employee> getRows() {
+        return rows;
+    }
+}

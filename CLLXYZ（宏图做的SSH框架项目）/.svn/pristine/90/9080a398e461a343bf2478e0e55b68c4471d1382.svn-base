@@ -1,0 +1,96 @@
+package com.ht.controller;
+
+import com.ht.bean.Agency;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.service.AgencyService;
+
+import java.util.List;
+
+public class AgencyController extends AppController {
+    private Agency agency;
+
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Agency> rows;
+
+    private AgencyService agencyService;
+    private Integer page;
+    private String id;//得到页面选择的id
+    private Short status;//得到页面的状态
+
+    /**
+     * 分页显示所有经销商
+     */
+    public String pagerAgency(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Agency> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = agencyService.listPager(pager);
+        rows = pager.getResult();//查询出所有经销商
+        total = agencyService.count();//查询出经销商总数
+        return "pagerAgency";
+    }
+
+    /**
+     * 经销商激活与冻结
+     * @return
+     */
+    public String statusAgency() {
+        if (status==1) {
+            agencyService.updateStatus(id,status);
+            controllerResult = ControllerResult.getSuccessResult("激活成功！");
+        } else if (status==0) {
+            agencyService.updateStatus(id,status);
+            controllerResult = ControllerResult.getSuccessResult("冻结成功！");
+        } else {
+            controllerResult = ControllerResult.getFailResult("操作失败!");
+        }
+        return "statusAgency";
+    }
+    // 更新经销商
+    public String updateAgency(){
+//        agency = new Agency();
+        System.out.println(agency);
+        agencyService.update(agency);
+        return "updateAgency";
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public List<Agency> getRows() {
+        return rows;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setAgencyService(AgencyService agencyService) {
+        this.agencyService = agencyService;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+}

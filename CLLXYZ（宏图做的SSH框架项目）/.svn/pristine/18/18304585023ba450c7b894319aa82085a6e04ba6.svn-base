@@ -1,0 +1,89 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.Agency;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.AgencyDAO;
+import org.hibernate.query.Query;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public class AgencyDAOImpl extends HibernateSessionFactoryBean implements AgencyDAO {
+    @Override
+    public void save(Agency agency) {
+        getSessionFactory().getCurrentSession().save(agency);
+    }
+
+    @Override
+    public void remove(Agency agency) {
+        getSessionFactory().getCurrentSession().remove(agency);
+    }
+
+    @Override
+    public void update(Agency agency) {
+        getSessionFactory().getCurrentSession().update(agency);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+        Query query = getSessionFactory().getCurrentSession().createQuery(" update Agency set status=:status where id=:id");
+        query.setParameter("status",status);
+        query.setParameter("id",id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public Agency foundById(String id) {
+        return getSessionFactory().getCurrentSession().get(Agency.class, id);
+    }
+
+    @Override
+    public Pager<Agency> listPager(Pager<Agency> pager) {
+       Query query = getSessionFactory().getCurrentSession().createQuery("from Agency" + pager.getParamStr());
+       query.setFirstResult(pager.getBeginIndex());
+       query.setMaxResults(pager.getPageSize());
+       pager.setResult(query.list());
+       return pager;
+    }
+
+    @Override
+    public List<Agency> listAll() {
+        return null;
+    }
+
+    @Override
+    public Long count(Pager pager) {
+        Long resultL = (Long) getSessionFactory().getCurrentSession().createQuery("select count(id) from Agency" + pager.getParamStr()).uniqueResult();
+        return resultL;
+    }
+
+    @Override
+    public Agency foundByPhone(String phone) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from Agency where phone=:phone");
+        query.setParameter("phone", phone);
+        Agency agency = (Agency) query.uniqueResult();
+        return agency;
+    }
+
+    @Override
+    public Agency foundByEmail(String email) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from Agency where email=:email");
+        query.setParameter("email", email);
+        Agency agency = (Agency) query.uniqueResult();
+        return agency;
+
+    }
+
+    @Override
+    public Agency loginAgency(String email, String pwd) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from Agency where email=:email and pwd=:pwd");
+        query.setParameter("email", email);
+        query.setParameter("pwd", pwd);
+        Agency agency = (Agency) query.uniqueResult();
+        return agency;
+
+    }
+}

@@ -1,0 +1,130 @@
+/**
+ * 下载合同
+ */
+function dowoloadFile() {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        var contract = row.contract;
+        var download = $("#downloadA");
+        download.attr("href", contextPath + "/customer/downFile?fileName=" + contract);
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}
+/**
+ *激活与冻结客户
+ */
+function updateStatusCus(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        if(row.status==status){
+            showAlert("无需"+(status=='1'?"激活":"冻结")+"该用户！");
+            return;
+        }
+        var json;
+        if(status=='1'){//激活
+            json = {
+                "status": '1',
+                "id": row.id
+            }
+        }else if(status=='0'){//冻结
+            json = {
+                "status": '0',
+                "id": row.id
+            }
+        }
+        $.post(
+            contextPath+"/customer/statusCustomer",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                }
+            },
+            "json"
+        );
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}
+
+/**
+ *修改客户信息
+ */
+function showCusEdit() {
+    if (formValidate("editCusForm")) {
+        var row = $("#list").datagrid("getSelected");
+        if (row){
+            openWin("editCus");
+        }else {
+            showAlert("请选择需要修改的栏目！");
+        }
+    }
+}
+function updateCusInfo() {
+    var birthday = $("#birthday");
+    birthday.attr("name","customer.birthday");
+    var customer_type = $("#customer_type");
+    customer_type.attr("name","customer.customer_type");
+    if (formValidate("form")){
+        $.post(
+            contextPath+"/customer/updateCustomerInfo",
+            $("#form").serialize(),
+            function (data) {
+                showAlert(data.controllerResult.message);
+                $("#list").datagrid("reload");
+            },
+            "json"
+        );
+        window.location.reload();
+    }
+}
+
+
+/**
+ *添加客户
+ */
+function savaCus() {
+    if(formValidate("saveCusForm")){
+        $.post(
+            contextPath+"/customer/saveCustomer",
+            $("#saveCusForm").serialize(),
+            function (data) {
+            },
+            "json"
+        );
+        window.location.href="emp_customers.jsp";
+    }
+}
+/**
+ *上传文件，给静态变量赋值（步骤01）
+ */
+function uploadFile(value) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+       openWin("uploadFile");
+       $("#customer_id").val(row.id);
+       $("#fileType").val(value);
+    }else{
+        showAlert("请选择上传的对象！");
+    }
+}
+/**
+ *获取静态变量文件名，并插入到数据库（步骤02）,完成上传
+ */
+function saveFileName() {
+    $.post(
+        contextPath+"/customer/saveFileCustomer",
+        $("#uploadForm").serialize(),
+        function (data) {
+            alert(data.controllerResult.message);
+            window.location.reload();
+        },
+        "json"
+    );
+    closeWin("uploadFile");
+}

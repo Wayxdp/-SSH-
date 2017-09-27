@@ -1,0 +1,14 @@
+package com.ht.common;
+
+import org.junit.Test;
+
+import java.util.UUID;
+
+public class UUIDTest {
+
+    @Test
+    public void testUUID() {
+        UUID uuid = UUID.randomUUID();
+        System.out.println(uuid.toString().replaceAll("-", ""));
+    }
+}

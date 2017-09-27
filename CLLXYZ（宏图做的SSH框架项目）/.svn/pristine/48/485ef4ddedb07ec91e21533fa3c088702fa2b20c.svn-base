@@ -1,0 +1,112 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Ads;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.AdsService;
+
+import java.util.Calendar;
+import java.util.List;
+
+public class AdsController extends AppController {
+
+    private AdsService adsService;
+    private String updateId;
+    private short status;
+    private int page;
+
+    private ControllerResult controllerResult;
+    private int total;
+    private List<Ads> rows;
+
+    //广告的添加，（已测试）
+    public String saveAds(){
+        Ads ads = new Ads();
+        ads.setTitle("广告01");
+        ads.setContent("这是广告的描述。。。");
+        ads.setLogo("src/images/a.jpg"); //图片路径
+        ads.setAd_url("www.bai.com");//广告的链接地址
+        ads.setShow_status(Short.valueOf(request.getParameter("show_status")));
+        ads.setShow_order(1);//广告的显示位置
+        ads.setStatus(Short.valueOf(request.getParameter("status")));
+        ads.setCreated_time(Calendar.getInstance().getTime());
+        adsService.save(ads);
+        return SUCCESS;
+    }
+
+
+    //广告的修改,（已测试）
+    public String updateAds(){
+        Ads ads = new Ads();
+        ads.setId(request.getParameter("ads_id"));
+        ads.setTitle("广告02");
+        ads.setContent("这是广告02的描述。。。");
+        ads.setLogo("src/images/a.jpg"); //图片路径
+        ads.setAd_url("www.taobao.com");//广告的链接地址
+        ads.setShow_status(Short.valueOf(request.getParameter("show_status")));
+        ads.setShow_order(2);//广告的显示位置
+        ads.setStatus(Short.valueOf(request.getParameter("status")));
+        ads.setCreated_time(Calendar.getInstance().getTime());
+        adsService.update(ads);
+        return SUCCESS;
+    }
+
+
+    //广告的激活冻结，（已测试）
+    public String statusAds(){
+        adsService.updateStatus(updateId,status);
+        if(status == 1) {
+            controllerResult = ControllerResult.getSuccessResult("激活成功！");
+        }else if(status == 0) {
+            controllerResult = ControllerResult.getFailResult("冻结成功！");
+        }
+        return SUCCESS;
+    }
+
+
+    //广告的分页查看，（已测试）
+    public String pagerAds(){
+        int pageSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Ads> pager = new Pager<Ads>();
+        pager.setPageSize(pageSize);
+        pager.setPage(page);
+        pager = adsService.listPager(pager);
+        total = adsService.count();
+        rows = pager.getResult();
+        return SUCCESS;
+    }
+
+    //提供的setter,getter方法
+    public void setAdsService(AdsService adsService) {
+        this.adsService = adsService;
+    }
+
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setResults(List<Ads> rows){
+        this.rows = rows;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Ads> getRows() {
+        return rows;
+    }
+}

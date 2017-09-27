@@ -1,0 +1,13 @@
+package com.ht.dao;
+
+import com.ht.bean.Agency;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public interface AgencyDAO extends BaseDAO<String,Agency>{
+
+    Agency foundByPhone(String phone);
+    Agency foundByEmail(String email);
+    Agency loginAgency(String email, String pwd);
+}

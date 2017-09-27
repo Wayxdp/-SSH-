@@ -1,0 +1,25 @@
+package com.ht.common;
+
+import org.junit.Test;
+
+import javax.xml.crypto.Data;
+import java.util.Calendar;
+import java.util.Date;
+
+public class CalendarTest {
+
+    @Test
+    public void testCalendar() {
+        Calendar instance = Calendar.getInstance();
+        System.out.println(instance.get(Calendar.YEAR));
+        System.out.println(instance.get(Calendar.MONTH) + 1);
+        Date date = Calendar.getInstance().getTime();
+        date.getYear();
+    }
+
+    @Test
+    public void testDate() {
+        Date time = Calendar.getInstance().getTime();
+        System.out.println(time.getMonth());
+    }
+}

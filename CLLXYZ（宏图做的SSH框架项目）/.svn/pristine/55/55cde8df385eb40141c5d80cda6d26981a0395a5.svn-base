@@ -1,0 +1,30 @@
+package com.ht.common;
+
+import com.ht.bean.Mission;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ForeachListTest {
+
+    @Test
+    public void testForeachList() {
+        List<Mission> missions = new ArrayList<>();
+        Mission m1 = new Mission();
+        m1.setId("1");
+        Mission m2 = new Mission();
+        m2.setId("2");
+        Mission m3 = new Mission();
+        m3.setId("3");
+        missions.add(m1);
+        missions.add(m2);
+        missions.add(m3);
+        for (Mission m : missions) {
+            m.setId("4");
+        }
+        for (Mission m : missions) {
+            System.out.println(m.getId());
+        }
+    }
+}

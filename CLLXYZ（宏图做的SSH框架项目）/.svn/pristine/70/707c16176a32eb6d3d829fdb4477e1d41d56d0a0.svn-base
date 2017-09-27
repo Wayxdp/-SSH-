@@ -1,0 +1,18 @@
+package com.ht.dao;
+
+import com.ht.bean.Employee;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public interface EmployeeDAO extends BaseDAO<String,Employee> {
+    /**
+     * 1.员工修改自己的部分信息
+     * 2.修改登录密码,先查询原密码，验证，再修改
+     */
+    void updateEmployeeSelf(String id,Employee employee);
+
+    Employee queryByIdPwd(String id,String pwd);
+
+    void updateEmpPwd(String id,String pwd);
+}

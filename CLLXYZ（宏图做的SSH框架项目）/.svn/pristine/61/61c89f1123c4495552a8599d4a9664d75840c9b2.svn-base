@@ -1,0 +1,42 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Room;
+import com.ht.controller.AppController;
+import com.ht.service.RoomService;
+import com.ht.vo.NameIdVO;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RoomController extends AppController {
+
+    private RoomService roomService;
+
+
+    private List<NameIdVO> nameIdVOList;
+
+
+    /**
+     * 添加销售记录：获取房号，id
+     */
+    public String getRoomId(){
+        nameIdVOList = new ArrayList<>();
+        List<Room> rooms = new ArrayList<>();
+        rooms = roomService.listAll();
+        for (Room r : rooms){
+            NameIdVO nameIdVO = new NameIdVO();
+            nameIdVO.setId(r.getId());
+            nameIdVO.setName(r.getName());
+            nameIdVOList.add(nameIdVO);
+        }
+        return SUCCESS;
+    }
+
+    public void setRoomService(RoomService roomService) {
+        this.roomService = roomService;
+    }
+
+    public List<NameIdVO> getNameIdVOList() {
+        return nameIdVOList;
+    }
+}

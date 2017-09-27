@@ -1,0 +1,22 @@
+package com.ht.common;
+
+import java.util.Calendar;
+
+public class DateUtil {
+
+    private static final Calendar instance = Calendar.getInstance();
+    private static final int year = instance.get(Calendar.YEAR);
+    private static final int month = instance.get(Calendar.MONTH) + 1;
+
+    public static String getCurrentMonth() {
+        return year + "年" + month + "月";
+    }
+
+    public static String getBeginDate() {
+        return year + "-" + month + "-1";
+    }
+
+    public static String getEndDate() {
+        return year + "-" + month + "-31";
+    }
+}

@@ -1,0 +1,66 @@
+//点击评论的时候隐藏留言，户型的div
+function showComment() {
+    $("#commentDiv").show();
+    $("#notLoggingMessage").hide();
+}
+
+//点击留言的时候隐藏评论，户型的div
+function showMessage() {
+    $("#notLoggingMessage").show();
+    $("#commentDiv").hide();
+}
+
+//默认显示评论的div，整个页面跑完的时候执行脚本方法
+function defaultComment() {
+    $("#notLoggingMessage").hide();
+}
+
+//当点击鼠标的时候，点赞的图片会变一张图片，也可以取消点赞
+function changeLikeStatus(userId) {
+    if (userId != undefined && userId != "") {
+        var likeStr = $("#likeImg").attr("src");
+        var noLike = contextPath + "/public/images/xie/noLike.jpg";
+        var alreadyLike = contextPath + "/public/images/xie/alreadyLike.jpg";
+        var likeCount = parseInt($("#likeCount").text());
+        if(likeStr == noLike) {
+            $("#likeImg").attr("src",alreadyLike);
+            $("#likeCount").text(likeCount + 1);
+        }
+        if(likeStr == alreadyLike) {
+            $("#likeImg").attr("src",noLike);
+            $("#likeCount").text(likeCount - 1);
+        }
+        $.get(contextPath + "/like/changeLikeUser?userId=" + userId + "&buildingsId=" + buildingsId,
+            function (data) {
+                alert(data.controllerResult.message);
+            }, "json");
+    } else {
+        alert("登录后才能对楼盘进行点赞操作");
+    }
+}
+
+var buildingsId = "";
+
+function getBuildingsInfo(id) {
+    $.post(contextPath + "/buildings/buildingsInfoIndex?id=" + id,
+        function (data) {
+            var buildings = data.buildingsIndexInfoVO;
+            buildingsId = buildings["id"];
+            for (var key in buildings) {
+                $("#" + key).text(buildings[key]);
+                if (key == "logo") {
+                    $("#logoSrc").attr("src", contextPath + "/public/images/upload/" + buildings[key]);
+                } else if (key == "longitudeLatitude") {
+                    $("#buildingsMap").attr("href", contextPath + "/buildings/showMap?" + buildings[key]);
+                } else if (key == "agencyId") {
+                    $("#agencyName").attr("href", contextPath + "/agency/showAgencyDetailIndex?id=" + buildings[key]);
+                } else if (key == "id") {
+                    $("#buildingsImg").attr("href", contextPath + "buildings/showBuildingsImg?id=" + buildings[key]);
+                } else if (key == "booleanLike") {
+                    if (buildings[key] == 1) {
+                        $("#likeImg").attr("src", contextPath + "/public/images/xie/alreadyLike.jpg");
+                    }
+                }
+            }
+        },"JSON");
+}

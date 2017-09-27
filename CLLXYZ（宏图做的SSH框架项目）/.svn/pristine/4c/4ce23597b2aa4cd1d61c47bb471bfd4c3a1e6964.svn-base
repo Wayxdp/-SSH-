@@ -1,0 +1,18 @@
+package com.ht.common;
+
+public class Constants {
+
+    public static final String DEFAULT_ENCRYPT = "MD5";
+    public static final String DEFAULT_ENCODING = "utf-8";
+
+    public static final String EMPLOYEE_ROLE = "235e964e87c34ac2959ce702f4a50e3d";
+    public static final String USER_ROLE = "3944c4378b3a4d5fa813455d6cca16f6";
+    public static final String ADMIN_ROLE = "b07db0289b5344cf911723bd9e6e3832";
+    public static final String AGENCY_ROLE = "ba18d787e0fc4019a4611943c5193765";
+
+    public static final short YES_STATUS = 1; //可用状态
+    public static final short NO_STATUS = 0;
+    public static final short CHECK_STATUS = 2;
+
+
+}

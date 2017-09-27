@@ -1,0 +1,106 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,
+        collapsible:true,
+        rownumbers:true,
+        pagination:true,
+        pageSize:20,
+        toolbar:'#tb',
+        url:'<%=path %>/sale/pagerSale?emp_id=${employee.id}',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id', checkbox:true"></th>
+        <th data-options="field:'customer',align:'right',formatter:formatUser">客户姓名</th>
+        <th data-options="field:'unit_price',align:'right'">销售单价</th>
+        <th data-options="field:'discount',align:'right'">销售折扣</th>
+        <th data-options="field:'total_cost'">销售总价</th>
+        <th data-options="field:'sale_time',align:'right',formatter:formatDate">销售时间</th>
+        <th data-options="field:'created_time',align:'right',formatter:formatDate">创建时间</th>
+        <th data-options="field:'status',align:'right', formatter:formatStatus">状态</th>
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showSaleEdit();">修改记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusSale('1');">激活记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusSale('0');">冻结记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showCustomer();">查看客户详情</a>
+</div>
+<!--修改记录窗口-->
+<div id="editSale" class="easyui-window normal-win" data-options="closed:true" title="修改销售记录">
+    <form id="editSaleForm">
+        <table>
+            <tr>
+                <!--隐藏id-->
+                <td>
+                    <input type="hidden" name="sale.id" />
+                </td>
+            </tr>
+            <tr>
+                <td>销售单价：</td>
+                <td>
+                    <input name="sale.unit_price"/>
+                </td>
+            </tr>
+            <tr>
+                <td>销售折扣：</td>
+                <td>
+                    <input name="sale.discount"/>
+                </td>
+            </tr>
+            <tr>
+                <td>总费用：</td>
+                <td>
+                    <input name="sale.total_cost"/>
+                </td>
+            </tr>
+            <tr>
+                <td>销售时间：</td>
+                <td>
+                    <input class="easyui-datetimebox" name="sale.sale_time"/>
+                </td>
+            </tr>
+            <tr>
+                <td>创建时间：</td>
+                <td>
+                    <input class="easyui-datetimebox" name="sale.created_time"/>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="updateSale();">确认修改</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<!--自定义的js-->
+<script src="<%=path%>/public/js/ye/employee-js/appointment.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</html>

@@ -1,0 +1,9 @@
+function over(id){
+    document.getElementById(id).style.background="#0b76ac";
+    $('a',"#"+id).attr("style","color:white");
+}
+function out(id){
+    document.getElementById(id).style.background="#f8f8f8";
+    $('a',"#"+id).attr("style","color:#777");
+}
+

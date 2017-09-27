@@ -1,0 +1,188 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Agency;
+import com.ht.bean.Buildings;
+import com.ht.bean.BuildingsImg;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingsImgService;
+import com.ht.service.BuildingsService;
+import com.ht.vo.BuildingsVO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingsController extends AppController {
+
+    private Buildings buildings;
+    private List<BuildingsImg> buildingsImg;
+    //提供set
+    private BuildingsService buildingsService;
+    private BuildingsImgService buildingsImgService;
+    private String id;
+    private Short status;
+    private Integer page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Buildings> rows;
+    private List<BuildingsVO> buildingsVOList;
+
+    /***
+     * 查看单个楼盘详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        buildings = buildingsService.foundById(id);
+        return "showAlterBuildings";
+    }
+    /***
+     * 添加楼盘
+     * @return
+     */
+    public String saveBuildings() {
+        try {
+            buildingsService.save(buildings);
+            controllerResult = ControllerResult.getSuccessResult("添加楼盘成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加楼盘失败！");
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼盘
+     * @return
+     */
+    public String updateBuildings() {
+       try{
+           buildingsService.update(buildings);
+           controllerResult = ControllerResult.getSuccessResult("修改楼盘信息成功");
+       }catch (Exception e) {
+           controllerResult = ControllerResult.getFailResult("修改楼盘信息失败");
+       }
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼盘状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘已可用");
+            } else if (status == 0) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 楼盘的分页查看
+     * @return
+     */
+    public String pagerBuildings() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Buildings> buildingsPager = new Pager<>();
+        buildingsPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingsPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingsPager = buildingsService.listPager(buildingsPager);
+        List<Buildings> result = buildingsPager.getResult();//获取到所有的楼栋
+        rows = buildingsPager.getResult();//查询出所有经销商
+        total = buildingsService.count(buildingsPager).intValue();//查询出经销商总数
+        return "pagerBuildings";
+    }
+
+    /***
+     * 经销商关联的楼盘
+     * @return
+     */
+    public String pagerBuildingsAgency() {
+        buildingsVOList = new ArrayList<>();
+        Pager<Buildings> pager = new Pager<>();
+        pager.setParamStr(" where agency.id='" + id + "'");
+        pager.setPageSize(buildingsService.count(pager).intValue());
+        pager = buildingsService.listPager(pager);
+        for (Buildings b : pager.getResult()) {
+            BuildingsVO buildingsVO = new BuildingsVO();
+            buildingsVO.setId(b.getId());
+            buildingsVO.setName(b.getName());
+            buildingsVOList.add(buildingsVO);
+        }
+        return SUCCESS;
+    }
+
+// 管理员页面参看单个楼盘的所有信息
+    public String adminBuildingsDetail(){
+        buildings = buildingsService.foundById(id);
+        return "adminBuildingsDetail";
+    }
+//查看楼盘的图片
+    public String buildingsImg(){
+        buildingsImg = buildingsImgService.queryImgByBuildingsId(id);
+        System.out.println(buildingsImg);
+        return "buildingsImg";
+    }
+
+    public Buildings getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(Buildings buildings) {
+        this.buildings = buildings;
+    }
+
+    public List<BuildingsImg> getBuildingsImg() {
+        return buildingsImg;
+    }
+
+    public void setBuildingsImg(List<BuildingsImg> buildingsImg) {
+        this.buildingsImg = buildingsImg;
+    }
+
+    public void setBuildingsService(BuildingsService buildingsService) {
+        this.buildingsService = buildingsService;
+    }
+
+    public void setBuildingsImgService(BuildingsImgService buildingsImgService) {
+        this.buildingsImgService = buildingsImgService;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Buildings> getRows() {
+        return rows;
+    }
+
+    public List<BuildingsVO> getBuildingsVOList() {
+        return buildingsVOList;
+    }
+
+}

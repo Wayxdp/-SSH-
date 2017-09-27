@@ -1,0 +1,191 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Agency;
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingService;
+import com.ht.service.BuildingsService;
+import com.ht.vo.BuildingsVO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingsController extends AppController {
+
+    private Buildings buildings;
+
+    //提供set
+    private BuildingsService buildingsService;
+    private String id;
+    private Short status;
+    private Integer page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private int total;
+    private List<Buildings> rows;
+    private List<BuildingsVO> buildingsVOList;
+
+    /***
+     * 查看单个楼栋详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        buildings = buildingsService.foundById(id);
+        return "showAlterBuildings";
+    }
+    /***
+     * 添加楼盘
+     * @return
+     */
+    public String saveBuildings() {
+        try {
+            buildingsService.save(buildings);
+            controllerResult = ControllerResult.getSuccessResult("添加楼盘成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加楼盘失败！");
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼盘
+     * @return
+     */
+    public String updateBuildings() {
+        Buildings b2 = new Buildings();
+        b2.setId(id);
+        b2.setName("修改楼盘的昵称");
+        b2.setArea("修改楼盘的区域");
+        b2.setAddress("修改楼盘的地址");
+        b2.setFloor_area(11.231);
+        b2.setBuilding_area(1212.21);
+        b2.setHouse_type("修改楼层");
+        b2.setBuilding_type("修改别墅");
+        b2.setLatitude(12.121);
+        b2.setLatitude(121.121);
+        b2.setAvg_price(121.12);
+        b2.setCompany("修改楼盘的发开公司");
+        b2.setOpen_date(Calendar.getInstance().getTime()); //楼盘的开盘时间
+        b2.setTotal_rooms(1212);
+        b2.setReception_address("修改接待地址");
+        b2.setTel("18870798915");
+        b2.setGreen_ratio(1212);
+        b2.setPlot_ratio(1212);
+        b2.setProperty_company("物业公司");
+        b2.setProperty_fee(1212);
+        b2.setCar_station(12);
+        b2.setTraffic("经常堵车");
+        b2.setEquipments("泡吧");
+        b2.setIntro("介绍");
+        Agency a2 = new Agency(); // 经销商
+        a2.setId("82d91e8f40b943f88ee5cf6cce0d81b2");
+        b2.setAgency(a2);
+        b2.setCreated_time(Calendar.getInstance().getTime());
+        buildingsService.update(b2);
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼盘状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘已可用");
+            } else if (status == 0) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 楼盘的分页查看
+     * @return
+     */
+    public String pagerBuildings() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Buildings> buildingsPager = new Pager<>();
+        buildingsPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingsPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingsPager = buildingsService.listPager(buildingsPager);
+        List<Buildings> result = buildingsPager.getResult();//获取到所有的楼栋
+        rows = buildingsPager.getResult();//查询出所有经销商
+        total = buildingsService.count();//查询出经销商总数
+        return "pagerUser";
+    }
+
+    /***
+     * 经销商分页查看自己的楼盘
+     * @return
+     */
+    public String pagerBuildingsAgency() {
+        buildingsVOList = new ArrayList<>();
+        Pager<Buildings> pager = new Pager<>();
+        pager.setParamStr(" where agency.id='" + id + "'");
+        pager.setPageSize(buildingsService.count(pager).intValue());
+        pager = buildingsService.listPager(pager);
+        for (Buildings b : pager.getResult()) {
+            BuildingsVO buildingsVO = new BuildingsVO();
+            buildingsVO.setId(b.getId());
+            buildingsVO.setName(b.getName());
+            buildingsVOList.add(buildingsVO);
+        }
+        return SUCCESS;
+    }
+
+    public Buildings getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(Buildings buildings) {
+        this.buildings = buildings;
+    }
+
+    public void setBuildingsService(BuildingsService buildingsService) {
+        this.buildingsService = buildingsService;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Buildings> getRows() {
+        return rows;
+    }
+
+    public List<BuildingsVO> getBuildingsVOList() {
+        return buildingsVOList;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+}

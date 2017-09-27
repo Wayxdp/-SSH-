@@ -1,0 +1,14 @@
+/**
+ * Created by Administrator on 2017/9/5.
+ */
+function submitFile () {
+    $.post("/activity/saveActivity",
+        $("#form").serialize(),
+        function (data) {
+            if(data.controllerResult=="success"){
+                alert("public/js/liu/activity_add.js:9");
+                window.location.href =contextPath + "/admin/admin_activity.jsp";
+            }
+        },"json"
+    );
+}

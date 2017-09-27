@@ -1,0 +1,105 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/6
+  Time: 9:20
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>活动详情</title>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/css/fileinput.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/themes/explorer/theme.css"/>
+</head>
+<body>
+
+<div class="col-lg-12" style="margin-top: 30px;margin-bottom: 300px;">
+    <form class="form-horizontal" id="editForm">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动标题</label>
+            <div class="col-sm-6">
+                <input  type="text" class="form-control  easyui-textbox"
+                       data-options="required:true, novalidate:true" name="activity.title" value=${requestScope.activity.title} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始时间</label>
+            <div class="col-sm-6">
+                <input  type="text" class="form-control  easyui-databox"
+                       data-options="required:true, novalidate:true" name="activity.start_time" value=${requestScope.activity.start_time} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">结束时间</label>
+            <div class="col-sm-6">
+                <input  type="text" class="form-control easyui-validatebox  easyui-databox"
+                       data-options="required:true, novalidate:true"  name="activity.end_time" value=${requestScope.activity.end_time} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动地址</label>
+            <div class="col-sm-6">
+                <input  type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" name="activity.address" value=${requestScope.activity.address} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动内容</label>
+            <div class="col-sm-6">
+                <input  type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" name="activity.content" value=${requestScope.activity.content} />
+            </div>
+        </div><div class="form-group">
+
+        <div class="form-group">
+            <label for="activity_image" class="col-sm-2 control-label">修改图片</label>
+            <div class="col-sm-6" style="height: 290px;">
+                <input type="file" multiple class="form-control file-preview" id="activity_image" name="logo" value="<%=path%>/${requestScope.activity.logo}"
+                       data-overwrite-initial="false" data-max-file-count="1" placeholder="活动图片" style="height: 200px;width:auto;">
+            </div>
+        </div>
+    </div>
+        <div style="margin-left: auto;margin-right: auto;height: 300px;width:auto;">
+            <a class="btn btn-primary btn-lg" href="javascript:void(0);" onclick="editActivity();">修改</a>
+        </div>
+    </form>
+</div>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/themes/fa/theme.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/js/fileinput.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path%>/public/js/liu/activity.js"></script>
+<script>
+    $("#activity_image").fileinput({
+        language: 'zh',
+        uploadUrl: '/activity/addActivityImg', // you must set a valid URL here else you will get an error
+        allowedFileExtensions: ['jpg', 'png', 'gif','mp4','txt'],   //文件格式
+        overwriteInitial: false,  // 覆盖初始的选中文件
+        maxFileSize: 409600,   //单个文件大小的最大值
+        maxFilesNum: 1, //
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');  // 更改默认的名字
+        }
+    });
+</script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</body>
+</html>
+

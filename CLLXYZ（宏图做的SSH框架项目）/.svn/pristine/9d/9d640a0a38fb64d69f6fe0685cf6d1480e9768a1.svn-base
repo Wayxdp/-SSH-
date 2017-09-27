@@ -1,0 +1,10 @@
+package com.ht.dao;
+
+import com.ht.bean.Appointment;
+import com.ht.common.HibernateSessionFactoryBean;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public interface AppointmentDAO extends BaseDAO<String,Appointment>  {
+}

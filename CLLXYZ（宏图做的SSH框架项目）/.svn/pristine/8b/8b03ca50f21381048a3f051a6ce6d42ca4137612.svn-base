@@ -1,0 +1,74 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/2
+  Time: 9:48
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/css/zhang/main.css" rel="stylesheet" />
+</head>
+<body>
+
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,  <!--是否支持多选-->
+        collapsible:true,   <!--是否可以查询-->
+        rownumbers:true,    <!--是否显示行数-->
+        pagination:true,    <!--是否标记页码-->
+        pageSize:20,        <!--分页的大小-->
+        toolbar:'#tb',      <!--工具栏-->
+        url:'<%=path %>/buildings/pagerBuildingsAdmin',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id',width:60,checkbox:true">楼盘id</th>
+        <th data-options="field:'name'">楼盘名称</th>
+        <th data-options="field:'agency',formatter:formatObject">楼盘名称</th>
+        <th data-options="field:'address',align:'center'">楼盘地址</th>
+        <th data-options="field:'floor_area',align:'center'">占地面积</th>
+        <th data-options="field:'building_area',align:'center'">建筑面积</th>
+        <th data-options="field:'house_type',align:'center'">房源类型</th>
+        <th data-options="field:'building_type',align:'center'">建筑类型</th>
+        <th data-options="field:'avg_price',align:'center'">楼盘均价</th>
+        <th data-options="field:'open_date',align:'center',formatter:formatDate">开盘时间</th>
+        <th data-options="field:'total_rooms',align:'center'">总套数</th>
+        <th data-options="field:'reception_address',align:'center'">接待地址</th>
+        <th data-options="field:'avg_price',align:'center'">楼盘均价</th>
+        <th data-options="field:'tel',align:'center'">固定电话</th>
+        <th data-options="field:'status',align:'left'">状态</th>
+    </tr>
+    </thead>
+</table>
+
+<div id="tb">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="showBuildingsImg();">显示楼盘图片</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="showBuildingsDetail();">显示楼盘详情</a>
+</div>
+
+<div id="showImgWin">
+
+</div>
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path %>/public/js/liu/buildings.js"></script>
+<script src="<%=path %>/public/js/liu/commonFormat.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+
+</body>
+</html>
+

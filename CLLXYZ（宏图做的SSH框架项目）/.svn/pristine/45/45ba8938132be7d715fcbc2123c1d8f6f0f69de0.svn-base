@@ -1,0 +1,135 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/17
+  Time: 19:40
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" href="<%=path%>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/plugins/bootstrap/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/main.css">
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/index-img.css">
+</head>
+<body class="container">
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+
+        <div class="row-fluid" style="margin-top: 20px;">
+            <div class="col-lg-12 col-md-12  col-sm-12" style="border: 1px #ac2925 solid;height: 80px;padding: 10px;">
+                <jsp:include page="/include_page/top.jsp"></jsp:include>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="col-lg-6 col-md-6 col-sm-4"
+                 style="border: 1px #ac2925 solid;height: 400px; text-align: center;">
+                <br/>
+                <div style="text-align: center;height: 350px;background-color: #f1f1ff;">
+                    <br/>
+                    <img src="${requestScope.agency.logo}" style=" width: auto;height:300px;vertical-align: middle;">
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-4" style="border: 1px #ac2925 solid;height: 400px;padding: 10px;">
+                <div name="des" style="background-color: #f1f1ff;height: 350px;margin-top: 10px;">
+
+                    <div name="one" style="height: 50px;">
+                        <div id="name" style="float: left;margin-top: 10px;margin-left: 30px;">
+                            <label style="width: 60px;text-align: center;">公司名称</label>
+                            <input readonly value="${requestScope.agency.name}"/>
+                        </div>
+                        <div id="email" style="float: left;margin-top: 10px;margin-left: 20px;">
+                            <label style="width: 60px;text-align: center;">Email</label>
+                            <input readonly value="${requestScope.agency.email}"/>
+                        </div>
+                        <p style="clear: both"></p>
+                    </div>
+
+                    <div name="two" style="height: 50px;">
+                        <div id="leader" style="float: left;margin-top: 10px;margin-left: 30px;">
+                            <label style="width: 60px;text-align: center;">管 理 者</label>
+                            <input readonly value="${requestScope.agency.leader}"/>
+                        </div>
+                        <div id="phone" style="float: left;margin-top: 10px;margin-left: 20px;">
+                            <label style="width: 60px;text-align: center;">电话</label>
+                            <input readonly value="${requestScope.agency.phone}"/>
+                        </div>
+                        <p style="clear: both"></p>
+                    </div>
+
+                    <div name="three" style="height: 50px;">
+                        <div id="tel" style="float: left;margin-top: 10px;margin-left: 30px;">
+                            <label style="width: 60px;text-align: center;">固定电话</label>
+                            <input readonly value="${requestScope.agency.tel}"/>
+                        </div>
+                        <div id="address" style="float: left;margin-top: 10px;margin-left: 20px;">
+                            <label style="width: 60px;text-align: center;">地址</label>
+                            <input readonly value="${requestScope.agency.address}">
+                        </div>
+                    </div>
+
+                    <div name="four">
+                        <div id="intro">
+                            <div class="col-lg-12" style="border: 1px #ac2925 solid;height: 150px;">
+                                <div style="text-align: center;width: auto;height: auto;margin-right: 0;margin-left: 0;">
+                                    <h4>公司简介</h4>
+                                </div>
+                                <div id="intro-words">${requestScope.agency.intro}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p style="clear: both;"></p>
+        <div class="row-fluid">
+            <div class="col-lg-6 col-md-4 col-sm-4" style="border: 1px #ac2925 solid;height: 400px;">
+                <div style="width: auto;margin-left: 100px;margin-top: 20px;">
+                    <div class="col-lg-8 col-md-6 col-sm-6" style="margin-right: 0;margin-left: 0;text-align: center;">
+                        <span style=";font:bold 20px w;">前台接待</span>
+                    </div>
+                </div>
+
+                <div id="emps">
+                        <div >
+                            <
+                        </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6  col-md-4 col-sm-4" style="border: 1px #ac2925 solid;height: 400px;">
+                <div id="buildings-1">
+                    <img name="buildings-1">
+                </div>
+                <div id="buildings-2">
+                    <img name="buildings-2">
+                </div>
+                <div id="buildings-3">
+                    <img name="buildings-3">
+                </div>
+            </div>
+        </div>
+
+        <div class="row-fluid">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="border: 1px #ac2925 solid;height: auto;">
+                <jsp:include page="/include_page/footer.jsp"></jsp:include>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap/js/bootstrap.min.js"></script>
+</body>
+</html>
+

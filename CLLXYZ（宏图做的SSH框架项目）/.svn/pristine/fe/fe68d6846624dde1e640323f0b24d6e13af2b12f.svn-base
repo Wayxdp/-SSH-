@@ -1,0 +1,68 @@
+/**
+ * 员工相关的js
+ */
+function showEmpEdit() {
+    $('input').attr('readonly',false);//取消input的不可编辑状态，将true改为false
+    $('input').removeAttr("disabled");
+    $('#editbtn').attr('style', '');//清除效果
+    $('input').css('background-color','#def6ff');//设置input的颜色
+    $('#editInfo').css('display','none');//隐藏
+    $('#phoneid').css('display','none');
+    $('#basic_salaryid').css('display','none');
+}
+
+
+/**
+ * 修改员工的信息
+ */
+function updateEmpInfo() {
+    if (formValidate("editEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmployeeSelf",
+            $("#editEmpForm").serialize(),
+            function (data) {
+                showAlert(data.controllerResult.message);
+                window.location.href="/employee/emp_information.jsp";
+            },
+            "json"
+        );
+    }
+    top.location.reload();
+}
+
+/**
+ * 修改员工密码
+ */
+
+function updateEmpPwd() {
+    if (formValidate("pwdEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmpPwd",
+            $("#pwdEmpForm").serialize(),
+            function (data) {
+                if (data.controllerResult.result=="success"){
+                    alert(data.controllerResult.message);
+                    window.location.reload();
+                }else{
+                    showAlert(data.controllerResult.message);
+                }
+            },
+            "json"
+        );
+    }
+}
+
+/**
+ *上传头像
+ */
+function uploadHeadIcon() {
+    alert("upload");
+    $.post(
+        contextPath+"/employee/uploadHeadIcon",
+        $("#uploadFrom").serialize(),
+        function (data) {
+
+        },
+        "json"
+    );
+}

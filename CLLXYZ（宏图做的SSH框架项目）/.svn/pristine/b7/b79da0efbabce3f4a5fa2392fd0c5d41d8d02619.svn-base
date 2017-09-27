@@ -1,0 +1,6 @@
+package com.ht.controller.entity;
+
+import com.ht.controller.AppController;
+
+public class SaleController extends AppController {
+}

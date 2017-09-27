@@ -1,0 +1,151 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.*;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingService;
+import com.ht.vo.BuildingsVO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingController extends AppController {
+
+    private Building building;
+
+    //提供set
+    private BuildingService buildingService;
+    private String id;
+    private Short status;
+    private Integer page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Building> rows;
+
+    /***
+     * 查看单个楼栋详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        building = buildingService.foundById(id);
+        return "showAlterBuilding";
+    }
+    /***
+     * 添加楼栋
+     * @return
+     */
+    public String saveBuilding() {
+        Building b1 = new Building(); //楼栋
+        b1.setName("楼栋的名称");
+        b1.setTotal_room(12);
+        b1.setTotal_lift(12);
+        b1.setTotal_floor(12);
+        b1.setFloor_rooms(12);
+        b1.setStatus(Constants.YES_STATUS);
+        b1.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        Buildings s = new Buildings(); // 楼盘
+        s.setId(id);//从页面获取传替到后台的id值
+        b1.setBuildings(s);
+        Agency agency = new Agency();
+        agency.setId("82d91e8f40b943f88ee5cf6cce0d81b2");// 楼栋与楼盘都应关联该经销商
+        b1.setAgency(agency);//从session里获取Agency的值
+        buildingService.save(b1);
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼栋
+     * @return
+     */
+    public String updateBuilding() {
+        Building b2 = new Building();
+        b2.setId("402880b25e269a1f015e269a81e40000");
+        b2.setName("修改楼栋的名称1");
+        b2.setTotal_room(1234);
+        b2.setTotal_lift(1234);
+        b2.setTotal_floor(1234);
+        b2.setFloor_rooms(1234);
+        b2.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        b2.setStatus(Constants.YES_STATUS); //修改状态
+        Buildings s2 = new Buildings(); // 楼盘
+        s2.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b2.setBuildings(s2);
+        buildingService.update(b2);
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼栋状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼栋可用");
+            } else if (status == 0) {
+                controllerResult = ControllerResult.getFailResult("楼栋冻结成功");
+                buildingService.updateStatus(id, status);
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 楼栋的分页查看
+     * @return
+     */
+    public String pagerBuilding() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Building> buildingPager = new Pager<>();
+        buildingPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingPager = buildingService.listPager(buildingPager);
+        List<Building> result = buildingPager.getResult();//获取到所有的楼栋
+        rows = buildingPager.getResult();//查询出所有经销商
+        total = buildingService.count(buildingPager).intValue();//查询出经销商总数
+        return "pagerUser";
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public void setBuildingService(BuildingService buildingService) {
+        this.buildingService = buildingService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Building> getRows() {
+        return rows;
+    }
+
+}

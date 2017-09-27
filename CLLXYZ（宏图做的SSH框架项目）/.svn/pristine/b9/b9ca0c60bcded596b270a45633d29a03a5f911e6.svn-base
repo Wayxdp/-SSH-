@@ -1,0 +1,54 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Activity;
+import com.ht.bean.House;
+import com.ht.common.ControllerResult;
+import com.ht.controller.AppController;
+import com.ht.service.ActivityService;
+import com.ht.service.HouseService;
+
+import java.util.List;
+
+/**
+ * Created by qm on 2017/8/28.
+ */
+public class ActivityController extends AppController{
+
+    private ActivityService activityService;
+    private ControllerResult controllerResult;
+
+    private String id;
+    private Short status;
+    private int page;
+
+    private int total;
+    private List<Activity> rows;
+
+    public void setActivityService(ActivityService activityService) {
+        this.activityService = activityService;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public List<Activity> getRows() {
+        return rows;
+    }
+}

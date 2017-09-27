@@ -1,0 +1,223 @@
+package com.ht.controller;
+
+import com.ht.bean.*;
+import com.ht.common.ControllerResult;
+import com.ht.common.EncryptUtil;
+import com.ht.common.Pager;
+import com.ht.service.*;
+import org.apache.log4j.Logger;
+
+import java.util.Calendar;
+import java.util.List;
+
+public class UserController extends AppController {
+
+    //需要输出log记录
+    private static final Logger logger = Logger.getLogger(AdminController.class);
+
+    private User user;
+
+    private ControllerResult controllerResult;
+
+    private UserService userService;
+    private BuildingsService buildingsService;
+    private MessageService messageService;
+    private CommentService commentService;
+    private LikeService likeService;
+    private HistoryService historyService;
+
+    private List<Like> rows;
+    private int total;
+    private int page;
+
+    /**
+     * 1.到添加页面，得到表单数据
+     */
+    public String toAddPage(){
+        return "toAddPage";
+    }
+
+    /**
+     * 2.校验手机号
+     */
+    public String checkPhone(){
+        User reg_user = userService.findByPhone(user.getPhone());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            controllerResult.setMessageColor("green");
+            return "phone_ok";
+        }
+        controllerResult = ControllerResult.getSuccessResult("该手机号已注册");
+        controllerResult.setMessageColor("red");
+        return "phone_no";
+    }
+
+    /**
+     * 3.校验邮箱
+     * @return
+     */
+    public String checkEmail(){
+        User reg_user = userService.findByEmail(user.getEmail());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            return "email_ok";
+        }
+        controllerResult = ControllerResult.getSuccessResult("该邮箱已注册");
+        return "check_no";
+    }
+    /**
+     * 4.手机号和邮箱校验通过，实现注册功能
+     * @return
+     */
+    public String register() {
+        if (checkPhone().equals("phone_ok") && checkEmail().equals("email_ok")) {
+            String password = request.getParameter("user.pwd");
+            String comfirmPwd = request.getParameter("repassword");
+            String pwdStr = "";
+            pwdStr = EncryptUtil.md5(password);
+            user.setPwd(pwdStr);
+            userService.save(user);
+            return "register_success";
+        }else{
+            return "register_fail";
+        }
+    }
+
+    public String testUserAdd() {
+        User user = new User();
+        user.setEmail("user1@qq.com");
+        user.setPhone("18870798915");
+        user.setPwd("Qpf0SxOVUjUkWySXOZ16kw==");
+        logger.trace("trace");
+        logger.warn("警告");
+        logger.info("提示信息");
+        //字段信息不完整···
+        userService.save(user);
+        return SUCCESS;
+    }
+
+
+    //增加留言
+    public String addMessage() {
+        Message message = new Message();
+        message.setContent("小张的留言内容");
+        message.setReply("留言的回复");
+        User u2 = new User();
+        u2.setId("402880b25e17fe90015e17ff891c0000");//用户的ID
+        message.setUser(u2);
+        Buildings builds = new Buildings(); //楼盘的ID
+        builds.setId("e31d51b0cba044609b32ae3203cd6de7");
+        message.setBuildings(builds);
+        message.setLeave_time((Calendar.getInstance().getTime())); //留言的时间
+        message.setReply_time((Calendar.getInstance().getTime())); //留言的回复时间
+        messageService.save(message);
+        return SUCCESS;
+    }
+
+    //添加评论
+    public String addComment() {
+        Comment comment = new Comment();
+        comment.setContent("评论的内容");
+        comment.setComment_time(Calendar.getInstance().getTime()); //评论的时间
+        User u2 = new User();//谁发表的评论
+        u2.setId("402880b25e171aba015e171b5da50001");
+        comment.setUser(u2);
+        Buildings buildings = new Buildings(); //评论的哪栋楼盘
+        buildings.setId("Qpf0SxOVUjUkWySXOZ16kw==");
+        comment.setBuildings(buildings);
+        commentService.save(comment);
+        return SUCCESS;
+    }
+
+    //点赞
+    public  String addLike() {
+        Like like = new Like();
+        like.setCreated_time(Calendar.getInstance().getTime()); //点赞的时间
+        User u4 = new User();
+        u4.setId("402880b25e16fd23015e16ff08c50001");
+        like.setUser(u4);
+        Buildings build = new Buildings();
+        build.setId("ICy5YqxZB1uWSwcVLSNLcA==");
+        like.setBuildings(build);
+        likeService.save(like);
+        return SUCCESS;
+    }
+
+    //历史记录
+    public String addHistory() {
+        History history = new History();
+        history.setCreated_time(Calendar.getInstance().getTime()); //历史记录的时间
+        User u5 = new User();
+        u5.setId("402880b25e17229c015e1722e3840000");
+        history.setUser(u5);
+        Buildings b5 = new Buildings();
+        b5.setId("Qpf0SxOVUjUkWySXOZ16kw==");
+        history.setBuildings(b5);
+        historyService.save(history);
+        return SUCCESS;
+    }
+
+    // liu: 点赞的分页查询
+    public String likePager(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据 获取从页面上传递过来的数据个数
+        Pager<Like> pager = new Pager<Like>(); //  组装pager对象 在分页查询中使用到 该对象
+        pager.setPage(Integer.valueOf(page));
+        pager.setPageSize(pageSize);
+        pager = likeService.listPager(pager); // 查询出的结果
+        rows = pager.getResult();
+        total = likeService.count();
+        return SUCCESS;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setBuildingsService(BuildingsService buildingsService) {
+        this.buildingsService = buildingsService;
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
+    public void setLikeService(LikeService likeService) {
+        this.likeService = likeService;
+    }
+
+    public void setHistoryService(HistoryService historyService) {
+        this.historyService = historyService;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setResults(List<Like> rows) {
+        this.rows = rows;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public List<Like> getRows() {
+        return rows;
+    }
+}

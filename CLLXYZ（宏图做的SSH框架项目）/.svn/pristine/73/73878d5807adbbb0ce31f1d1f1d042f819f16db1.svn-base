@@ -1,0 +1,147 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Activity;
+import com.ht.bean.Agency;
+import com.ht.bean.Buildings;
+import com.ht.bean.House;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.ActivityService;
+import com.ht.service.HouseService;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by qm on 2017/8/28.
+ */
+public class ActivityController extends AppController{
+
+    private ActivityService activityService;
+    private ControllerResult controllerResult;
+
+    private String id;
+    private Short status;
+    private int page;
+
+    private int total;
+    private List<Activity> rows;
+    private Activity activity;
+
+    /**
+     * 1.分页查看所有活动
+     * @return
+     */
+    public String pagerActivity(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Activity> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = activityService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = activityService.count();//查询出活动总数
+        return  "pagerActivity";
+    }
+
+    /**
+     * 2.添加活动
+     * @param
+     */
+    public String addActivity(){
+        Activity activity = new Activity();
+        activity.setAddress("天庭");
+        activity.setContent("蟠桃会");
+        activity.setLogo("1.png");
+        activity.setTitle("大闹天宫");
+        activity.setStart_time(new Date());
+        activity.setEnd_time(Calendar.getInstance().getTime());
+        if (id != null) {//id此时为楼盘id
+            Agency agency = new Agency();//从session中获取agency
+            agency.setId("2ea5fb1065c3458ea37e131566624bc8");
+            Buildings buildings = new Buildings();//
+            buildings.setId(id);
+            activity.setAgency(agency);
+            activity.setBuildings(buildings);
+        }
+        activityService.save(activity);
+        return  "addActivity";
+    }
+
+    /**
+     * 3.修改活动
+     * @param
+     */
+    public String updateActivity(){
+        Activity activity = new Activity();
+        activity.setId("3d78beebad734a44af0482f942afd35f");
+        activity.setEnd_time(new Date());
+        activity.setStart_time(new Date());
+        activity.setTitle("南海佛衣会");
+        activity.setLogo("2.png");
+        activity.setContent("佛衣会");
+        activity.setAddress("南海");
+        Agency agency = new Agency();//从session中获取agency
+        agency.setId("402880e95e27d363015e27d42ce40000");
+        Buildings buildings = new Buildings();//
+        buildings.setId(id);
+        activity.setAgency(agency);
+        activity.setBuildings(buildings);
+        activityService.update(activity);
+        return  "updateActivity";
+    }
+
+    /**
+     * 活动的激活与冻结
+     * @param
+     */
+    public String validActivity(){
+        activityService.updateStatus(id,status);
+        if(status != null){
+            if (status==1) {
+                controllerResult = ControllerResult.getSuccessResult("激活成功！");
+            } else if (status==0) {
+                controllerResult = ControllerResult.getSuccessResult("冻结成功！");
+            }
+
+        }
+        return "validActivity";
+    }
+
+    public void setActivityService(ActivityService activityService) {
+        this.activityService = activityService;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Activity> getRows() {
+        return rows;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+}

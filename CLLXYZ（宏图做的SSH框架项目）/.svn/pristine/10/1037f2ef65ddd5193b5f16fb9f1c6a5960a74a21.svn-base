@@ -1,0 +1,86 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Article;
+import com.ht.bean.ArticleType;
+import com.ht.common.ControllerResult;
+import com.ht.controller.AppController;
+import com.ht.service.ArticleService;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/29.
+ */
+public class ArticleController extends AppController {
+    private ArticleService articleService;
+    private short status;
+    private String id;
+    private int page;
+
+    private ControllerResult controllerResult;
+    private List<Article> rows;
+    private int total;
+
+
+    //文章添加
+    public String addArticle(){
+        ArticleType articleType = new ArticleType();
+        articleType.setId(request.getParameter("articleType_id"));
+        Article article = new Article();
+        article.setTitle("晒房");
+        article.setAbstracts("文章摘要");
+        article.setContent("文章的空内容");
+        article.setLogo("/article.jsp");
+        article.setCreated_time(Calendar.getInstance().getTime());
+        article.setStatus((short)0);
+        article.setArticleType(articleType);
+        return SUCCESS;
+    }
+    //文章修改
+    public String updateArticle(){
+        Article article = new Article();
+        article.setId(request.getParameter("article_id"));
+        article.setTitle("蜗居小屋");
+        article.setAbstracts("蜗居小屋摘要");
+        article.setContent("文章内容----");
+        article.setLogo("/article1.jsp");
+        article.setCreated_time(Calendar.getInstance().getTime());
+        article.setStatus((short)1);
+        return SUCCESS;
+    }
+    //文章冻结
+    //文章激活
+    //文章分页查看
+
+
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public List<Article> getRows() {
+        return rows;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+
+}

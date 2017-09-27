@@ -1,0 +1,157 @@
+/**
+ * 获取楼盘的楼栋
+ */
+function getBuilding(id) {
+    $.post("/building/pagerBuildingBuildingsVO?id=" + id,
+        function (data) {
+            if (data) {
+                var buildingsSelect = $("#building");
+                $.each(data.nameIdVOList, function (index, buildings) {
+                    buildingsSelect.append('<option value="' + buildings.id + '"> ' + buildings.name + '</option>');
+                });
+            }
+        }, "json"
+    );
+}
+/**
+ *根据楼栋id获取房号
+ */
+function getRoom(value) {
+    $.post("/room/pagerRoomBuildingVO?id=" + value,
+        function (data) {
+            if (data) {
+                var roomSelect = $("#rooms");
+                $.each(data.nameIdVOList, function (index, room) {
+                    roomSelect.append('<option value="' + room.id + '"> ' + room.name + '</option>');
+                });
+            } "json"});
+}
+
+/**
+ *激活与冻结记录
+ */
+function updateStatusSale(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        if(row.status==status){
+            showAlert("无需"+(status=='1'?"激活":"冻结")+"该记录！");
+            return;
+        }
+        var json;
+        if(status=='1'){//激活
+            json = {
+                "status": '1',
+                "id": row.id
+            }
+        }else if(status=='0'){//冻结
+            json = {
+                "status": '0',
+                "id": row.id
+            }
+        }
+        $.post(
+            contextPath+"/sale/statusSale",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                }
+            },
+            "json"
+        );
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}
+/**
+ * 销售记录的修改
+ */
+function showSaleEdit() {
+    if (row){
+    }else {
+        showAlert("请选择需要修改的栏目！");
+    }
+}
+function updateSale() {
+    var created_time = $("#created_time");
+    created_time.attr("name","sale.created_time");
+    var sale_time = $("#sale_time");
+    sale_time.attr("name","sale.sale_time");
+    if (formValidate("form")){
+        $.post(
+            contextPath+"/sale/updateSale",
+            $("#form").serialize(),
+            function (data) {
+                $("#list").datagrid("reload");
+                showAlert(data.controllerResult.message);
+            },
+            "json"
+        );
+        closeWin("win");
+    }
+}
+/**
+ *客户信息
+ */
+function showCustomer() {
+    var row = $("#list").datagrid("getSelected");
+    if(row){
+        var name = row.customer.name;
+        var gender = row.customer.gender;
+        if (gender=='M'){
+            gender='男'
+        }else{
+            gender='女'
+        }
+        var birthday = row.customer.birthday;
+        var identity_id = row.customer.identity_id;
+        var email = row.customer.email;
+        var phone = row.customer.phone;
+        var address = row.customer.address;
+        var together = row.customer.together;
+        $('#name').html(name);
+        $('#gender').html(gender);
+        $('#birthday').html(birthday);
+        $('#identity_id').html(identity_id);
+        $('#email').html(email);
+        $('#phone').html(phone);
+        $('#address').html(address);
+        $('#together').html(together);
+        openWin("customer_info");
+    }else{
+        showAlert("请选择需要操作的栏目！");
+    }
+
+}
+/**
+ *添加销售记录
+ */
+function saveSale() {
+    if (formValidate("saveSaleForm")){
+        $.post(
+            contextPath+"/sale/saveSale",
+            $("#saveSaleForm").serialize(),
+            function (data) {
+                window.location.href="emp_sales.jsp";
+            },
+            "json"
+        );
+    }
+}
+function setCustomers(id) {
+    $.post(
+        contextPath+"/customer/pagerCustomerEmployeeVO?emp_id=" + id,
+        function (data) {
+            if (data) {
+                var customerSelect = $("#customers");
+                $.each(data.nameIdVOList, function (index, customers) {
+                    customerSelect.append('<option value="' + customers.id + '"> ' + customers.name + '</option>');
+                });
+            }
+        }, "json"
+    );
+}

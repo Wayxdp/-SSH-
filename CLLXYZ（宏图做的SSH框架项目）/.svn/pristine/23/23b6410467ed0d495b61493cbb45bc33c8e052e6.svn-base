@@ -1,0 +1,82 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/9/5
+  Time: 20:46
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>活动详情</title>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/plugins/lightbox2/dist/css/lightbox.css"/>
+</head>
+<body>
+
+<div class="col-lg-12" style="margin-top: 30px;margin-bottom: 300px;">
+    <form class="form-horizontal" id="detailForm">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动标题</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.activity.title} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">开始时间</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.activity.start_time} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">结束时间</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.activity.end_time} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动地址</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.activity.address} />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">活动内容</label>
+            <div class="col-sm-6">
+                <input readonly type="text" class="form-control easyui-validatebox  easyui-textbox"
+                       data-options="required:true, novalidate:true" value=${requestScope.activity.content} />
+            </div>
+        </div><div class="form-group">
+            <label class="col-sm-2 control-label">活动图片</label>
+            <div class="lb-cancel col-sm-6" style="width: 270px;height: auto;">
+                <a href="<%=path%>/${requestScope.activity.logo}" data-lightbox="image-group">
+                <img src="<%=path%>/${requestScope.activity.logo}"  style="width: auto;height: 200px;">
+            </a>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path%>/public/plugins/lightbox2/dist/js/lightbox.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</body>
+</html>

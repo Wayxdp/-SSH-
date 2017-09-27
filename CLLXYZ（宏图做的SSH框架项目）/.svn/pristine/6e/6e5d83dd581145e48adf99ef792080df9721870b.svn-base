@@ -1,0 +1,103 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.*;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.CommentService;
+
+import java.util.Calendar;
+import java.util.List;
+
+/**
+ * Created by Administrator on 2017/8/29.
+ */
+public class CommentController extends AppController {
+    private List<Comment> rows; // getter
+    private ControllerResult controllerResult; //getter
+
+    private CommentService commentService;  //setter
+    private String id;       // setter
+    private int total;      // setter
+    private int page;   //setter
+    private Short status; // setter
+
+    //添加
+    private String saveComment(){
+        Comment comment = new Comment();
+        comment.setContent("评论的内容");
+        comment.setComment_time(Calendar.getInstance().getTime()); //评论的时间
+        User user= new User()                                                           ;//谁发表的评论
+        user.setId("4028809b5e1c0348015e1c03cad90000");  // 刘表中的id
+        comment.setUser(user);
+        Buildings buildings = new Buildings();                                      //评论的哪栋楼盘
+        buildings.setId("4028809b5e194a94015e194c1cd10000"); // 刘表中的id
+        comment.setBuildings(buildings);
+        commentService.save(comment);
+        return SUCCESS;
+    }
+    //评论修改
+    public String updateComment() {
+        Comment comment = new Comment();
+        comment.setId("4028809b5e262cc9015e262cf84f0000");
+        comment.setContent(" 修改的内容");
+        commentService.update(comment);
+        return SUCCESS;
+    }
+    //状态的修改
+    public String statusComment() {
+        System.out.println("com/ht/controller/UserController.java:160 status" + status);
+        if (status!=null&&id!=null){
+            if (status == 1) {
+                commentService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("激活成功");
+            }else if (status ==0){
+                commentService.updateStatus(id,status);
+                controllerResult = ControllerResult.getSuccessResult("冻结成功");
+            }else {
+                controllerResult = ControllerResult.getSuccessResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+    //分页查看自己的评论
+    public String pagerComment(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据 获取从页面上传递过来的数据个数
+        Pager<Comment> pager = new Pager<Comment>(); //  组装pager对象 在分页查询中使用到 该对象
+        pager.setPage(Integer.valueOf(page));
+        pager.setPageSize(pageSize);
+        pager = commentService.listPager(pager); // 查询出的结果
+        rows = pager.getResult();
+        total = commentService.count();
+        return SUCCESS;
+    }
+
+
+    public List<Comment> getRows() {
+        return rows;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setCommentService(CommentService commentService) {
+        this.commentService = commentService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+}

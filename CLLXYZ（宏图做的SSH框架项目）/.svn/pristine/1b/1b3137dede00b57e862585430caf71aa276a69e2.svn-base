@@ -1,0 +1,12 @@
+function getArticleInfo(id) {
+    $.post(contextPath + "/article/articleInfo?id=" + id,
+        function (data) {
+            var article = data.article;
+            for (var a in article) {
+                $("#" + a).text(article[a]);
+                if (a == "logo") {
+                    $("#logoSrc").attr("src", contextPath + "/public/images/upload/" + article[a]);
+                }
+            }
+        },"JSON");
+}

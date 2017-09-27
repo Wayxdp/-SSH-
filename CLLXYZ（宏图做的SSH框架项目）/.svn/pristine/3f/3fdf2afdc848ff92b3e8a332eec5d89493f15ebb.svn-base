@@ -1,0 +1,53 @@
+/**
+ * Created by ccf on 2017/9/1.
+ */
+
+//删除留言
+function removeMessage() {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        var json;
+            json = {
+                "id": row.id
+             }
+        confirm('确定要删除吗?');
+        $.post(contextPath + "/message/remove",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, "json"
+        );
+    } else {
+        showAlert("请选择需要删除的留言！");
+    }
+}
+//回复留言
+function replyMessage() {
+    var row = $("#list").datagrid("getSelected");
+    if(row) {
+        var replyMsgs = prompt("回复输入框", "请输入要回复内容");
+        $.post(contextPath + "/message/replyMsg",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, "json"
+        );
+    }else{
+        showAlert("请选择需要回复的留言")
+    }
+}
+
+
+function formatUsers(value) {
+    return  value.name;
+}

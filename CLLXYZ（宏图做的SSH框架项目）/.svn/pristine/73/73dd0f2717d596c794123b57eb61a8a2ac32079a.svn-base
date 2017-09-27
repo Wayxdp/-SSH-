@@ -1,0 +1,57 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.House;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.HouseDAO;
+import org.hibernate.query.Query;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public class HouseDAOImpl extends HibernateSessionFactoryBean implements HouseDAO {
+    @Override
+    public void save(House house) {
+        getSessionFactory().getCurrentSession().save(house);
+    }
+
+    @Override
+    public void remove(House house) {
+        getSessionFactory().getCurrentSession().remove(house);
+    }
+
+    @Override
+    public void update(House house) {
+        getSessionFactory().getCurrentSession().update(house);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("update House house set house.status=:status where house.id=:id");
+        query.setParameter("id",id);
+        query.setParameter("status",status);
+        query.executeUpdate();
+    }
+
+    @Override
+    public House foundById(String id) {
+        return null;
+    }
+
+    @Override
+    public Pager<House> listPager(Pager<House> pager) {
+        return null;
+    }
+
+    @Override
+    public List<House> listAll() {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+}

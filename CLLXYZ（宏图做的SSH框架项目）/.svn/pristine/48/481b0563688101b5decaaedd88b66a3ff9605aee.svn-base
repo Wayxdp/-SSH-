@@ -1,0 +1,63 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: qm
+  Date: 2017/8/27
+  Time: 22:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>经销商添加活动</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/css/zhang/main.css" rel="stylesheet" />
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,  <!--是否支持多选-->
+        collapsible:true,   <!--是否可以查询-->
+        rownumbers:true,    <!--是否显示行数-->
+        pagination:true,    <!--是否标记页码-->
+        pageSize:20,        <!--分页的大小-->
+        toolbar:'#tb',      <!--工具栏-->
+        url:'<%=path %>/activity/pagerActivity',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id',width:60,checkbox:true">活动编号</th>
+        <th data-options="field:'title'">标题</th>
+        <th data-options="field:'start_time',align:'center',formatter:formatDate">开盘时间</th>
+        <th data-options="field:'end_time',align:'center',formatter:formatDate">结束时间</th>
+        <th data-options="field:'address',align:'right'">地址</th>
+        <th data-options="field:'content',align:'right'">内容</th>
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="editActivity();">修改活动</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validActivity(1);">激活活动</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validActivity(0);">冻结活动</a>
+</div>
+
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path %>/public/js/xie/agency_activity.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</body>
+</html>

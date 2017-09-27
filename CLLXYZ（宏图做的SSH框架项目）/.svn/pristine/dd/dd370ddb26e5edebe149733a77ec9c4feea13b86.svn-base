@@ -1,0 +1,128 @@
+function checkEmail(url) {
+	var result = false;
+	var regex = new RegExp("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$");
+	$.post(url, 
+			$("#reg_form").serialize(),
+			function (data) {
+				$("#info_span").text(data.controllerResult.message);
+				$("#info_span").css("color", data.controllerResult.messageColor);
+				if (data.controllerResult.result == "success") {
+					result = true;
+				}
+			}, "JSON");
+	return check("#input_email", "#info_span", regex, "✔", "请输入正确的邮箱格式") && result;
+}
+
+function checkPhone(url) {
+	var result = false;
+    var regex = new RegExp("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$");
+    if (check("#input_phone", "#phone_span", regex, "✔", "请输入正确的手机号码")) {
+		$.post(url,$("#reg_form").serialize(),function(data){
+			$("#info_span").text(data.controllerResult.message);
+			$("#info_span").css("color",data.controllerResult.messageColor);
+			if(data.controllerResult.result == "success"){
+				result = true;
+			}
+		},"JSON");
+	}
+    return check("#input_phone", "#phone_span", regex, "✔", "请输入正确的手机号码")&& result;
+}
+
+function request(method){
+	$.post("index/reg/" + method, 
+			$("#reg_form").serialize(),
+			function (data) {
+				$("#hint_span").text(data.info);
+				$("#hint_span").css("color", data.span_color);
+			}, "JSON");
+}
+
+function submit_admin(){
+	$.post("admin/system/add_admin", 
+			$("#add_form").serialize(),
+			function (data) {
+				$("#hint_span").text(data.info);
+				$("#hint_span").css("color", data.span_color);
+			}, "JSON");
+}
+
+function checkName() {
+	var regex = new RegExp("^[\u4e00-\u9fa5]{1,6}|[a-zA-Z]{1,12}$");
+	return check("#input_name", "#name_span", regex, "✔", "请输入合法字符");
+}
+
+function checkPwd() {
+	var regex = new RegExp("^[a-zA-Z0-9]{6,20}$");
+	return check("#input_password", "#password_span", regex, "✔", "请输入正确的密码格式(至少6个字符)");
+}
+
+function checkVerify() {
+	var pwdVal = $("#input_password").val();
+	if (pwdVal.length < 1) {
+		var verifyCode = $("#verify_span");
+        verifyCode.text("请先输入密码");
+        verifyCode.css("color", "red");
+	} else {
+		var regex = new RegExp("^" + pwdVal + "$");
+		return check("#input_verify", "#verify_span", regex, "✔", "两次输入的密码不一致")
+	}
+}
+
+function checkPrincipal() {
+	var regex = new RegExp("^[\u4e00-\u9fa5]{1,6}|[a-zA-Z]{1,12}$");
+	return check("#input_principal", "#principal_span", regex, "✔", "请输入合法字符");
+}
+
+function checkAddress() {
+	var regex = new RegExp("^[\u4e00-\u9fa5]{1,6}|[a-zA-Z]{1,12}$");
+	return check("#input_address", "#address_span", regex, "✔", "请输入正确的地址");
+}
+
+function checkDate(codeId, spanId){
+	var codeValue = $(codeId).val();
+	var spanCode = $(spanId);
+	if(codeValue == null || codeValue==""){
+		spanCode.text("请选择日期");
+		spanCode.css("color", "red");
+		return false;
+	}else{
+		spanCode.text("✔");
+		spanCode.css("color", "green");
+		return true;
+	}
+}
+
+function check(codeId, spanId, regex, okHint, noHint) {
+	var is = false;
+	var codeValue = $(codeId).val();
+	var spanCode = $(spanId);
+	if (regex.test(codeValue)) {
+		is = true;
+		spanCode.text(okHint);
+		spanCode.css("color", "green");
+	} else {
+		spanCode.text(noHint);
+		spanCode.css("color", "red");
+	}
+	return is;
+}
+
+function reg_customer() {
+	return checkName() && checkPwd() && checkVerify() && checkPhone() && checkEmail('customer_checkMail');
+}
+
+function reg_company() {
+	return checkName() && checkPwd() && checkVerify() && checkPhone() && checkAddress() && checkPrincipal() && checkDate(codeId, spanId) && checkEmail('company_checkMail');
+}
+
+function reg_designer() {
+	return checkName() && checkPwd() && checkVerify() && checkPhone() && checkEmail('designer_checkMail');
+}
+
+function reg_supply() {
+	return checkName() && checkPwd() && checkVerify() && checkPhone() && checkAddress() && checkPrincipal() && checkDate(codeId, spanId) && checkEmail('supply_checkMail');
+}
+
+function add_admin() {
+	return checkName() && checkPwd()  && checkPhone() && checkEmail('');
+}

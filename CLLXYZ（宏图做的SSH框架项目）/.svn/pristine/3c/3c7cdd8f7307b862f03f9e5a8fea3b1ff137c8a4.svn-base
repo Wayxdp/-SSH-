@@ -1,0 +1,38 @@
+function setSelectTime(){
+    var date = new Date();
+    var year = date.getYear() + 1900;
+    var month = date.getMonth() + 1;
+    $("#yearMonthSelect").val(year + "年" + month + "月");
+}
+
+function getNewData(id) {
+    var time = $("#yearMonthSelect").val();
+    var date = new Date();
+    var year = date.getYear() + 1900;
+    var month = date.getMonth() + 1;
+    if (time == (year + "年" + month + "月")) {
+        $("#list").datagrid("reload", contextPath + "/mission/pagerMissionAgencyNoTime?id=" + id);
+    } else {
+        $("#list").datagrid("reload", contextPath + "/mission/pagerMissionAgencyByTime?id=" + id + "&time=" + time);
+    }
+}
+
+function  formatSaleCount() {
+    $('#list').datagrid({
+        rowStyler:function(index,row){
+            if (row.saleCount < row.quantity){
+                return 'background-color:#FFCC00;';//红色：未完成
+            } else {
+                return 'background-color:#99CC00;';//绿色：已完成
+            }
+        }
+    });
+}
+
+/**
+ *计算可领工资：可领工资 = 基本工资 + 销量*提成
+ */
+
+function formatRealSalary() {
+
+}

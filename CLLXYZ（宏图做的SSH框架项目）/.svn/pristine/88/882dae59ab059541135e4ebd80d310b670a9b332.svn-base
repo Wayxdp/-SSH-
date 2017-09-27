@@ -1,0 +1,177 @@
+package com.ht.controller;
+
+import com.ht.bean.*;
+import com.ht.common.ControllerResult;
+import com.ht.common.EncryptUtil;
+import com.ht.common.Pager;
+import com.ht.common.msg.IndustrySMS;
+import com.ht.common.msg.VerifyCodeUtil;
+import com.ht.service.*;
+import org.apache.log4j.Logger;
+
+import java.util.Calendar;
+import java.util.List;
+
+import static com.ht.common.msg.VerifyCodeUtil.getVerifyCode;
+
+public class UserController extends AppController {
+
+    private User user;              // getter setter
+
+    private ControllerResult controllerResult;
+    private List<User> rows;
+    private Integer total;
+
+    private UserService userService; // setter
+    private String id;       // setter
+    private Integer page;   //setter
+    private Short status; // setter
+
+    //需要输出log记录
+    private static final Logger logger = Logger.getLogger(AdminController.class);
+
+    /**
+     * 1.到添加页面，得到表单数据
+     */
+    public String toAddPage() {
+        return "toAddPage";
+    }
+
+    public String sendVerifyCode() {
+        String phone = request.getParameter("phone");
+        String verifyCode = VerifyCodeUtil.getVerifyCode();
+        System.out.println("com/ht/controller/UserController.java:44.." + verifyCode);
+        session.setAttribute("verifyCode", verifyCode);
+//        IndustrySMS.execute(phone,verifyCode); //快答辩时再放开这注释（发短信要收费的）。
+        controllerResult = ControllerResult.getSuccessResult("发送验证码成功");
+        return SUCCESS;
+    }
+
+    /**
+     * 2.校验手机号
+     */
+    public String checkPhone() {
+        User reg_user = userService.findByPhone(user.getPhone());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            controllerResult.setMessageColor("green");
+            return SUCCESS;
+        }
+        controllerResult = ControllerResult.getFailResult("该手机号已注册");
+        controllerResult.setMessageColor("red");
+        return "defeated";
+    }
+
+    /**
+     * 3.校验邮箱
+     *
+     * @return
+     */
+    public String checkEmail() {
+        User reg_user = userService.findByEmail(user.getEmail());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            controllerResult.setMessageColor("green");
+            return SUCCESS;
+        }
+        controllerResult = ControllerResult.getSuccessResult("该邮箱已注册");
+        controllerResult.setMessageColor("red");
+        return "defeated";
+    }
+
+    /**
+     * 4.手机号和邮箱校验通过，实现注册功能
+     *
+     * @return
+     */
+    public String register() {
+        if (session.getAttribute("verifyCode").equals(request.getParameter("verifyCode"))) {
+            System.out.println("com/ht/controller/UserController.java:91");
+            session.removeAttribute("verifyCode");
+            if (checkPhone().equals(SUCCESS) && checkEmail().equals(SUCCESS)) {
+                user.setPwd(EncryptUtil.md5(user.getPwd()));;
+                userService.save(user);
+                return SUCCESS;
+            }
+            return "defeated";
+        } else {
+            return "defeated";
+        }
+    }
+
+//基本信息的查看
+    public String information(){
+        user = userService.foundById( id);
+        System.out.println(user);
+        if (user!=null){
+            controllerResult = ControllerResult.getSuccessResult("查看成功");
+            return  SUCCESS;
+        }else{
+            controllerResult = ControllerResult.getSuccessResult("查看失败");
+            return null;
+        }
+    }
+
+    public String pagerUser() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<User> pager = new Pager<>();
+        pager.setPage(Integer.valueOf(page));
+        pager.setPageSize(pagerSize);
+        pager = userService.listPager(pager);
+        rows = pager.getResult();
+        total = userService.count(pager).intValue();
+        return "pagerUser";
+
+    }
+    //状态的更改
+    public String statusUser(){
+        if (status!=null&&id!=null){
+            if (status == 1) {
+                userService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("激活成功");
+            }else if (status ==0){
+                userService.updateStatus(id,status);
+                controllerResult = ControllerResult.getSuccessResult("冻结成功");
+            }else {
+                controllerResult = ControllerResult.getSuccessResult("操作失败");
+            }
+        }
+        return "statusUser";
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public List<User> getRows() {
+        return rows;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+}

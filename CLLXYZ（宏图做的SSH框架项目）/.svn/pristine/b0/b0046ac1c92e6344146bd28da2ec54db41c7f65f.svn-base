@@ -1,0 +1,78 @@
+<%--
+  Date: 2017/9/15
+  Time: 8:39
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path= request.getContextPath(); %>
+<html>
+<head>
+    <title>Title</title>
+
+    <link rel="stylesheet" href="<%=path%>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/chen/main.css"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+</head>
+<body>
+<div>
+    <jsp:include page="/include_page/top.jsp" flush="true"></jsp:include>
+</div>
+<!--主页主体：开始-->
+
+<div class="pageMainWrap">
+    <div class="in">
+        <div class="secondBgColor">
+            <div class="viewHead">
+                <!--活动标题-->
+                <h2>${activity.title}</h2>
+                <p><em>开始时间:${acticity.atart_time}</em><em>结束时间:${acticity.end_time}</em></p>
+                <p><em>地址:${acticity.address}</em></p>
+            </div>
+            <div class="viewBody">
+                <!--活动内容-->
+                <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${acticity.content}</h5>
+                <!--文章标题-->
+                <!--<h4><p align="center"><strong>南国威尼斯城</strong></p></h4>-->
+                <!--文章图片-->
+                <span><img src="<%=path%>/${acticity.logo}" title="活动图" alt="活动图"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="in">
+        <div class="advs">
+            <div class="adv">
+                <p align="center"><h4>相关信息</h4></p>
+                <h6>广告1</h6>
+                <a href="#"><img src="<%=path%>/public/css/chen/main.jpg" title="图" alt="图"></a>
+            </div>
+
+            <div class="adv">
+                <h6> 广告2</h6>
+                <a href="#"><img src="<%=path%>/public/css/chen/main.jpg" title="图" alt="图"></a>
+            </div>
+
+            <div class="adv">
+                <h6> 广告3</h6>
+                <a href="#"><img src="<%=path%>/public/css/chen/main.jpg" title="图" alt="图"></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+<p style="clear: both;"></p>
+<div>
+    <jsp:include page="/include_page/footer.jsp" flush="true"></jsp:include>
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+        window.location.href="/article/showArticleInfo";
+    });
+</script>
+</html>
+

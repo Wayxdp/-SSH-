@@ -1,0 +1,13 @@
+package com.ht.service;
+
+import com.ht.bean.Buildings;
+import com.ht.common.Pager;
+import com.ht.dao.BuildingsDAO;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public interface BuildingsService extends BaseService<String,Buildings> {
+
+    Long count (Pager<Buildings> pager);
+}

@@ -1,0 +1,145 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,
+        collapsible:true,
+        rownumbers:true,
+        pagination:true,
+        pageSize:20,
+        toolbar:'#tb',
+        url:'<%=path %>/sale/pagerSale?emp_id=${employee.id}',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id', checkbox:true"></th>
+        <th data-options="field:'customer',align:'right',formatter:formatUser">客户姓名</th>
+        <th data-options="field:'unit_price',align:'right'">销售单价</th>
+        <th data-options="field:'discount',align:'right'">销售折扣</th>
+        <th data-options="field:'total_cost'">销售总价</th>
+        <th data-options="field:'sale_time',align:'right',formatter:formatDate">销售时间</th>
+        <th data-options="field:'created_time',align:'right',formatter:formatDate">创建时间</th>
+        <th data-options="field:'status',align:'right', formatter:formatStatus">状态</th>
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showEditWin('sale.',5);">修改记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusSale('1');">激活记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusSale('0');">冻结记录</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showCustomer();">查看客户详情</a>
+</div>
+<!--修改记录窗口：开始-->
+<div id="win" class="easyui-window" title="修改销售记录" style="width:800px;height:400px"
+      data-options="closed:true,modal:true">
+    <form class="form-horizontal" id="form">
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="hidden" class="form-control"
+                       id="id" name="id"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="unit_price" class="col-sm-2 control-label">销售单价</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control easyui-validatebox"
+                       data-options="required:true, novalidate:true"
+                       validType="xiaoshu"
+                       id="unit_price" name="unit_price"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="discount" class="col-sm-2 control-label">销售折扣</label>
+            <div class="col-sm-6">
+                <input type="discount" class="form-control easyui-validatebox"
+                       data-options="required:true, novalidate:true"
+                       validType="xiaoshu"
+                       id="discount" name="discount"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="total_cost" class="col-sm-2 control-label">总费用</label>
+            <div class="col-sm-6">
+                <input type="text" class="easyui-validatebox form-control"
+                       data-options="required:true, novalidate:true"
+                       validType="xiaoshu"
+                       id="total_cost" name="total_cost"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="sale_time" class="col-sm-2 control-label">销售时间</label>
+            <div class="col-sm-6">
+                <input type="text" class="easyui-datetimebox form-control"
+                       data-options="required:true, novalidate:true"
+                       id="sale_time" name="sale_time"/>
+            </div>
+        </div>
+
+        <div class="form-group ">
+            <label for="created_time"  class="col-sm-2 control-label ">创建时间</label>
+            <div class="col-sm-6">
+                <input class="easyui-datetimebox form-control "
+                       data-options="required:true, novalidate:true"
+                       id="created_time" name="created_time" />
+            </div>
+        </div>
+        <div class="form-group">
+            <a class="col-sm-offset-3  btn btn-primary btn-lg" onclick="updateSale();">修改</a>
+            <button type="reset" class="col-sm-offset-1 btn btn-default btn-lg">重置</button>
+        </div>
+    </form>
+</div>
+<!--修改记录窗口：结束-->
+<!--客户详情：开始-->
+<div id="customer_info" class="easyui-window" title="客户详情"
+     data-options="modal:true,closed:true,iconCls:'icon-save'"
+     style="width:530px;height:440px;padding:10px;">
+    <ul class="list-group">
+        <li class="list-group-item">姓名：<div id="name" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">性别：<div id="gender" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">出生年月：<div id="birthday" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">身份证号：<div id="identity_id" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">邮箱：<div id="email" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">手机号：<div id="phone" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">地址：<div id="address" style="float:right;margin-right:200px;"></div></li>
+        <li class="list-group-item">共同购房人：<div id="together" style="float:right;margin-right:250px;"></div></li>
+        <li class="list-group-item">
+            <button type="button" class="btn btn-primary" style="margin-left:40%;" onclick="closeWin('customer_info');">关闭</button>
+        </li>
+    </ul>
+</div>
+<!--客户详情：结束-->
+</body>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<!--自定义的js-->
+<script src="<%=path%>/public/js/ye/employee-js/appointment.js"></script>
+<script src="<%=path%>/public/js/ye/employee-js/emp_sale.js"></script>
+<script src="<%=path%>/public/js/ye/employee-js/emp_common.js"></script>
+<script src="<%=path %>/public/js/lai/load_form_data.js"></script>
+<script src="<%=path%>/public/js/ye/valid/commonValid.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</html>

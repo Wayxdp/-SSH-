@@ -1,0 +1,44 @@
+function checkedAgencies() {
+    var rows = $("#list").datagrid("getSelections");
+    if (rows) {
+        var len = rows.length;
+        var json;
+        var ids = "";
+        for (var i = 0; i < len; i++) {
+            ids += rows[i].id + ",";
+            json = {
+                "id": ids
+            }
+            showAlert(rows[i].id)
+        }
+        $.post(contextPath+"/agency/checkedAgencies",
+            json,
+            function (data) {
+                showAlert("审核成功!")
+                $("#list").datagrid("reload");
+            }
+        );
+    }
+}
+function UncheckedAgencies() {
+    var rows = $("#list").datagrid("getSelections");
+    if (rows) {
+        var len = rows.length;
+        var json;
+        var ids = "";
+        for (var i = 0; i < len; i++) {
+            ids += rows[i].id + ",";
+            json = {
+                "id": ids
+            }
+            showAlert(rows[i].id)
+        }
+        $.post(contextPath+"/agency/UncheckedAgencies",
+            json,
+            function (data) {
+                showAlert("否决成功!")
+                $("#list").datagrid("reload");
+            }
+        );
+    }
+}

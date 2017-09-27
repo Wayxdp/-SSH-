@@ -1,0 +1,145 @@
+package com.ht.vo;
+
+import java.io.Serializable;
+
+public class BuildingsIndexVO implements Serializable {
+
+    private String id;
+    private String name;
+    private String houseName;
+    private String saleStatus;
+    private String address;
+    private String tel;
+
+    private int viewCount;
+    private int commentCount;
+    private int pictureCount;
+
+    private float beginPrice;
+    private float meanPrice;
+    private float longitude;
+    private float latitude;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getHouseName() {
+        return houseName;
+    }
+
+    public void setHouseName(String houseName) {
+        this.houseName = houseName;
+    }
+
+    public String getSaleStatus() {
+        return saleStatus;
+    }
+
+    public void setSaleStatus(String saleStatus) {
+        this.saleStatus = saleStatus;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
+
+    public int getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public int getPictureCount() {
+        return pictureCount;
+    }
+
+    public void setPictureCount(int pictureCount) {
+        this.pictureCount = pictureCount;
+    }
+
+    public float getBeginPrice() {
+        return beginPrice;
+    }
+
+    public void setBeginPrice(float beginPrice) {
+        this.beginPrice = beginPrice;
+    }
+
+    public float getMeanPrice() {
+        return meanPrice;
+    }
+
+    public void setMeanPrice(float meanPrice) {
+        this.meanPrice = meanPrice;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
+
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    @Override
+    public String toString() {
+        return "BuildingsIndexVO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", houseName='" + houseName + '\'' +
+                ", saleStatus='" + saleStatus + '\'' +
+                ", address='" + address + '\'' +
+                ", tel='" + tel + '\'' +
+                ", viewCount=" + viewCount +
+                ", commentCount=" + commentCount +
+                ", pictureCount=" + pictureCount +
+                ", beginPrice=" + beginPrice +
+                ", meanPrice=" + meanPrice +
+                ", longitude=" + longitude +
+                ", latitude=" + latitude +
+                '}';
+    }
+}

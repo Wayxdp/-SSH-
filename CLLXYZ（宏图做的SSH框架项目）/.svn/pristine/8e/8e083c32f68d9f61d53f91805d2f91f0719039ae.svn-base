@@ -1,0 +1,131 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Agency;
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingService;
+import com.ht.service.BuildingsService;
+
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingsController extends AppController {
+
+    //提供set
+    private BuildingsService buildingsService;
+    private String id;
+    private Short status;
+    private int page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private int total;
+    private List<Buildings> rows;
+
+    /***
+     * 添加楼盘
+     * @return
+     */
+    public String addBuildings() {
+        Buildings b1 = new Buildings(); //楼栋
+        b1.setName("楼栋的名称");
+        b1.setArea("121");
+        b1.setAddress("江西赣州");
+        b1.setTotal_rooms(12);
+        b1.setBuilding_area(12);
+        b1.setStatus(Constants.YES_STATUS);
+        b1.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        Agency agency = new Agency();
+        agency.setId("82d91e8f40b943f88ee5cf6cce0d81b2");
+        b1.setAgency(agency);//从session里获取Agency的值
+        buildingsService.save(b1);
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼盘
+     * @return
+     */
+    public String updateBuildings() {
+        Buildings b2 = new Buildings();
+        b2.setId("402880b25e269a1f015e269a81e40000");
+        b2.setName("修改楼栋的名称1");
+        b2.setArea("1234");
+        b2.setTotal_rooms(1234);
+        b2.setAddress("江西赣州");
+        b2.setHouse_type("别墅");
+        b2.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        b2.setStatus(Constants.YES_STATUS); //修改状态
+        Agency a2 = new Agency(); // 楼盘
+        a2.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b2.setAgency(a2);
+        buildingsService.update(b2);
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼盘状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘可用");
+            } else if (status == 0) {
+                controllerResult = ControllerResult.getFailResult("楼盘冻结成功");
+                buildingsService.updateStatus(id, status);
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 楼盘的分页查看
+     * @return
+     */
+    public String pagerBuildings() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Buildings> buildingsPager = new Pager<>();
+        buildingsPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingsPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingsPager = buildingsService.listPager(buildingsPager);
+        List<Buildings> result = buildingsPager.getResult();//获取到所有的楼栋
+        rows = buildingsPager.getResult();//查询出所有经销商
+        total = buildingsService.count();//查询出经销商总数
+        return "pagerUser";
+    }
+
+    public void setBuildingsService(BuildingService buildingService) {
+        this.buildingsService = buildingsService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Buildings> getRows() {
+        return rows;
+    }
+
+}

@@ -1,0 +1,157 @@
+package com.ht.controller;
+
+
+import com.ht.bean.Agency;
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.bean.Employee;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.EncryptUtil;
+import com.ht.common.Pager;
+import com.ht.service.EmployeeService;
+
+import java.util.Calendar;
+import java.util.List;
+
+public class EmployeeController extends AppController {
+
+    private Employee employee;
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    //提供set
+    private EmployeeService employeeService;
+    private String id;
+    private Short status;
+    private int page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private int total;
+    private List<Employee> rows;
+
+
+    /***
+     * 查看单个员工详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        employee = employeeService.foundById(id);
+        return "showAlterPage";
+    }
+
+    /***
+     * 添加员工
+     * @return
+     */
+    public  String saveEmployee() {
+       try {
+           employeeService.save(employee);
+           controllerResult = ControllerResult.getSuccessResult("添加员工成功");
+       }catch (Exception e) {
+           controllerResult = ControllerResult.getFailResult("添加员工失败");
+       }
+        return SUCCESS;
+    }
+
+    /***
+     * 修改员工
+     * @return
+     */
+    public String updateEmployee() {
+        Employee e2 = new Employee();
+        e2.setId("8ae0edf78262406d93bfb168a437d87b");
+        e2.setName("东阳山已修改");
+        e2.setEmail("890@qq.com");
+        e2.setPwd(EncryptUtil.md5("0987654321"));
+        e2.setPhone("98765432345");
+        e2.setQq("1234567876");
+        e2.setWechat("987656789899");
+        e2.setGender("男");
+        e2.setDes("高富帅");
+        e2.setAddress("广东惠州");
+        e2.setBasic_salary(11000);
+        e2.setIntro("软件架构师");
+        e2.setStatus(Constants.YES_STATUS);
+        e2.setCreated_time(Calendar.getInstance().getTime());
+        Agency a2 = new Agency();
+        a2.setId("82d91e8f40b943f88ee5cf6cce0d81b2");
+        e2.setAgency(a2);
+        Buildings b2 = new Buildings();
+        b2.setId(id);
+        e2.setBuildings(b2);
+        employeeService.update(e2);
+        return SUCCESS;
+    }
+
+    /***
+     * 更改员工状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                employeeService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("员工已可用");
+            } else if (status == 0) {
+                employeeService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("员工冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+
+    /***
+     * 员工的分页查看
+     * @return
+     */
+    public String pagerEmployee() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Employee> employeePager = new Pager<>();
+        employeePager.setPage(page); //得到用户在页面选择的第几页数据
+        employeePager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        employeePager = employeeService.listPager(employeePager);
+        List<Employee> employees = employeePager.getResult();//获取到所有的员工
+        rows = employeePager.getResult();//查询出所有员工
+        total = employeeService.count();//查询出员工商总数
+        return SUCCESS;
+    }
+
+    public void setEmployeeService(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Employee> getRows() {
+        return rows;
+    }
+}

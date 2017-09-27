@@ -1,0 +1,59 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.Customer;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.CustomerDAO;
+import org.hibernate.Session;
+import org.hibernate.query.Query;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public class CustomerDAOImpl extends HibernateSessionFactoryBean implements CustomerDAO {
+    @Override
+    public void save(Customer customer) {
+        getSessionFactory().getCurrentSession().save(customer);
+    }
+
+    @Override
+    public void remove(Customer customer) {
+        getSessionFactory().getCurrentSession().remove(customer);
+    }
+
+    @Override
+    public void update(Customer customer) {
+        getSessionFactory().getCurrentSession().update(customer);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+        String sql = "update Customer set status=:status where id =:id";
+        Query query = getSessionFactory().getCurrentSession().createQuery(sql);
+        query.setParameter("status",status);
+        query.setParameter("id",id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public Customer foundById(String id) {
+        return null;
+    }
+
+    @Override
+    public Pager<Customer> listPager(Pager<Customer> pager) {
+        return null;
+    }
+
+    @Override
+    public List<Customer> listAll() {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+}

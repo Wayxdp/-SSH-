@@ -1,0 +1,10 @@
+package com.ht.dao;
+
+import com.ht.bean.Admin;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public interface AdminDAO extends BaseDAO<String,Admin> {
+    Admin loginAdmin(String phone,String pwd);
+}

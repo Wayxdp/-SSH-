@@ -1,0 +1,182 @@
+package com.ht.controller;
+
+import com.ht.bean.Agency;
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.bean.House;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.service.AgencyService;
+import com.ht.service.BuildingService;
+import com.ht.service.HouseService;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class AgencyController extends AppController {
+
+    private AgencyService agencyService;
+    private BuildingService buildingService;
+    private ControllerResult controllerResult;
+
+    private String buildingId;
+
+    private int page;
+    private int total;
+
+    private String id;//得到页面选择的id
+    private Short status;//得到页面的状态
+
+    private List rows;
+
+    /***
+     * 添加楼栋
+     * @return
+     */
+    public String addBuilding() {
+        Building b1 = new Building(); //楼栋
+        b1.setName("楼栋的名称");
+        b1.setTotal_room(12);
+        b1.setTotal_lift(12);
+        b1.setTotal_floor(12);
+        b1.setFloor_rooms(12);
+        b1.setStatus(Constants.YES_STATUS);
+        b1.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        Buildings s = new Buildings(); // 楼盘
+        s.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b1.setBuildings(s);
+        Agency agency = new Agency();
+        agency.setId("82d91e8f40b943f88ee5cf6cce0d81b2");
+        b1.setAgency(agency);
+        buildingService.save(b1);
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼栋
+     * @return
+     */
+    public String updateBuilding() {
+        Building b2 = new Building();
+        b2.setId("402880b25e1c4241015e1c428d530000");
+        b2.setName("修改楼栋的名称");
+        b2.setTotal_room(1234);
+        b2.setTotal_lift(1234);
+        b2.setTotal_floor(1234);
+        b2.setFloor_rooms(1234);
+        b2.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        b2.setStatus(Constants.YES_STATUS); //修改状态
+        Buildings s2 = new Buildings(); // 楼盘
+        s2.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b2.setBuildings(s2);
+        buildingService.update(b2);
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼栋状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        String statusStr = request.getParameter("status");
+        if (statusStr != null)  {
+            short status = Short.valueOf(statusStr);
+            buildingService.updateStatus(buildingId,status);
+            if("1".equals(statusStr)) {
+                controllerResult = ControllerResult.getSuccessResult("楼栋状态可用");
+            }else if("2".equals(statusStr)) {
+                controllerResult = ControllerResult.getFailResult("楼栋状态不可用");
+            }
+        }
+
+        return SUCCESS;
+    }
+
+
+
+    /***
+     * 楼栋的分页查看
+     * @return
+     */
+    public String pagerBuilding() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Building> buildingPager = new Pager<>();
+        buildingPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingPager = buildingService.listPager(buildingPager);
+        List<Building> result = buildingPager.getResult();//获取到所有的楼栋
+        rows = new ArrayList<>();
+        for (Building b : result) {
+            rows.add(b);
+        }
+        total = buildingService.count(); //查询出经销商的整数
+        return SUCCESS;
+    }
+
+
+    /**
+     * 分页显示所有经销商
+     */
+        public String pagerAgency(){
+            int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+            Pager<Agency> pager = new Pager<>();//创建分页对象
+            pager.setPage(page);//得到用户页面选择的第几页，
+            pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+            pager = agencyService.listPager(pager);
+            rows = pager.getResult();//查询出所有经销商
+            total = agencyService.count();//查询出经销商总数
+            return "pagerAgency";
+        }
+
+    /**
+     * 经销商激活与冻结
+     * @return
+     */
+    public String valid() {
+        agencyService.updateStatus(id,status);
+        if (status==1) {
+            controllerResult = ControllerResult.getSuccessResult("激活成功！");
+        } else if (status==0) {
+            controllerResult = ControllerResult.getSuccessResult("冻结成功！");
+        }
+        return "valid";
+    }
+
+    public void setAgencyService(AgencyService agencyService) {
+        this.agencyService = agencyService;
+    }
+
+    public void setBuildingService(BuildingService buildingService) {
+        this.buildingService = buildingService;
+    }
+
+    public void setBuildingId(String buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public void setControllerResult(ControllerResult controllerResult) {
+        this.controllerResult = controllerResult;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public List getRows() {
+        return rows;
+    }
+}

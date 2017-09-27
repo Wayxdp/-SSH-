@@ -1,0 +1,25 @@
+a:link,a:visited {
+    text-decoration: none;
+    color:black;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+
+
+#nav ul li{
+    margin-left: 20px;
+}
+.dropdown-menu li{
+    margin-left: 0;
+    text-align: left;
+}
+.form-group{
+    float: left;
+}
+
+#ulArticle li a:hover{
+    color: #ff3a33;
+}

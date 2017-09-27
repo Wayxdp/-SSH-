@@ -1,0 +1,32 @@
+package com.ht.controller;
+
+import com.ht.bean.Ads;
+import com.ht.service.AdsService;
+
+import java.util.List;
+
+public class IndexController extends AppController{
+
+    private AdsService adsService;
+
+    public String showHome(){
+        return "showHome";
+    }
+
+    /**
+     * 广告测试
+     * @return
+     */
+    public String ads(){
+        List<Ads> adsList = adsService.listAll();
+        request.setAttribute("ads",adsList);
+        return SUCCESS;
+    }
+
+    /**
+     * get，set方法
+     */
+    public void setAdsService(AdsService adsService) {
+        this.adsService = adsService;
+    }
+}

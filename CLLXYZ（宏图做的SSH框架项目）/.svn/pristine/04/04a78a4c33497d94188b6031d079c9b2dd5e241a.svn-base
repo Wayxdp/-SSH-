@@ -1,0 +1,17 @@
+package com.ht.service;
+
+import com.ht.bean.Agency;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public interface AgencyService extends BaseService<String,Agency>{
+
+    Agency foundByPhone(String phone);
+    Agency foundByEmail(String email);
+    Agency loginAgency(String email, String pwd);
+    List<Agency> foundByUnchecked(short i);
+    void updateCheckedStatus(String[] id,short checked_status);
+}

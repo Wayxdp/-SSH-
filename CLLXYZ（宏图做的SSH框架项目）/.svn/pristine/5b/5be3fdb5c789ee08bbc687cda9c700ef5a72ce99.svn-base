@@ -1,0 +1,86 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.User;
+import com.ht.common.EncryptUtil;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.UserDAO;
+import org.hibernate.query.Query;
+import org.springframework.orm.hibernate5.HibernateTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public class UserDAOImpl extends HibernateSessionFactoryBean implements UserDAO {
+
+    @Override
+    public void save(User user) {
+        getSessionFactory().getCurrentSession().save(user);
+    }
+
+    @Override
+    public void remove(User user) {
+        getSessionFactory().getCurrentSession().remove(user);
+    }
+
+    @Override
+    public void update(User user) {
+        getSessionFactory().getCurrentSession().update(user);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+    }
+
+    @Override
+    public User foundById(String id) {
+        return null;
+    }
+
+    @Override
+    public Pager<User> listPager(Pager<User> pager) {
+        return null;
+    }
+
+    @Override
+    public List<User> listAll() {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        return 0;
+    }
+
+    @Override
+    public User findByPhone(String phone) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from User where phone=:phone");
+        query.setParameter("phone", phone);
+        return (User) query.uniqueResult();
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from User where email=:email");
+        query.setParameter("email",email);
+        return (User) query.uniqueResult();
+    }
+
+    /**
+     * 用户登录的方法
+     * @param phone
+     * @param pwd
+     * @return
+     */
+    @Override
+    public User loginUser(String phone, String pwd) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from User where phone=:phone and pwd=:pwd ");
+        query.setParameter("phone", phone);
+        query.setParameter("pwd", EncryptUtil.md5(pwd));
+        User u = (User)query.uniqueResult();
+        return u;
+    }
+}

@@ -1,0 +1,81 @@
+//显示员工
+function showActivityDetail() {
+    var row = $("#list").datagrid("getSelected"); // 获取数据网格中被选择的单行 getSelections获取数据网格中选中的多行
+    if (row) {
+       window.location.href = contextPath +"/"+"activity/activityDetail"+row.id;
+    } else {
+        showAlert("请选择需要查看的活动！");
+    }
+
+}
+
+function editsActivity() {
+    var jsonStr = '{"activity.id":"id_value","activity.title":"title_value","activity.start_time":"start_time_value","activity.end_time":"end_time_value","activity.address":"address_value","activity.content":"content_value","activity.logo":"logo_value"}';
+    alert(jsonStr)
+    var row = $("#list").datagrid("getSelected"); // 获取数据网格中被选择的单行 getSelections获取数据网格中选中的多行
+    if (row) {
+        // 选中了行
+        jsonStr = jsonStr.replace("id_value",row.id).replace("title_value",row.title).replace("start_time_value",row.start_time).replace("end_time_value", row.end_time).replace("address_value",row.address).replace("content_value",row.content).replace("logo_value",row.logo);
+        // alert(jsonStr)
+        $("#editForm").form("load", JSON.parse(jsonStr)); // 自动把json对象加载到form表单，form里的name与json数据里的属性保持一致
+        openWin("editWin"); // JSON.parse把json字符串转成json对象，JSON.stringify,把JSON对象转成JSON字符串
+    } else {
+        showAlert("请选择需要修改的活动！");
+    }
+
+}
+
+//修改员工
+function editActivity() {
+    if (formValidate("editForm")) {
+        $.post(contextPath + "/activity/updateActivity",
+            $("#editForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                    $("#editForm").form("clear");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, 'json'
+        );
+        closeWin("editWin");
+    }
+}
+
+//验证员工是否可用
+function validActivity(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        if (row.status == status) {
+            showAlert("该活动已被" + (status == 1 ? "激活" : "冻结"));
+            return;
+        }
+        var json;
+        if (status == 1) {
+            // 激活
+            json = {
+                "status": 1,
+                "id": row.id
+            }
+        } else if (status == 0) {
+            // 冻结
+            json = {
+                "status": 0,
+                "id": row.id
+            }
+        }
+        $.post(contextPath + "/activity/statusActivity",
+            json,
+            function (data) {
+                showAlert(data.controllerResult.message);
+                if (data.controllerResult.result == "success") {
+                    $("#list").datagrid("reload");
+                }
+            }, "json"
+        );
+    } else {
+        showAlert("请选择需要" + (status == 1 ? "激活" : "冻结") + "的活动！");
+    }
+}

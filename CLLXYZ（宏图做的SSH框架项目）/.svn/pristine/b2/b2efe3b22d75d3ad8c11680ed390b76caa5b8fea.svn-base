@@ -1,0 +1,176 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Activity;
+import com.ht.bean.Agency;
+import com.ht.bean.Buildings;
+import com.ht.bean.House;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.ActivityService;
+import com.ht.service.HouseService;
+import com.ht.vo.BuildingsVO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Created by qm on 2017/8/28.
+ */
+public class ActivityController extends AppController{
+
+    private Activity activity;
+
+    private ActivityService activityService;
+    private ControllerResult controllerResult;
+
+    private String id;
+    private Short status;
+    private Integer page;
+
+    private Integer total;
+    private List<Activity> rows;
+    private List<BuildingsVO> activityVOList;
+
+
+
+    /***
+     * 查看单个活动详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        activity = activityService.foundById(id);
+        return "showAlterActivity";
+    }
+
+    /***
+     * 经销商分页查看自己的活动
+     * @return
+     */
+    public String pagerBuildingsAgency() {
+        activityVOList = new ArrayList<>();
+        Pager<Activity> activityPager = new Pager<>();
+        activityPager.setParamStr(" where agency.id='" + id + "'");
+        activityPager.setPageSize(activityService.count(activityPager).intValue());
+        activityPager = activityService.listPager(activityPager);
+        for (Activity b : activityPager.getResult()) {
+            BuildingsVO buildingsVO = new BuildingsVO();
+            buildingsVO.setId(b.getId());
+            buildingsVO.setName(b.getTitle());
+            activityVOList.add(buildingsVO);
+        }
+        return SUCCESS;
+    }
+    /**
+     * 1.分页查看所有活动
+     * @return
+     */
+    public String pagerActivity(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Activity> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = activityService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = activityService.count(pager).intValue();//查询出活动总数
+        return  "pagerActivity";
+    }
+
+    /**
+     * 2.添加活动
+     * @param
+     */
+    public String saveActivity(){
+        try {
+            activityService.save(activity);
+            controllerResult = ControllerResult.getSuccessResult("添加活动成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加活动失败！");
+        }
+        return SUCCESS;
+    }
+    /**
+     * 3.修改活动
+     * @param
+     */
+    public String updateActivity(){
+        Activity activity = new Activity();
+        activity.setId("3d78beebad734a44af0482f942afd35f");
+        activity.setEnd_time(new Date());
+        activity.setStart_time(new Date());
+        activity.setTitle("南海佛衣会");
+        activity.setLogo("2.png");
+        activity.setContent("佛衣会");
+        activity.setAddress("南海");
+        Agency agency = new Agency();//从session中获取agency
+        agency.setId("402880e95e27d363015e27d42ce40000");
+        Buildings buildings = new Buildings();//
+        buildings.setId(id);
+        activity.setAgency(agency);
+        activity.setBuildings(buildings);
+        activityService.update(activity);
+        return  "updateActivity";
+    }
+
+    /**
+     * 活动的激活与冻结
+     * @param
+     */
+    public String statusActivity(){
+        if(status != null) {
+            if (status == 1) {
+                activityService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("活动已可用");
+            } else if (status == 0) {
+                activityService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("活动冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+
+    public void setActivityService(ActivityService activityService) {
+        this.activityService = activityService;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Activity> getRows() {
+        return rows;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public List<BuildingsVO> getActivityVOList() {
+        return activityVOList;
+    }
+}

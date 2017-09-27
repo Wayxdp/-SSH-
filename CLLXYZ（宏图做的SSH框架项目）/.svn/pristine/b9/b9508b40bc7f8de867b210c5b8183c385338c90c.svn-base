@@ -1,0 +1,87 @@
+package com.ht.controller;
+
+import com.ht.bean.Building;
+import com.ht.bean.Buildings;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.service.AgencyService;
+import com.ht.service.BuildingService;
+
+import java.util.Calendar;
+
+public class AgencyController extends AppController {
+
+    private AgencyService agencyService;
+    private BuildingService buildingService;
+    private ControllerResult controllerResult;
+
+    private String buildingId;
+
+    //添加楼栋
+    public String addBuilding() {
+        Building b1 = new Building(); //楼栋
+        b1.setName("楼栋的名称");
+        b1.setTotal_room(12);
+        b1.setTotal_lift(12);
+        b1.setTotal_floor(12);
+        b1.setFloor_rooms(12);
+        b1.setStatus(Constants.YES_STATUS);
+        b1.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        Buildings s = new Buildings(); // 楼盘
+        s.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b1.setBuildings(s);
+        buildingService.save(b1);
+        return SUCCESS;
+    }
+
+    //修改楼栋
+    public String updateBuilding() {
+        Building b2 = new Building();
+        b2.setId("402880b25e1c4241015e1c428d530000");
+        b2.setName("修改楼栋的名称");
+        b2.setTotal_room(1234);
+        b2.setTotal_lift(1234);
+        b2.setTotal_floor(1234);
+        b2.setFloor_rooms(1234);
+        b2.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        b2.setStatus(Constants.YES_STATUS); //修改状态
+        Buildings s2 = new Buildings(); // 楼盘
+        s2.setId("e31d51b0cba044609b32ae3203cd6de7");
+        b2.setBuildings(s2);
+        buildingService.update(b2);
+        return SUCCESS;
+    }
+
+    //更改楼栋状态（冻结，激活）
+    public String updateStatus() {
+        String statusStr = request.getParameter("status");
+        if (statusStr != null)  {
+            short status = Short.valueOf(statusStr);
+            buildingService.updateStatus(buildingId,status);
+            if("1".equals(statusStr)) {
+                controllerResult = ControllerResult.getSuccessResult("状态可用");
+            }else if("2".equals(statusStr)) {
+                controllerResult = ControllerResult.getFailResult("状态不可用");
+            }
+        }
+
+
+        return SUCCESS;
+    }
+
+    public void setAgencyService(AgencyService agencyService) {
+        this.agencyService = agencyService;
+    }
+
+    public void setBuildingService(BuildingService buildingService) {
+        this.buildingService = buildingService;
+    }
+
+    public void setBuildingId(String buildingId) {
+        this.buildingId = buildingId;
+    }
+
+    public void setControllerResult(ControllerResult controllerResult) {
+        this.controllerResult = controllerResult;
+    }
+}

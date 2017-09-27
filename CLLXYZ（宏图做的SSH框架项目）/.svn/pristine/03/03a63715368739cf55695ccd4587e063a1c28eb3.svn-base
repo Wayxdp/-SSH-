@@ -1,0 +1,46 @@
+var pager = 1;
+var pagerCount = 0;
+
+//首页
+function CurrentPager(page) {
+    $("SearchCurrentPager").text(page);
+    var showCount = 8;
+    $.post("globalSearch/globalSearchNavigate?pager&name" + page + name,
+        function (date) {
+
+            pager = date.page;
+            pagerCount = date.total;
+
+        }
+
+    )
+
+
+}
+
+//上一页
+function ListPager() {
+    var page = pager - 1;
+    if(page < 1) {
+        page = 1;
+        $("SearchListPager").hide();
+        $("SearchNextPager").show();
+    }
+    CurrentPager(page);
+}
+
+//下一页
+function NextPager() {
+    var page = pager + 1;
+    if( page > pagerCount) {
+        page = pagerCount;
+        $("SearchListPager").show();
+        $("SearchNextPager").hide();
+    }
+    CurrentPager(page);
+}
+
+//尾页
+function endPager() {
+    CurrentPager(pagerCount);
+}

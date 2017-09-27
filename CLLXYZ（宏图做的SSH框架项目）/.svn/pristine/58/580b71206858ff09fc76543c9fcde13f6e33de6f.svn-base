@@ -1,0 +1,112 @@
+/**
+ * 预约相关js
+ */
+
+function formatHouse(value) {
+    return value.name;
+}
+function formatName(value) {
+    return value.name;
+}
+function formatUser(value) {
+    return value.name;
+}
+
+
+function formatEmployee(value) {
+    return value.basic_salary;
+}
+
+function showAppEdit() {
+    var jsonStr = '{"appointment.app_status":"app_status_value","appointment.id":"id_value"}';
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        jsonStr = jsonStr.replace("app_status_value", row.app_status).replace("id_value", row.id);
+        $("#editAppForm").form("load", JSON.parse(jsonStr));
+        openWin("editApp");
+    }else {
+        showAlert("请选择需要修改的栏目！");
+    }
+}
+
+//更新购房预约状态
+function updateAppStatus() {
+        $.post(contextPath + "/appointment/appStatusAppointment",
+            $("#editAppForm").serialize(),
+            function(data) {
+                    $("#list").datagrid("reload");
+                    $("#editAppForm").form("clear");
+            }, 'json'
+        );
+        closeWin("editApp");
+
+}
+
+/**
+ * 员工相关的js
+ */
+function showEmpEdit() {
+    $('input').attr('readonly',false);//取消input的不可编辑状态，将true改为false
+    $('input').removeAttr("disabled");
+    $('#editbtn').attr('style', '');//清除效果
+    $('input').css('background-color','#def6ff');//设置input的颜色
+    $('#editInfo').css('display','none');//隐藏
+    $('#phoneid').css('display','none');
+    $('#basic_salaryid').css('display','none');
+}
+
+
+/**
+ * 修改员工的信息
+ */
+function updateEmpInfo() {
+    if (formValidate("editEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmployeeSelf",
+            $("#editEmpForm").serialize(),
+            function (data) {
+                showAlert(data.controllerResult.message);
+                top.location.reload();
+            },
+            "json"
+        );
+    }
+}
+
+/**
+ * 修改员工密码
+ */
+
+function updateEmpPwd() {
+    if (formValidate("pwdEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmpPwd",
+            $("#pwdEmpForm").serialize(),
+            function (data) {
+                if (data.controllerResult.result=="success"){
+                    alert(data.controllerResult.message);
+                    window.location.reload();
+                }else{
+                    showAlert(data.controllerResult.message);
+                }
+            },
+            "json"
+        );
+    }
+}
+
+/**
+ *上传头像
+ */
+function uploadHeadIcon() {
+    alert("upload");
+    $.post(
+        contextPath+"/employee/uploadHeadIcon",
+        $("#uploadFrom").serialize(),
+        function (data) {
+
+        },
+        "json"
+    );
+}
+

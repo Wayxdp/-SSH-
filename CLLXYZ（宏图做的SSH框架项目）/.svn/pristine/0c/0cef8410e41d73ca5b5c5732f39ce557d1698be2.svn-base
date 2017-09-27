@@ -1,0 +1,140 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: qm
+  Date: 2017/8/27
+  Time: 22:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>经销商</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/css/zhang/main.css" rel="stylesheet" />
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,  <!--是否支持多选-->
+        collapsible:true,   <!--是否可以查询-->
+        rownumbers:true,    <!--是否显示行数-->
+        pagination:true,    <!--是否标记页码-->
+        pageSize:20,        <!--分页的大小-->
+        toolbar:'#tb',      <!--工具栏-->
+        url:'<%=path %>/agency/pagerAgency',
+        method:'post'">
+    <thead>
+    <tr>
+        <th data-options="field:'id',width:60,checkbox:true">经销商id</th>
+        <th data-options="field:'name',align:'right'">名称</th>
+        <th data-options="field:'email',align:'right'">邮箱</th>
+        <th data-options="field:'leader',align:'right'">领导</th>
+        <th data-options="field:'phone',align:'center'">手机号</th>
+        <th data-options="field:'tel',align:'center'">固定电话</th>
+        <th data-options="field:'address',align:'center'">地址</th>
+        <th data-options="field:'logo',align:'center'">图标</th>
+        <th data-options="field:'intro',align:'center'">介绍</th>
+        <th data-options="field:'created_time',align:'center',formatter:formatDate">注册日期</th>
+        <th data-options="field:'checked_status',align:'center',formatter:formatStatus">审查是否通过</th>
+        <th data-options="field:'status',align:'center',formatter:formatStatus">是否可用</th>
+
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="showAgency();">显示经销商</a>
+    <%--<a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="editAgency();">修改经销商</a>--%>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validAgency(1);">激活经销商</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="validAgency(0);">冻结经销商</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="checkAgency(1);">通过销商</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" iconCls="icon-remove" onclick="checkAgency(0);">否决销商</a>
+</div>
+
+<div id="editWin" class="easyui-window large-win" title="经销商" data-options="closed:true">
+    <form id="editForm">
+        <input type="hidden" name="agency.id">
+        <table>
+            <tr>
+                <td><label>名称</label></td>
+                <td>
+                    <input class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商名称',required:true,validType:'length[2,20]',novalidate:true" name="agency.name" />
+                </td>
+            </tr>
+
+            <tr>
+                <td><label >邮箱</label></td>
+                <td>
+                    <input class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商邮箱',required:true,validType:'length[2,50]',novalidate:true" name="agency.email" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>领导</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商领导',required:true,validType:'length[2,20]',novalidate:true" name="agency.leader" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>手机号</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商手机',required:true,validType:'length[2,20]',novalidate:true" name="agency.phone" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>固定电话</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商固话',required:true,validType:'length[2,20]',novalidate:true" name="agency.tel" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>地址</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商地址',required:true,validType:'length[2,20]',novalidate:true" name="agency.address" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>图标</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商图标',required:true,validType:'length[2,20]',novalidate:true" name="agency.logo" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>介绍</label></td>
+                <td>
+                    <input  class="easyui-textbox easyui-validatebox" data-options="prompt:'经销商介绍',required:true,validType:'length[2,200]',novalidate:true" name="agency.intro" />
+                </td>
+            </tr>
+            <tr>
+                <td><label>注册日期</label></td>
+                <td>
+                    <input  class="eeasyui-textbox easyui-validatebox" data-options="prompt:'经销商注册时间',required:true,validType:'length[2,20]',novalidate:true" name="agency.create_time" />
+                </td>
+            </tr>
+            <%--<tr>--%>
+                <%--<td></td>--%>
+                <%--<td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="editAgency();">修改</a></td>--%>
+            <%--</tr>--%>
+        </table>
+    </form>
+</div>
+
+</body>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path %>/public/js/liu/agency.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</html>

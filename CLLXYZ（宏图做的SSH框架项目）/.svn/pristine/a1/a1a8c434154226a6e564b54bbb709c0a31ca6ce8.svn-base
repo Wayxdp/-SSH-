@@ -1,0 +1,139 @@
+/**
+ * 预约相关js
+ */
+
+function formatHouse(value) {
+    return value.name;
+}
+
+function formatUser(value) {
+    return value.name;
+}
+
+
+function formatEmployee(value) {
+    return value.basic_salary;
+}
+
+function showAppEdit() {
+    var jsonStr = '{"appointment.app_status":"app_status_value","appointment.id":"id_value"}';
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        jsonStr = jsonStr.replace("app_status_value", row.app_status).replace("id_value", row.id);
+        $("#editAppForm").form("load", JSON.parse(jsonStr));
+        openWin("editApp");
+    }else {
+        showAlert("请选择需要修改的栏目！");
+    }
+}
+
+//更新购房预约状态
+function updateAppStatus() {
+        $.post(contextPath + "/appointment/appStatusAppointment",
+            $("#editAppForm").serialize(),
+            function(data) {
+                    $("#list").datagrid("reload");
+                    $("#editAppForm").form("clear");
+            }, 'json'
+        );
+        closeWin("editApp");
+
+}
+
+/**
+ * 员工相关的js
+ */
+
+function showEmpEdit() {
+    openWin("editEmp")
+}
+
+/**
+ * 修改员工的信息
+ */
+function updateEmpInfo() {
+    $.post(
+        contextPath+"/employee/updateEmployeeSelf",
+        $("#editEmpForm").serialize(),
+        function (data) {
+            window.location.reload();
+        },
+        "json"
+    );
+    closeWin("editEmp");
+}
+
+/**
+ * 修改员工密码
+ */
+
+function updateEmpPwd() {
+    $.post(
+        contextPath+"/employee/updateEmpPwd",
+        $("#pwdEmpForm").serialize(),
+        function (data) {
+            if (data.controllerResult.result=="success"){
+                alert(data.controllerResult.message);
+                window.location.reload();
+            }else{
+                showAlert(data.controllerResult.message);
+            }
+        },
+        "json"
+    );
+}
+
+/**
+ *上传头像
+ */
+function uploadHeadIcon() {
+    alert("upload");
+    $.post(
+        contextPath+"/employee/uploadHeadIcon",
+        $("#uploadFrom").serialize(),
+        function (data) {
+
+        },
+        "json"
+    );
+}
+/**
+ *激活与冻结客户
+ */
+function updateStatusCus(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        if(row.status==status){
+            showAlert("无需"+(status=='1'?"激活":"冻结")+"该用户！");
+            return;
+        }
+        var json;
+        if(status=='1'){//激活
+            json = {
+                "status": '1',
+                "id": row.id
+            }
+        }else if(status=='0'){//冻结
+            json = {
+                "status": '0',
+                "id": row.id
+            }
+        }
+        $.post(
+            contextPath+"/customer/statusCustomer",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                }
+            },
+            "json"
+        );
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}

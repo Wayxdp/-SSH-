@@ -1,0 +1,104 @@
+/**
+ *激活与冻结客户
+ */
+function updateStatusCus(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        if(row.status==status){
+            showAlert("无需"+(status=='1'?"激活":"冻结")+"该用户！");
+            return;
+        }
+        var json;
+        if(status=='1'){//激活
+            json = {
+                "status": '1',
+                "id": row.id
+            }
+        }else if(status=='0'){//冻结
+            json = {
+                "status": '0',
+                "id": row.id
+            }
+        }
+        $.post(
+            contextPath+"/customer/statusCustomer",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                }
+            },
+            "json"
+        );
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}
+
+/**
+ *修改客户信息
+ */
+function showCusEdit() {
+    if (formValidate("editCusForm")) {
+        var jsonStr = '{"customer.name":"name_value","customer.id":"id_value","customer.identity_id":"identity_id_value","customer.gender":"gender_value",' +
+            '"customer.birthday":"birthday_value","customer.phone":"phone_value","customer.email":"email_value","customer.customer_type":"type_value","customer.address":"address_value"}';
+        var row = $("#list").datagrid("getSelected");
+        if (row){
+            jsonStr = jsonStr.replace("name_value", row.name).replace("id_value", row.id).replace("identity_id_value",row.identity_id).replace("gender_value",row.gender).replace("birthday_value",row.birthday)
+                .replace("phone_value",row.phone).replace("email_value",row.email).replace("type_value",row.customer_type).replace("birthday_value",row.birthday).replace("address_value",row.address);
+            $("#editCusForm").form("load", JSON.parse(jsonStr));
+            openWin("editCus");
+        }else {
+            showAlert("请选择需要修改的栏目！");
+        }
+    }
+}
+function updateCusInfo() {
+    if (formValidate("editCusForm")){
+        $.post(
+            contextPath+"/customer/updateCustomerInfo",
+            $("#editCusForm").serialize(),
+            function (data) {
+                $("#list").datagrid("reload");
+                $("#editCusForm").form("clear");
+                showAlert(data.controllerResult.message);
+            },
+            "json"
+        );
+    }
+    closeWin("editCus");
+}
+
+
+/**
+ *添加客户
+ */
+function savaCus() {
+    if(formValidate("saveCusForm")){
+        $.post(
+            contextPath+"/customer/saveCustomer",
+            $("#saveCusForm").serialize(),
+            function (data) {
+            },
+            "json"
+        );
+        window.location.href="emp_customers.jsp";
+    }
+}
+/**
+ *上传电子版合同
+ */
+function uploadContractFile() {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        var customer_id = row.id;
+        document.getElementById("customer_id").innerHTML(customer_id);
+        window.location.href='emp_uploadContract.jsp'
+    }else{
+        showAlert("请选择上传的对象！");
+    }
+}

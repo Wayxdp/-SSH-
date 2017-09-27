@@ -1,0 +1,13 @@
+/**
+ * Created by Administrator on 2017/9/5.
+ */
+function submitFile () {
+    $.post("/activity/saveActivity",
+        $("#form").serialize(),
+        function (data) {
+            if(data.controllerResult=="success"){
+                window.location.href =contextPath + "/activity/pagerActivity";
+            }
+        },"json"
+    );
+}

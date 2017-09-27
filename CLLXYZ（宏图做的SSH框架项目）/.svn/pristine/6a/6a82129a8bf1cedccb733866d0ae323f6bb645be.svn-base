@@ -1,0 +1,112 @@
+package com.ht.controller;
+
+import com.ht.bean.Agency;
+import com.ht.bean.User;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.service.AgencyService;
+import com.ht.service.UserService;
+
+import java.util.List;
+
+public class AdminController extends AppController {
+
+    private Agency agency;
+    private AgencyService agencyService;
+    private UserService userService;
+
+    private int page;
+    private int total;
+
+    private List rows;
+
+    private ControllerResult controllerResult;
+
+    private String id;//得到页面选择的id
+    private Short status;//得到页面的状态
+
+    /**
+     * 分页显示经销商
+     * @return
+     */
+
+    public String pagerAgency(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Agency> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = agencyService.listPager(pager);
+        rows = pager.getResult();//查询出所有经销商
+        total = agencyService.count();//查询出经销商总数
+        return "pagerAgency";
+    }
+    /**
+     * 分页显示所有用户
+     * @return
+     */
+
+    public String pagerUser(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<User> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = userService.listPager(pager);
+        rows = pager.getResult();//查询出所有经销商
+        total = userService.count();//查询出经销商总数
+        return "pagerUser";
+    }
+
+    /**
+     * 用户的激活与冻结
+     * @return
+     */
+    public String validUser() {
+        userService.valid(id,status);
+        if (status==1) {
+            controllerResult = ControllerResult.getSuccessResult("激活成功！");
+        } else if (status==0) {
+            controllerResult = ControllerResult.getSuccessResult("冻结成功！");
+        }
+        return "validUser";
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List getRows() {
+        return rows;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setAgencyService(AgencyService agencyService) {
+        this.agencyService = agencyService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+}

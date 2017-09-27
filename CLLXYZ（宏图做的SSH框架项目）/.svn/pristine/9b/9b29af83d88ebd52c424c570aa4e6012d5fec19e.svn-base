@@ -1,0 +1,18 @@
+//增加楼盘
+function addBuildings() {
+    if (formValidate("addForm")) {
+        $.post(contextPath + "/building/saveBuildings",
+            $("#addForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                    $("#addForm").form("clear");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, 'json'
+        );
+        closeWin("addWin");
+    }
+}

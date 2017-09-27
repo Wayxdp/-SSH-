@@ -1,0 +1,43 @@
+package com.ht.controller.search;
+
+import com.ht.controller.AppController;
+import com.ht.service.GlobalSearchService;
+import com.ht.vo.GlobalSearchVO;
+
+import java.util.List;
+
+public class GlobalSearchController extends AppController {
+
+    private List<GlobalSearchVO> globalSearchVOList;
+    private Long total;
+
+    private GlobalSearchService globalSearchService;
+    private int page = 1;
+    private String search;
+
+    public String globalSearchNavigate() {
+        int pageSize = 8;
+        globalSearchVOList = globalSearchService.globalSearchName(search, page, pageSize);
+        return SUCCESS;
+    }
+
+    public List<GlobalSearchVO> getGlobalSearchVOList() {
+        return globalSearchVOList;
+    }
+
+    public void setGlobalSearchService(GlobalSearchService globalSearchService) {
+        this.globalSearchService = globalSearchService;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public Long getTotal() {
+        return total;
+    }
+}

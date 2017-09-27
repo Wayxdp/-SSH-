@@ -1,0 +1,94 @@
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+    <link href="<%=path %>/public/plugins/easyui/themes/icon.css" rel="stylesheet"/>
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,
+        collapsible:true,
+        rownumbers:true,
+        pagination:true,
+        pageSize:20,
+        toolbar:'#tb',
+        url:'<%=path %>/customer/pagerCustomer',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'id', checkbox:true"></th>
+        <th data-options="field:'name'">客户名</th>
+        <th data-options="field:'gender',align:'right'">性别</th>
+        <th data-options="field:'birthday',align:'right',formatter:formatDate">出生日期</th>
+        <th data-options="field:'identity_id',align:'right'">身份证号</th>
+        <th data-options="field:'email',align:'right'">邮箱</th>
+        <th data-options="field:'phone',align:'right'">电话</th>
+        <th data-options="field:'address',align:'right'">地址</th>
+        <th data-options="field:'customer_type',align:'right'">客户类型</th>
+        <th data-options="field:'created_time',align:'right',formatter:formatDate">创建时间</th>
+        <th data-options="field:'status',align:'right',formatter:formatStatus">是否可用</th>
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+    <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAppEdit();">修改客户信息</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusCus('1');">激活客户</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" onclick="updateStatusCus('0');">冻结客户</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" onclick="showAppEdit();">购房合同</a>
+
+</div>
+<!--修改状态窗口-->
+<div id="editApp" class="easyui-window normal-win" data-options="closed:true" title="修改预约状态">
+    <form id="editAppForm">
+        <table>
+            <tr>
+                <td><label>选择状态</label></td>
+                <td>
+                    <div class="form-group">
+                        <select name="appointment.app_status" id="app_status">
+                            <option value="已购房">已购房</option>
+                            <option value="已预约">已预约</option>
+                            <option value="已联系">已联系</option>
+                            <option value="已购房">已看房</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <!--隐藏id-->
+                <td>
+                    <input type="hidden" id="app_id" name="appointment.id" />
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a class="easyui-linkbutton" href="javascript:void(0);" onclick="updateAppStatus()">修改</a></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+</body>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<!--自定义的js-->
+<script src="<%=path%>/public/js/ye/employee-js/appointment.js"></script>
+<script>
+    $(function () {
+        setPagination("list");
+    })
+</script>
+</html>

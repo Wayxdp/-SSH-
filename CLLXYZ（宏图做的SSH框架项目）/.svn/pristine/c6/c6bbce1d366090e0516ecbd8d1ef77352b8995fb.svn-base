@@ -1,0 +1,13 @@
+/**
+ * Created by Administrator on 2017/9/12.
+ */
+function submitFile() {
+    $(function () {
+        $.post("/admin/adminUpdatePwd",
+            $("#form").serialize(),
+            function (data) {
+
+            },"json"
+        )
+    });
+}

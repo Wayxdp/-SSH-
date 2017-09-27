@@ -1,0 +1,91 @@
+/**
+ * Created by Administrator on 2017/9/6.
+ */
+function showArticleDetail() {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        window.location.href = contextPath+"/article/adminArticleDetail?id="+row.id;
+    }else{
+        showAlert("请选择要查看的文章!");
+    }
+}
+
+
+function validArticle(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        if (row.status == status) {
+            showAlert("该活动已被" + (status == 1 ? "激活" : "冻结"));
+            return;
+        }
+        var json;
+        if (status == 1) {
+            // 激活
+            json = {
+                "status": 1,
+                "id": row.id
+            }
+        } else if (status == 0) {
+            // 冻结
+            json = {
+                "status": 0,
+                "id": row.id
+            }
+        }
+        $.post(contextPath + "/article/statusArticle",
+            json,
+            function (data) {
+                showAlert(data.controllerResult.message);
+                if (data.controllerResult.result == "success") {
+                    $("#list").datagrid("reload");
+                }
+            }, "json"
+        );
+    } else {
+        showAlert("请选择需要" + (status == 1 ? "激活" : "冻结") + "的文章！");
+    }
+
+}
+
+function editArticle() {
+    if (formValidate("editForm")) {
+        $.post(contextPath + "/article/updateArticle",
+            $("#editForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, 'json'
+        );
+    }
+}
+function addArticle() {
+    var typeId = $('#select option:selected').val();
+    var json = {
+        "typeId":typeId
+    }
+        $.post("/article/saveArticle",json,
+            $("#addForm").serialize(),
+            function (data) {
+
+            }, "json"
+        );
+}
+function updateArticle() {
+    var created_time = $("#created_time");
+    created_time.attr('name','article.created_time');
+    if (formValidate("form")) {
+        $.post(contextPath + "/article/updateArticle",
+            $("#form").serialize(),
+            function(data) {
+                showAlert(data.controllerResult.message);
+                if (data.controllerResult.result == "success") {
+                    $("#list").datagrid("reload");
+                }
+            }, 'json'
+        );
+        closeWin("win");
+    }
+}

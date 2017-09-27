@@ -1,0 +1,232 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.*;
+import com.ht.common.ControllerResult;
+import com.ht.common.EncryptUtil;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.MessageService;
+import com.ht.service.UserService;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 留言
+ * Created by qm on 2017/8/28.
+ */
+public class MessageController extends AppController{
+
+    private Message message;//提供setter和getter
+    private User user;
+
+    private ControllerResult controllerResult;//getter
+    private Integer total;
+    private List<Message> rows;
+
+    private MessageService messageService;//setter
+    private UserService userService;
+    private String id;
+    private String buildingsId;
+    private String agencyId;
+    private Short status;
+    private Integer page;
+
+    private String pwd;
+    private String repassword;
+
+
+    /**
+     * 1.留言的添加
+     */
+    public String saveMessage(){
+        Message message = new Message();
+        message.setReply_time(new Date());//消息回复时间
+        message.setReply("你好！");//
+        User user = new User();//从session中获取user
+        user.setId("2ea5fb1065c3458ea37e131566624bc8");
+        message.setUser(user);
+        message.setLeave_time(new Date());//离开时间
+        Buildings buildings = new Buildings();
+        buildings.setId(buildingsId);//楼盘id
+        message.setBuildings(buildings);//用户所在楼盘
+        Agency agency = new Agency();
+        agency.setId(agencyId);
+        message.setAgency(agency);//用户所属经销商
+        messageService.save(message);
+        return SUCCESS;
+    }
+    /**
+     * 2.留言的分页查看
+     * @return
+     */
+    public String pagerMessage(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Message> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = messageService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = messageService.count(pager).intValue();//查询出活动总数
+        return SUCCESS;
+    }
+
+    /**
+     * 用户查看自己的留言并分页显示
+     */
+    public String pagerMessageUser(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Message> pager = new Pager<>();//创建分页对象
+        pager.setParamStr(" where user_id ='"+id+"' order by reply_time desc");
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = messageService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = messageService.count(pager).intValue();//查询出活动总数
+        return SUCCESS;
+    }
+    public String pagerMessageAgency(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Message> pager = new Pager<>();//创建分页对象
+        pager.setParamStr(" where agency_id ='"+id+"' order by reply_time desc");
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = messageService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = messageService.count(pager).intValue();//查询出活动总数
+        return SUCCESS;
+    }
+
+    /**
+     * 3.留言的修改
+     * @return
+     */
+    public String updateMessage(){
+        if(message.getId() !=null){
+            messageService.updateMessage(message.getId(),message.getContent());
+            controllerResult = ControllerResult.getSuccessResult("修改成功");
+        }else{
+            controllerResult = ControllerResult.getFailResult("修改失败");
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 4.留言的激活与冻结
+     * @return
+     */
+    public String statusMessage(){
+        messageService.updateStatus(id,status);
+        if(status != null){
+            if(status==1){
+                controllerResult = ControllerResult.getSuccessResult("激活成功！");
+            } else if (status==0) {
+                controllerResult = ControllerResult.getSuccessResult("冻结成功！");
+            }
+
+        }
+        return SUCCESS;
+    }
+
+    public String userLogin(){
+        User user = (User) session.getAttribute("user");
+        if(user != null){
+            session.removeAttribute("user");
+        }
+        String phone = request.getParameter("user.phone");
+        String pwd = request.getParameter("user.pwd");
+       if(phone != null && ("").equals(phone) && pwd != null && ("").equals(pwd)){
+           String password = EncryptUtil.md5(pwd);
+           User u = userService.findByPhone(phone);
+           if(phone.equals(u.getPhone()) && password.equals(u.getPwd())){
+               userService.loginUser(phone,password);
+                return "loginSuccess";
+           }
+       }
+        return "loginFail";
+    }
+
+    //留言删除
+    public String remove(){
+        Message message =new Message();
+        message.setId(id);
+        messageService.remove(message);
+        controllerResult = ControllerResult.getSuccessResult("删除成功");
+        return SUCCESS;
+    }
+    //经销商留言回复
+    public String replyMsg(){
+
+        if(message.getId() !=null){
+            messageService.updateMessageAgency(message.getId(),message.getReply());
+            controllerResult = ControllerResult.getSuccessResult("修改成功");
+        }else{
+            controllerResult = ControllerResult.getFailResult("修改失败");
+        }
+        return SUCCESS;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Message> getRows() {
+        return rows;
+    }
+
+    public void setMessageService(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setBuildingsId(String buildingsId) {
+        this.buildingsId = buildingsId;
+    }
+
+    public void setAgencyId(String agencyId) {
+        this.agencyId = agencyId;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public void setRepassword(String repassword) {
+        this.repassword = repassword;
+    }
+}

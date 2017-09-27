@@ -1,0 +1,227 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Buildings;
+import com.ht.bean.BuildingsImg;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.FileUtil;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingsImgService;
+import com.ht.service.BuildingsService;
+import com.ht.vo.NameIdVO;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingsController extends AppController {
+
+    private Buildings buildings;
+
+    private List<BuildingsImg> buildingsImg;
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Buildings> rows;
+    private List<NameIdVO> nameIdVOList;
+
+    private BuildingsService buildingsService;
+    private BuildingsImgService buildingsImgService;
+    private String id;
+    private Short status;
+    private Integer page;
+    private File buildingsLogo;
+    private String buildingsLogoFileName;
+
+    public String updateBuildingsLogo() {
+        if (buildingsLogo != null) {
+            try {
+                FileUtils.copyFile(buildingsLogo, new File(FileUtil.upload() + File.separator + buildingsLogoFileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 分页查看经销商底下的楼盘
+     * @return
+     */
+    public String pagerBuildingsAgency() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Buildings> buildingsPager = new Pager<>();
+        buildingsPager.setParamStr(" where agency_id='" + id + "' order by created_time desc");
+        buildingsPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingsPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingsPager = buildingsService.listPager(buildingsPager);
+        List<Buildings> result = buildingsPager.getResult();//获取到所有的楼栋
+        rows = buildingsPager.getResult();//查询出所有经销商
+        total = buildingsService.count(buildingsPager).intValue();//查询出经销商总数
+        return SUCCESS;
+    }
+
+    /***
+     * 查看单个楼盘详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        buildings = buildingsService.foundById(id);
+        return SUCCESS;
+    }
+    /***
+     * 添加楼盘
+     * @return
+     */
+    public String saveBuildings() {
+        try {
+            buildings.setLogo(Constants.DEFAULT_BUILDINGS_LOGO);
+            buildings.setCreated_time(Calendar.getInstance().getTime());
+            buildings.setStatus(Constants.YES_STATUS);
+            buildingsService.save(buildings);
+            controllerResult = ControllerResult.getSuccessResult("添加楼盘成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加楼盘失败！");
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼盘
+     * @return
+     */
+    public String updateBuildings() {
+       try{
+           buildingsService.update(buildings);
+           controllerResult = ControllerResult.getSuccessResult("修改楼盘信息成功");
+       }catch (Exception e) {
+           e.printStackTrace();
+           controllerResult = ControllerResult.getFailResult("修改楼盘信息失败");
+       }
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼盘状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘已可用");
+            } else if (status == 0) {
+                buildingsService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼盘冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 增加、修改： 员工、楼栋、户型、活动时需要用到，
+     * 把楼盘的id和name属性传到页面的下拉框。
+     * @return
+     */
+    public String pagerBuildingsAgencyVO() {
+        nameIdVOList = new ArrayList<>();
+        Pager<Buildings> pager = new Pager<>();
+        pager.setParamStr(" where agency.id='" + id + "'" + " and status=1");
+        pager.setPageSize(buildingsService.count(pager).intValue());
+        pager = buildingsService.listPager(pager);
+        for (Buildings b : pager.getResult()) {
+            NameIdVO nameIdVO = new NameIdVO();
+            nameIdVO.setId(b.getId());
+            nameIdVO.setName(b.getName());
+            nameIdVOList.add(nameIdVO);
+        }
+        return SUCCESS;
+    }
+//管理员查看楼盘分页
+    public String pagerBuildingsAdmin(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Buildings> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = buildingsService.listPager(pager);
+        rows = pager.getResult();//查询出所有活动
+        total = buildingsService.count(pager).intValue();//查询出活动总数
+        return "pagerBuildingsAdmin";
+    }
+// 管理员页面参看单个楼盘的所有信息
+    public String adminBuildingsDetail(){
+        buildings = buildingsService.foundById(id);
+        return "adminBuildingsDetail";
+    }
+//查看楼盘的图片
+    public String buildingsImg(){
+        buildingsImg = buildingsImgService.queryImgByBuildingsId(id);
+        System.out.println(buildingsImg);
+        return "buildingsImg";
+    }
+
+    public Buildings getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(Buildings buildings) {
+        this.buildings = buildings;
+    }
+
+    public List<BuildingsImg> getBuildingsImg() {
+        return buildingsImg;
+    }
+
+    public void setBuildingsImg(List<BuildingsImg> buildingsImg) {
+        this.buildingsImg = buildingsImg;
+    }
+
+    public void setBuildingsService(BuildingsService buildingsService) {
+        this.buildingsService = buildingsService;
+    }
+
+    public void setBuildingsImgService(BuildingsImgService buildingsImgService) {
+        this.buildingsImgService = buildingsImgService;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Buildings> getRows() {
+        return rows;
+    }
+
+    public List<NameIdVO> getNameIdVOList() {
+        return nameIdVOList;
+    }
+
+    public void setBuildingsLogo(File buildingsLogo) {
+        this.buildingsLogo = buildingsLogo;
+    }
+
+    public void setBuildingsLogoFileName(String buildingsLogoFileName) {
+        this.buildingsLogoFileName = buildingsLogoFileName;
+    }
+}

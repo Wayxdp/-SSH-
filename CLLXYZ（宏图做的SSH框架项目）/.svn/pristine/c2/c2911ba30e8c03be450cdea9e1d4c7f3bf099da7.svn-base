@@ -1,0 +1,64 @@
+package com.ht.dao.impl;
+
+import com.ht.bean.Employee;
+import com.ht.common.HibernateSessionFactoryBean;
+import com.ht.common.Pager;
+import com.ht.dao.EmployeeDAO;
+import org.hibernate.query.Query;
+
+import java.util.List;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public class EmployeeDAOImpl extends HibernateSessionFactoryBean implements EmployeeDAO {
+    @Override
+    public void save(Employee employee) {
+        getSessionFactory().getCurrentSession().save(employee);
+    }
+
+    @Override
+    public void remove(Employee employee) {
+        getSessionFactory().getCurrentSession().remove(employee);
+    }
+
+    @Override
+    public void update(Employee employee) {
+        getSessionFactory().getCurrentSession().update(employee);
+    }
+
+    @Override
+    public void updateStatus(String id, short status) {
+        Query query = getSessionFactory().getCurrentSession().createQuery(" update Employee set status=:status where id=:id");
+        query.setParameter("status",status);
+        query.setParameter("id",id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public Employee foundById(String id) {
+        return getSessionFactory().getCurrentSession().get(Employee.class,id);
+    }
+
+    @Override
+    public Pager<Employee> listPager(Pager<Employee> pager) {
+        Query query = getSessionFactory().getCurrentSession().createQuery("from Employee");
+        query.setFirstResult(pager.getBeginIndex());
+        query.setMaxResults(pager.getPageSize());
+        pager.setResult(query.list());
+        pager.setTotal(count());
+        return pager;
+    }
+
+    @Override
+    public List<Employee> listAll() {
+        return null;
+    }
+
+    @Override
+    public int count() {
+        Long resultL = (Long) getSessionFactory().getCurrentSession().createQuery("select count(id) from Employee").uniqueResult();
+        int result = resultL.intValue();
+        return result;
+    }
+}

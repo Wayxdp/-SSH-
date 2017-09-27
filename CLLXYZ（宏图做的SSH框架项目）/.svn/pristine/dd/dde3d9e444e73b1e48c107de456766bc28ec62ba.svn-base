@@ -1,0 +1,56 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: qm
+  Date: 2017/9/11
+  Time: 10:27
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path = request.getContextPath();%>
+<html>
+<head>
+    <nav class="navbar navbar-default " role="navigation">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">房产网--员工管理页面</a>
+            </div>
+
+            <div id="nav" style="margin-left: 30px;">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">所有楼盘</a></li>
+                    <li><a href="#">楼盘活动</a></li>
+                    <li><a href="<%=path%>/user/showArticle">文章资讯</a></li>
+                    <%-- 经销商登录注册--%>
+                    <li class="dropdown" style="margin-left: 500px;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            注册
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<%=path%>/agency/showAgencyRegister">经销商入驻</a></li>
+                            <li><a href="<%=path%>/user/showUserRegister">用户注册</a></li>
+                        </ul>
+                    </li>
+                    <%-- 用户登录注册--%>
+                    <li class="dropdown" style="margin-left: 40px;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            登入
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="<%=path%>/agency/showAgencyLogin">经销商登录</a></li>
+                            <li><a href="<%=path%>/user/showUserLogin">用户登录</a></li>
+                            <li><a href="<%=path%>/employee/showEmployeeLogin">员工登录</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+</head>
+<body>
+
+</body>
+</html>

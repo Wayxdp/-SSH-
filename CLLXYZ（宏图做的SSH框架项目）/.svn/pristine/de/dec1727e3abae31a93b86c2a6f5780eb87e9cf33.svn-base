@@ -1,0 +1,10 @@
+package com.ht.service;
+
+import com.ht.bean.Admin;
+
+/**
+ * Created by ccf on 2017/8/23.
+ */
+public interface AdminService extends BaseService<String,Admin>{
+    Admin loginAdmin(String phone,String pwd);
+}

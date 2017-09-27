@@ -1,0 +1,66 @@
+package com.ht.bean;
+
+import java.io.Serializable;
+
+/**
+ * Created by qm on 2017/8/23.
+ * 绩效
+ */
+public class Mission implements Serializable{
+
+    private String id;//	varchar(36)	编号,UUID，主键
+    private int quantity;//	int	员工任务量
+    private int monthes;//	int	月份
+    private double bonus_percent;//	double	销售提成百分比
+    private Employee employee;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getMonthes() {
+        return monthes;
+    }
+
+    public void setMonthes(int monthes) {
+        this.monthes = monthes;
+    }
+
+    public double getBonus_percent() {
+        return bonus_percent;
+    }
+
+    public void setBonus_percent(double bonus_percent) {
+        this.bonus_percent = bonus_percent;
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @Override
+    public String toString() {
+        return "Mission{" +
+                "id='" + id + '\'' +
+                ", quantity=" + quantity +
+                ", monthes=" + monthes +
+                ", bonus_percent=" + bonus_percent +
+                '}';
+    }
+}

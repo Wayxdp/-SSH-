@@ -1,0 +1,20 @@
+package com.ht.controller.entity;
+
+import com.ht.controller.AppController;
+import com.ht.service.LikeService;
+
+/**
+ * Created by Administrator on 2017/8/28.
+ */
+public class LikeController extends AppController {
+     private LikeService likeService;
+
+    public void setLikeService(LikeService likeService) {
+        this.likeService = likeService;
+    }
+    // 添加
+    //修改
+    //分页查看
+    //删除
+
+}

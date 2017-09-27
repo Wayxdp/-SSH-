@@ -1,0 +1,34 @@
+/**
+ * Created by Administrator on 2017/9/4.
+ */
+// function showBuildingsImg(){
+//     var row = $("#list").datagrid("getSelected"); // 获取数据网格中被选择的单行 getSelections获取数据网格中选中的多行
+//     if (row) {
+//         var json;
+//         json = {
+//             "id": row.id
+//         }
+//         $.post(contextPath + "/buildings/buildingsImg",
+//             json,
+//                     function (data) {
+//                         showAlert(data.controllerResult.message);
+//                         if (data.controllerResult.result == "success") {
+//                             $("#list").datagrid("reload");
+//                         }
+//             }, "json"
+//         );
+//     }
+// }
+function showBuildingsDetail() {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        window.location.href=contextPath + "/buildings/adminBuildingsDetail?id=" + row.id;
+    }
+}
+function  showBuildingsImg() {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        window.location.href =contextPath + "/buildings/buildingsImg?id=" + row.id;
+    }
+
+}

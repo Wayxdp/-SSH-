@@ -1,0 +1,71 @@
+package com.ht.controller.test;
+
+import com.ht.bean.*;
+import com.ht.controller.AppController;
+import com.ht.service.*;
+
+public class ChenController extends AppController {
+    private ArticleTypeService articleTypeService;
+    private ArticleService articleService;
+    private AdsService adsService;
+    private ActivityService activityService;
+    private AppointmentService appointmentService;
+
+    public String testArticleTypeAdd(){
+        ArticleType articleType = new ArticleType();
+        articleType.setName("articleType-name111");
+        articleType.setDes("articleType-des1111");
+        articleTypeService.save(articleType);
+        return SUCCESS ;
+    }
+    public String testArticleAdd(){
+        Article article = new Article();
+        article.setAbstracts("article-abstract");
+        article.setTitle("article-title");
+        article.setContent("article-content");
+        articleService.save(article);
+        return SUCCESS;
+    }
+    public String testAdsAdd(){
+        Ads ads = new Ads();
+        ads.setTitle("ads-title");
+        ads.setShow_order(3);
+        ads.setContent("ads-content");
+        adsService.save(ads);
+        return SUCCESS;
+    }
+    public String testActivityAdd(){
+        Activity activity = new Activity();
+        activity.setAddress("activity-address");
+        activity.setTitle("activity-title");
+        activityService.save(activity);
+        return SUCCESS;
+    }
+    public String testAppointmentAdd(){
+
+        Appointment appointment = new Appointment();
+        appointment.setApp_status("App-stauts");
+        appointmentService.save(appointment);
+        return SUCCESS;
+    }
+
+    public void setArticleTypeService(ArticleTypeService articleTypeService) {
+        this.articleTypeService = articleTypeService;
+    }
+
+    public void setArticleService(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
+    public void setAdsService(AdsService adsService) {
+        this.adsService = adsService;
+    }
+
+    public void setActivityService(ActivityService activityService) {
+        this.activityService = activityService;
+    }
+
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
+}

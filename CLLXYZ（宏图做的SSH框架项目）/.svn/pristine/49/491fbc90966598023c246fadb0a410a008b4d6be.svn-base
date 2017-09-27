@@ -1,0 +1,58 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Employee;
+import com.ht.bean.Mission;
+import com.ht.controller.AppController;
+import com.ht.service.MissionService;
+
+import java.util.HashSet;
+import java.util.Set;
+
+public class MissionController extends AppController {
+
+
+    private MissionService missionService;
+
+
+    /**
+     * 绩效管理
+     * 对员工进行任务分配，设置销售提成
+     */
+
+
+    /**
+     * 给所有员工设置提成百分比
+     */
+    public String updateMissionPercent(){
+        Mission mission = new Mission();
+        mission.setBonus_percent(Double.valueOf(request.getParameter("bonus_percent")));
+        missionService.updatePercent(mission);
+        return SUCCESS;
+    }
+
+
+    /**
+     *修改绩效
+     * 给员工设置任务量，可指定某个月
+     */
+    public String updateMission(){
+        Mission mission = new Mission();
+        mission.setId(request.getParameter("mission_id"));
+        mission.setMonthes(1);
+        mission.setQuantity(10);
+        mission.setBonus_percent(0.23);
+        Employee employee = new Employee();
+        employee.setId(request.getParameter("emp_id"));
+        Set<Mission> missions = new HashSet<Mission>();
+        mission.setEmployee(employee);
+        missions.add(mission);
+        employee.setMissions(missions);
+        missionService.update(mission);
+        return SUCCESS;
+    }
+
+
+    public void setMissionService(MissionService missionService) {
+        this.missionService = missionService;
+    }
+}

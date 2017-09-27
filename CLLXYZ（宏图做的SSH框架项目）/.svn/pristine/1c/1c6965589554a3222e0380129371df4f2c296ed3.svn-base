@@ -1,0 +1,64 @@
+package com.ht.controller;
+
+import com.ht.bean.Agency;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.service.AgencyService;
+
+import java.util.List;
+
+public class AdminController extends AppController {
+
+    private Agency agency;
+    private AgencyService agencyService;
+
+    private int page;
+    private int total;
+
+    private List<Agency> rows;
+    private ControllerResult controllerResult;
+
+    /**
+     * 分页显示经销商
+     * @return
+     */
+
+    public String pagerAgency(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Agency> pager = new Pager<>();//创建分页对象
+        pager.setPage(page);//得到用户页面选择的第几页，
+        pager.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        pager = agencyService.listPager(pager);
+        rows = pager.getResult();//查询出所有经销商
+        total = agencyService.count();//查询出经销商总数
+        return "pagerAgency";
+    }
+
+    public Agency getAgency() {
+        return agency;
+    }
+
+    public void setAgency(Agency agency) {
+        this.agency = agency;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public List<Agency> getRows() {
+        return rows;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setAgencyService(AgencyService agencyService) {
+        this.agencyService = agencyService;
+    }
+}

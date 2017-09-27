@@ -1,0 +1,189 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Activity;
+import com.ht.bean.Room;
+import com.ht.common.ControllerResult;
+import com.ht.common.FileUtil;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.ActivityService;
+import com.ht.service.RoomService;
+import com.ht.vo.NameIdVO;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by qm on 2017/8/28.
+ */
+public class RoomController extends AppController{
+
+    private Room room;
+
+    private RoomService roomService;
+    private ControllerResult controllerResult;
+
+    private String id;
+    private Short status;
+    private Integer page;
+    private File logo;
+    private String logoFileName;
+
+    private Integer total;
+    private List<Room> rows;
+    private List<NameIdVO> activityVOList;
+
+    /***
+     * 查看单个活动详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        room = roomService.foundById(id);
+        return "showAlterRoom";
+    }
+
+  /***
+     * 经销商分页查看自己的销售情况
+     * @return
+     */
+    public String pagerRoomAgency() {
+        activityVOList = new ArrayList<>();
+        Pager<Room> roomPager = new Pager<>();
+        roomPager.setParamStr(" where agency.id='" + id + "'");
+        roomPager.setPageSize(roomService.count(roomPager).intValue());
+        roomPager = roomService.listPager(roomPager);
+        for (Room b : roomPager.getResult()) {
+            NameIdVO nameIdVO = new NameIdVO();
+            nameIdVO.setId(b.getId());
+            nameIdVO.setName(b.getName());
+            activityVOList.add(nameIdVO);
+        }
+        return SUCCESS;
+    }
+
+    /**
+     * 1.分页查看所有活动
+     * @return
+     */
+    public String pagerActivity(){
+        int pageSize = Integer.valueOf(request.getParameter("rows")); // 每一页显示多少个数据
+        Pager<Room> room = new Pager<>();//创建分页对象
+        room.setPage(page);//得到用户页面选择的第几页，
+        room.setPageSize(pageSize);//得到用户在页面设置一页显示多少个数据
+        room = roomService.listPager(room);
+        rows = room.getResult();//查询出所有活动
+        total = roomService.count(room).intValue();//查询出活动总数
+        return  "pagerActivity";
+    }
+
+    /**
+     * 2.添加活动
+     * @param
+     */
+/*    public String saveActivity(){
+        System.out.println(logoFileName);
+        try {
+            room.setLogo(FileUtil.PATH+"/"+logoFileName);
+            roomService.save(room);
+            controllerResult = ControllerResult.getSuccessResult("添加活动成功！");
+        } catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("添加活动失败！");
+        }
+        return "saveActivity";
+    }*/
+    /**
+     * 3.修改活动
+     * @param
+     */
+    public String updateActivity(){
+        try {
+            roomService.update(room);
+            controllerResult = ControllerResult.getSuccessResult("修改活动信息成功");
+        }catch (Exception e) {
+            controllerResult = ControllerResult.getFailResult("修改活动信息失败");
+        }
+        return  SUCCESS;
+    }
+
+    /**
+     * 活动的激活与冻结
+     * @param
+     */
+    public String statusActivity(){
+        if(status != null) {
+            if (status == 1) {
+                roomService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("房间已可用");
+            } else if (status == 0) {
+                roomService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("房间冻结成功");
+            } else {
+                controllerResult = ControllerResult.getFailResult("操作失败");
+            }
+        }
+        return SUCCESS;
+    }
+
+ /*   // 用于上传活动图片的方法
+    public String addActivityImg(){
+        if (logo!=null) {
+            try {
+                FileUtils.copyFile(logo, new File(FileUtil.upload() + File.separator + logoFileName));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return "addActivityImg";
+    }*/
+
+    public void setRoomService(RoomService roomService) {
+        this.roomService = roomService;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setLogo(File logo) {
+        this.logo = logo;
+    }
+
+    public void setLogoFileName(String logoFileName) {
+        this.logoFileName = logoFileName;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Room> getRows() {
+        return rows;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public List<NameIdVO> getActivityVOList() {
+        return activityVOList;
+    }
+}

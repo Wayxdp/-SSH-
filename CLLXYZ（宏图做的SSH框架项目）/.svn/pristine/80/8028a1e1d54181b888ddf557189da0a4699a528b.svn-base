@@ -1,0 +1,19 @@
+function  formatSaleCount() {
+    $('#list').datagrid({
+        rowStyler:function(index,row){
+            if (row.saleCount < row.quantity){
+                return 'background-color:#FF3333;';//红色：未完成
+            } else {
+                return 'background-color:#99CC33;';//绿色：已完成
+            }
+        }
+    });
+}
+
+/**
+ *计算可领工资：可领工资 = 基本工资 + 销量*提成
+ */
+
+function formatRealSalary() {
+
+}

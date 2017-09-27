@@ -1,0 +1,37 @@
+package com.ht.controller.entity;
+
+import com.ht.controller.AppController;
+import com.ht.service.AdsService;
+
+public class AdsController extends AppController {
+
+    private AdsService adsService;
+
+    //广告的添加
+    public String addAds(){
+        return SUCCESS;
+    }
+
+
+    //广告的修改
+    public String updateAds(){
+        return SUCCESS;
+    }
+
+
+    //广告的激活冻结
+    public String adsValid(){
+        return SUCCESS;
+    }
+
+
+    //广告的分页查看
+    public String adsPager(){
+        return SUCCESS;
+    }
+
+
+    public void setAdsService(AdsService adsService) {
+        this.adsService = adsService;
+    }
+}

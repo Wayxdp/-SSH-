@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.ht.bean">
+    <class name="Employee" table="t_employee">
+        <id name="id" column="id">
+            <generator class="uuid"/>
+        </id>
+        <property name="name" />
+        <property name="email"/>
+        <property name="pwd"/>
+        <property name="phone" />
+        <property name="qq"/>
+        <property name="wechat"/>
+        <property name="gender" />
+        <property name="exp"/>
+        <property name="des"/>
+        <property name="address" />
+        <property name="basic_salary"/>
+        <property name="headicon"/>
+        <property name="intro" />
+        <property name="created_time"/>
+        <property name="status"/>
+
+        <!-- 员工与经销商，多对一关系-->
+        <many-to-one name="agency" class="Agency" column="agency_id"></many-to-one>
+
+        <!-- 一个员工属于一个楼盘-->
+        <many-to-one name="buildings" class="com.ht.bean.Buildings" column="buildings_id"></many-to-one>
+
+        <!-- 员工与客户，一对关系
+            <set name="customers" fetch="select" inverse="true" cascade="all" lazy="true">
+            <key column="emp_id"/>
+                 <one-to-many class="com.ht.bean.Customer"/>
+        </set>
+        -->
+
+    </class>
+</hibernate-mapping>

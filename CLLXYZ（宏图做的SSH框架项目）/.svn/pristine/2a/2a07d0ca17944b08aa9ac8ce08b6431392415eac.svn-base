@@ -1,0 +1,12 @@
+package com.ht.dao;
+
+import com.ht.bean.Buildings;
+import com.ht.common.Pager;
+
+/**
+ * Created by ccf on 2017/8/24.
+ */
+public interface BuildingsDAO extends BaseDAO<String,Buildings> {
+
+    Long count (Pager<Buildings> pager);
+}

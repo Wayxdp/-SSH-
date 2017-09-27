@@ -1,0 +1,122 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: qm
+  Date: 2017/8/27
+  Time: 22:18
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>Title</title>
+    <link href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/css/fileinput.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap-fileupload/themes/explorer/theme.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+
+</head>
+<body>
+
+<!--显示分页的表格-->
+<table id="list" class="easyui-datagrid"
+       data-options="
+        singleSelect:true,
+        collapsible:true,
+        rownumbers:true,
+        pagination:true,
+        pageSize:20,
+        toolbar:'#tb',
+        url:'<%=path %>/customer/pagerCustomerAgency?id=${sessionScope.agency.id}',
+        method:'get'">
+    <thead>
+    <tr>
+        <th data-options="field:'',checkbox:true"></th>
+        <th data-options="field:'name',align:'center'">用户名称</th>
+        <th data-options="field:'gender',align:'center',formatter:formatGender">性别</th>
+        <th data-options="field:'birthday',align:'center',formatter:formatDate">生日</th>
+        <th data-options="field:'identity_id',align:'center'">身份证号码</th>
+        <th data-options="field:'phone',align:'center'">手机号码</th>
+        <th data-options="field:'address',align:'center'">地址</th>
+        <th data-options="field:'customer_type',align:'center'">用户类型</th>
+        <th data-options="field:'together',align:'center'">共同购房人姓名</th>
+        <th data-options="field:'created_time',align:'center',formatter:formatDate">创建时间</th>
+        <th data-options="field:'status',align:'center',formatter:formatStatus1">是否激活</th>
+    </tr>
+    </thead>
+</table>
+
+<!--顶部栏-->
+<div id="tb">
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="validCustomer(1);">激活客户</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="validCustomer(0);">冻结客户</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="showAlertWin();">查看并修改客户信息</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="uploadFile('contract');">上传合同文件</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="uploadFile('archives');">上传zip电子档案</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton"  onclick="dowoloadFile('archives');">下载zip电子档案</a>
+</div>
+
+<!--上传文件-->
+<div id="uploadFile" class="easyui-window" title="上传文件"
+     data-options="modal:true,closed:true,iconCls:'icon-save'"
+     style="width:550px;height:470px;padding:10px;">
+    <form class="form-horizontal" id="form" >
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="hidden" class="form-control" id="customer_id" name="id"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6">
+                <input type="hidden" class="form-control" value="" name="fileType" id="fileType"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-6" style="height: 300px;width: 340px">
+                <input type="file" multiple class="form-control file-preview" id="contract" name="contract"
+                       data-overwrite-initial="false" data-max-file-count="1" style="height: 200px;width:100%;">
+            </div><p/><p/><p/></p>
+            <button type="button" class="btn btn-success" onclick="saveFileName();">完成</button><p/><p/></p><p/>
+            <button type="button" class="btn btn-primary" onclick="closeWin('uploadFile');">取消</button>
+        </div>
+    </form>
+</div>
+</body>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/themes/fa/theme.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap-fileupload/js/fileinput.js"></script>
+<script src="<%=path%>/public/plugins/bootstrap/js/bootstrap.min.js"></script>
+<!--自定义的js-->
+<script src="<%=path%>/public/js/ye/employee-js/appointment.js"></script>
+<script src="<%=path%>/public/js/ye/employee-js/emp_common.js"></script>
+<script src="<%=path%>/public/js/chen/customer.js"></script>
+<script src="<%=path%>/public/js/ye/valid/commonValid.js"></script>
+<script src="<%=path %>/public/js/lai/load_form_data.js"></script>
+<script src="<%=path %>/public/js/chen/customer.js"></script>
+
+<script>
+    $("#upload").fileinput({
+        language: 'zh',
+        uploadUrl: '/customer/uploadContractCustomer', // you must set a valid URL here else you will get an error
+        allowedFileExtensions: ['jpg', 'png','txt', 'gif','text','pdf','doc','zip'],   //文件格式
+        overwriteInitial: false,  // 覆盖初始的选中文件
+        maxFileSize: 1150801652,   //单个文件大小的最大值
+        maxFilesNum: 1, //
+        //allowedFileTypes: ['image', 'video', 'flash'],
+        slugCallback: function (filename) {
+            return filename.replace('(', '_').replace(']', '_');  // 更改默认的名字
+        }
+    });
+</script>
+</html>

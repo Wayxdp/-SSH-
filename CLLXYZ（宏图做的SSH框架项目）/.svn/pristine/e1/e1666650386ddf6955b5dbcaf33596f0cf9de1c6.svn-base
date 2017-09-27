@@ -1,0 +1,14 @@
+
+//根据楼盘id来选择楼栋
+function setBuilding() {
+    var buildings = $("#buildings").val();
+    alert(buildings);
+        $.post("/building/pagerBuildingBuildings?id=" + buildings,
+            function (data) {
+                if (data) {
+                    var buildingsSelect = $("#building");
+                    $.each(data.nameIdVOList, function (index, building) {
+                        buildingsSelect.append('<option value="' + building.id + '"> ' + building.name + '</option>');
+                    });
+            } "json"});
+}

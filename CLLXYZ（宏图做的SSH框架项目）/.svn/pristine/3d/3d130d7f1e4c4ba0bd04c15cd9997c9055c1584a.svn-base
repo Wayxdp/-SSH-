@@ -1,0 +1,27 @@
+/**
+ *
+ */
+function deleter() {
+    var row = $("#list").datagrid("getSelected");
+    if(row){
+        var json = {
+            "like.id": row.id
+        };
+        $.post(contextPath + "/like/deleteLike",
+            json,
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+
+            }, 'json'
+        );
+    }
+}
+
+function formatBuildings(value) {
+    return value.name;
+}

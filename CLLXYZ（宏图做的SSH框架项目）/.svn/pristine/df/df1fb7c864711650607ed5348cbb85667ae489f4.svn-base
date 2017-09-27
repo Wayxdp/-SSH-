@@ -1,0 +1,145 @@
+package com.ht.controller;
+
+import com.ht.bean.*;
+import com.ht.common.ControllerResult;
+import com.ht.common.EncryptUtil;
+import com.ht.common.Pager;
+import com.ht.service.*;
+import org.apache.log4j.Logger;
+
+import java.util.Calendar;
+import java.util.List;
+
+public class UserController extends AppController {
+
+    //需要输出log记录
+    private static final Logger logger = Logger.getLogger(AdminController.class);
+
+    private User user;              // getter setter
+
+    private ControllerResult controllerResult;  // getter
+    private List<Like> rows;                                // getter
+
+    private UserService userService; // setter
+    private String id;       // setter
+    private int total;      // setter
+    private int page;   //setter
+    private Short status; // setter
+
+    // getter setter
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    // getter
+    public List<Like> getRows() {
+        return rows;
+    }
+
+    //setter
+    public void setUserService(UserService userService) {
+        this.userService = userService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    /**
+     * 1.到添加页面，得到表单数据
+     */
+    public String toAddPage() {
+        return "toAddPage";
+    }
+
+    /**
+     * 2.校验手机号
+     */
+    public String checkPhone() {
+        User reg_user = userService.findByPhone(user.getPhone());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            controllerResult.setMessageColor("green");
+            return "phone_ok";
+        }
+        controllerResult = ControllerResult.getSuccessResult("该手机号已注册");
+        controllerResult.setMessageColor("red");
+        return "phone_no";
+    }
+
+    /**
+     * 3.校验邮箱
+     *
+     * @return
+     */
+    public String checkEmail() {
+        User reg_user = userService.findByEmail(user.getEmail());
+        if (reg_user == null) {
+            controllerResult = ControllerResult.getSuccessResult("✔");
+            return "email_ok";
+        }
+        controllerResult = ControllerResult.getSuccessResult("该邮箱已注册");
+        return "check_no";
+    }
+
+    /**
+     * 4.手机号和邮箱校验通过，实现注册功能
+     *
+     * @return
+     */
+    public String register() {
+        if (checkPhone().equals("phone_ok") && checkEmail().equals("email_ok")) {
+            String password = request.getParameter("user.pwd");
+            String comfirmPwd = request.getParameter("repassword");
+            String pwdStr = "";
+            pwdStr = EncryptUtil.md5(password);
+            user.setPwd(pwdStr);
+            userService.save(user);
+            return "register_success";
+        } else {
+            return "register_fail";
+        }
+    }
+
+    // 添加用户
+    public String saveUser() {
+        User user = new User();
+        user.setEmail("user1@qq.com");
+        user.setPhone("18870798915");
+        user.setPwd("Qpf0SxOVUjUkWySXOZ16kw==");
+        logger.trace("trace");
+        logger.warn("警告");
+        logger.info("提示信息");
+        //字段信息不完整···
+        userService.save(user);
+        return SUCCESS;
+    }
+//基本信息的查看
+    public String information(){
+        user = userService.foundById( id);
+        System.out.println(user);
+        if (user!=null){
+            controllerResult = ControllerResult.getSuccessResult("查看成功");
+            return  SUCCESS;
+        }else{
+            controllerResult = ControllerResult.getSuccessResult("查看失败");
+            return null;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+/**
+ * Created by ccf on 2017/9/4.
+ */
+//删除留言
+function removeComment(){
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        var json;
+        json = {
+            "id": row.id
+        }
+        confirm('确定要删除吗?');
+        $.post(contextPath + "/comment/removeComment",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, "json"
+        );
+    } else {
+        showAlert("请选择需要删除的评价！");
+    }
+}

@@ -1,0 +1,170 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.*;
+import com.ht.common.Constants;
+import com.ht.common.ControllerResult;
+import com.ht.common.Pager;
+import com.ht.controller.AppController;
+import com.ht.service.BuildingService;
+import com.ht.vo.NameIdVO;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class BuildingController extends AppController {
+
+    private Building building;
+
+    //提供set
+    private BuildingService buildingService;
+    private String id;
+    private Short status;
+    private Integer page;
+
+    //提供get
+    private ControllerResult controllerResult;
+    private Integer total;
+    private List<Building> rows;
+    private List<NameIdVO> nameIdVOList;
+
+
+    /***
+     * 根据楼盘id来查找楼栋
+     * @return
+     */
+    public String pagerBuildingBuildings() {
+        nameIdVOList = new ArrayList<>();
+        Pager<Building> roomPager1 = new Pager<>();
+        roomPager1.setParamStr(" where buildings_id='" + id + "'");
+        roomPager1.setPageSize(buildingService.count(roomPager1).intValue());
+        roomPager1 = buildingService.listPager(roomPager1);
+        List<Building> result = roomPager1.getResult();//获取到所有的楼栋
+        for (Building b : result) {
+            NameIdVO nameIdVO = new NameIdVO();
+            nameIdVO.setId(b.getId());
+            nameIdVO.setName(b.getName());
+            nameIdVOList.add(nameIdVO);
+        }
+        return SUCCESS;
+    }
+
+
+    /***
+     * 查看单个楼栋详情(修改信息)
+     * @return
+     */
+    public String foundById(){
+        building = buildingService.foundById(id);
+        return "showAlterBuilding";
+    }
+    /***
+     * 添加楼栋
+     * @return
+     */
+    public String saveBuilding() {
+        Building b1 = new Building(); //楼栋
+        b1.setName("楼栋的名称");
+        b1.setTotal_room(12);
+        b1.setTotal_lift(12);
+        b1.setTotal_floor(12);
+        b1.setFloor_rooms(12);
+        b1.setStatus(Constants.YES_STATUS);
+        b1.setCreated_time(Calendar.getInstance().getTime()); //获取当期系统时间
+        Buildings s = new Buildings(); // 楼盘
+        s.setId(id);//从页面获取传替到后台的id值
+        b1.setBuildings(s);
+        Agency agency = new Agency();
+        agency.setId("82d91e8f40b943f88ee5cf6cce0d81b2");// 楼栋与楼盘都应关联该经销商
+        b1.setAgency(agency);//从session里获取Agency的值
+        buildingService.save(b1);
+        return SUCCESS;
+    }
+
+    /***
+     * 修改楼栋
+     * @return
+     */
+    public String updateBuilding() {
+      try{
+          buildingService.update(building);
+          controllerResult = ControllerResult.getSuccessResult("修改楼栋成功");
+      }catch (Exception e) {
+          controllerResult = ControllerResult.getFailResult("修改楼栋失败");
+      }
+        return SUCCESS;
+    }
+
+    /***
+     * 更改楼栋状态（冻结，激活）
+     * @return
+     */
+    public String updateStatus() {
+        if(status != null) {
+            if (status == 1) {
+                buildingService.updateStatus(id, status);
+                controllerResult = ControllerResult.getSuccessResult("楼栋可用");
+            } else if (status == 0) {
+                controllerResult = ControllerResult.getFailResult("楼栋冻结成功");
+                buildingService.updateStatus(id, status);
+            }
+        }
+        return SUCCESS;
+    }
+
+    /***
+     * 楼栋的分页查看
+     * @return
+     */
+    public String pagerBuilding() {
+        int pagerSize = Integer.valueOf(request.getParameter("rows"));
+        Pager<Building> buildingPager = new Pager<>();
+        buildingPager.setPage(page); //得到用户在页面选择的第几页数据
+        buildingPager.setPageSize(pagerSize); //得到用户在设置页面分页显示多少数据
+        buildingPager = buildingService.listPager(buildingPager);
+        List<Building> result = buildingPager.getResult();//获取到所有的楼栋
+        rows = buildingPager.getResult();//查询出所有经销商
+        total = buildingService.count(buildingPager).intValue();//查询出经销商总数
+        return "pagerUser";
+    }
+
+    public Building getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(Building building) {
+        this.building = building;
+    }
+
+    public void setBuildingService(BuildingService buildingService) {
+        this.buildingService = buildingService;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ControllerResult getControllerResult() {
+        return controllerResult;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public List<Building> getRows() {
+        return rows;
+    }
+
+    public List<NameIdVO> getNameIdVOList() {
+        return nameIdVOList;
+    }
+}

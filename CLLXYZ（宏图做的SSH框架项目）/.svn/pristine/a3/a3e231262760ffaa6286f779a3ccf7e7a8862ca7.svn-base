@@ -1,0 +1,36 @@
+package com.ht.controller.entity;
+
+import com.ht.bean.Buildings;
+import com.ht.bean.Like;
+import com.ht.bean.User;
+import com.ht.controller.AppController;
+import com.ht.service.LikeService;
+
+import java.util.Calendar;
+
+
+/**
+ * Created by Administrator on 2017/8/28.
+ */
+public class LikeController extends AppController {
+    private LikeService likeService;  // setter
+
+    public void setLikeService(LikeService likeService) {
+        this.likeService = likeService;
+    }
+
+    public String addLike(){
+        System.out.println("nimamaipi");
+        Like like = new Like();
+        like.setCreated_time(Calendar.getInstance().getTime()); //点赞的时间
+        User user = new User();
+        user.setId("4028809b5e1c0348015e1c03cad90000");
+        like.setUser(user);
+        Buildings build = new Buildings();
+        build.setId("4028809b5e194a94015e194c1cd10000");
+        like.setBuildings(build);
+        likeService.save(like);
+        return SUCCESS;
+    }
+
+}

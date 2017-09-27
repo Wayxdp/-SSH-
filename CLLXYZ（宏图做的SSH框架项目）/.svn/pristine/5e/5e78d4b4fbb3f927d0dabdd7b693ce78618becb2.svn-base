@@ -1,0 +1,94 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: xdp
+  Date: 2017/8/29
+  Time: 15:02
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<% String path = request.getContextPath(); %>
+<html>
+<head>
+    <title>经销商增加员工</title>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/bootstrap/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path %>/public/plugins/easyui/themes/bootstrap/easyui.css"/>
+</head>
+<body>
+<div class="col-lg-12">
+
+    <form class="form-horizontal" id="addForm">
+        <input type="hidden" id="id_input" name="employee.agency.id" value="${sessionScope.agency.id}" />
+
+        <div class="form-group">
+            <label for="buildings" class="col-sm-2 control-label">选择楼盘</label>
+            <div class="col-sm-6">
+                <select id="buildings" name="room.buildings.id" class="form-control easyui-validatebox data-options= required:true, novalidate:true">
+
+                </select>
+            </div>
+            <a style="position: absolute;top: auto;left: auto;" class="btn btn-primary btn-sm" onclick="setBuilding();">确认</a>
+        </div>
+
+        <div class="form-group">
+            <label for="building" class="col-sm-2 control-label">选择楼栋</label>
+            <div class="col-sm-6">
+                <select id="building" name="room.building.id" class="form-control easyui-validatebox data-options= required:true, novalidate:true">
+
+                </select>
+            </div>
+            <a  href="#" style="position: absolute;top: auto;left: auto;" class="btn btn-primary btn-sm" onclick="setHouse();">确认</a>
+
+            </div>
+
+            <!--隐藏的div-->
+            <div id="hiddenDiv">
+
+                <%--<div class="form-group">
+                    <label for="building" class="col-sm-2 control-label">选择一号房间户型</label>
+                    <div class="col-sm-6">
+                        <select id="building1" name="room.building.id" class="form-control ">
+
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" &lt;%&ndash;style="display:none;"&ndash;%&gt; >
+                    <label for="building" class="col-sm-2 control-label">选择二号房间户型</label>
+                    <div class="col-sm-6">
+                        <select id="building2" name="room.building.id" class="form-control ">
+
+                        </select>
+                    </div>
+                </div>--%>
+            </div>
+
+
+        <div class="form-group ">
+            <label class="col-sm-2 control-label ">创建时间</label>
+            <div class="col-sm-4">
+                <input class="easyui-datetimebox form-control easyui-validatebox easyui-datetimebox" style="width:200px"
+                       data-options="required:true, novalidate:true"
+                       id="created_time" name="employee.created_time" />
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="<%=path %>/public/plugins/jquery.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/jquery.easyui.min.js"></script>
+<script src="<%=path %>/public/plugins/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script src="<%=path %>/public/plugins/easyui/site-easyui.js"></script>
+
+<!--自己的js-->
+<script src="<%= path %>/public/js/xie/agency_room.js"></script>
+<script src="<%=path %>/public/js/xie/agency.js"></script>
+
+<script>
+    $(function () {
+        setBuildings("${sessionScope.agency.id}");
+    })
+</script>
+</body>
+</html>

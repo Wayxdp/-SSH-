@@ -1,0 +1,260 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Administrator
+  Date: 2017/8/23
+  Time: 8:36
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String path = request.getContextPath();
+%>
+<html>
+<head>
+    <title>房产网</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="<%=path%>/public/js/ye/index-js/bootstrap.js"></script>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/main.css">
+    <link rel="stylesheet" href="<%=path%>/public/css/ye/index-css/index-img.css">
+    <%--以下为图片效果样式--%>
+    <link rel="stylesheet" type="text/css" href="<%=path%>/public/css/ye/index-img-style/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="<%=path%>/public/css/ye/index-img-style/demo.css" />
+    <link rel="stylesheet" type="text/css" href="<%=path%>/public/css/ye/index-img-style/set2.css" />
+    <link rel="stylesheet" type="text/css" href="<%=path%>/public/css/ye/index-img-style/font-awesome.min.css" />
+
+</head>
+<body class="container" style="height: auto">
+<div class="container">
+    <%-- 导航条 --%>
+    <nav class="navbar navbar-default " role="navigation">
+        <div class="container-fluid">
+
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">房产网</a>
+            </div>
+
+            <div id="nav" style="margin-left: 30px;">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">所有楼盘</a></li>
+                    <li><a href="#">楼盘活动</a></li>
+                    <li><a href="#">文章资讯</a></li>
+                    <%-- 经销商登录注册--%>
+                    <li class="dropdown" style="margin-left: 500px;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            注册
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">经销商入驻</a></li>
+                            <li><a href="#">用户注册</a></li>
+                        </ul>
+                    </li>
+                    <%-- 用户登录注册--%>
+                    <li class="dropdown" style="margin-left: 40px;">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            登入
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">经销商登入</a></li>
+                            <li><a href="#">用户登入</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+    </nav>
+
+    <%--轮播图广告--%>
+    <div class="row ">
+        <div class="col-lg-12 col-md-12  col-sm-4">
+            <div id="myCarousel" class="carousel slide" style="border: solid orangered 1px;">
+                <!-- 轮播（Carousel）指标 -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    <li data-target="#myCarousel" data-slide-to="1"></li>
+                    <li data-target="#myCarousel" data-slide-to="2"></li>
+                </ol>
+                <!-- 轮播（Carousel）项目 -->
+                <div class="carousel-inner" style="margin-right: auto;margin-left: auto">
+                    <div class="item active">
+                        <img src="<%=path%>/public/images/slide1.png" alt="First slide" style="width: 1170px;height:500px;">
+                    </div>
+                    <div class="item">
+                        <img src="<%=path%>/public/images/slide2.png" alt="Second slide"
+                             style="width: 1170px;height:500px;">
+                    </div>
+                    <div class="item">
+                        <img src="<%=path%>/public/images/slide3.png" alt="Third slide" style="width: 1170px;height:500px;">
+                    </div>
+                </div>
+
+                <!-- 轮播（Carousel）导航 -->
+                <a class="carousel-control left" href="#myCarousel"
+                   data-slide="prev">&lsaquo;</a>
+                <a class="carousel-control right" href="#myCarousel"
+                   data-slide="next">&rsaquo;</a>
+            </div>
+        </div>
+    </div>
+
+    <%-- 楼盘的筛选 --%>
+    <div class="row" style="margin-top: 50px;">
+        <div class="col-lg-12 col-md-12  col-sm-4 " style="height: auto;margin-top: 20px;border: solid orangered 1px;">
+            <%-- 区域筛选 --%>
+            <div name="selectArea">
+                <div class="docs-methods">
+                    <form class="form-inline">
+                        <div id="distpicker">
+                            <div class="form-group">
+                                <label class="sr-only" for="province">Province</label>
+                                <select class="form-control" id="province"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="city">City</label>
+                                <select class="form-control" id="city"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="district">District</label>
+                                <select class="form-control" id="district"></select>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-primary" id="reset" type="button">重置</button>
+                                <button class="btn btn-warning" id="reset-deep" type="button">清空</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <%-- 名称搜索 --%>
+                <div style="float: left;margin-top: 1px;margin-left: 60px; ">
+                    <label for="building-name"><a>楼盘名称</a></label>
+                    <input id="building-name" type="text" name="building-name"/>
+                    <button onclick="a()">搜索</button>
+                </div>
+            </div>
+            <%--根据筛选地区显示八个楼盘--%>
+            <div id="buildings-img" class="container" style="float: left;margin-left: -20px;margin-top: 20px;">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <%--热门楼盘展示--%>
+    <div class="row">
+        <div id="hot-buildings" class="col-lg-12 col-md-12  col-sm-4 "
+             style="margin-top: 30px; border: solid orangered 1px;">
+            <a style="color: #ac2925;font-size: 18px;">热门楼盘16个</a>
+            <div id="buildings-img" class="container" style="float: left;margin-left: -20px;">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="grid">
+                            <figure class="effect-winston">
+                            <a href="#">
+                                <img src="<%=path%>/public/images/ye/buildings-img/buildings03.jpg" style="width: 310px;height: 200px;"/>
+                            </a>
+                                <figcaption>
+                                    <h2>热销楼盘 <span>楼盘01</span></h2>
+                                    <p>
+                                        <a href="#" title="点赞" onclick="zan();"><i class="fa fa-fw fa-star-o"></i></a>
+                                        <a href="#" title="评论"><i class="fa fa-fw fa-comments-o"></i></a>
+                                        <a href="#" title="留言"><i class="fa fa-fw fa-envelope-o"></i></a>
+                                    </p>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div style="color: red;">楼盘名称：</div>
+                        <div style="color: #533fff;">地址：</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%--热门户型展示--%>
+    <div class="row">
+        <div id="hot-house" class="col-lg-12 col-md-12  col-sm-4 "
+             style="margin-top: 30px; border: solid orangered 1px;">
+            <a style="color: #ac2925;font-size: 18px;">热门户型8个</a>
+            <div id="buildings-img" class="container" style="float: left;margin-left: -20px;">
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                    <div class="col-md-3">
+                        <img src="<%=path%>/public/images/buildings01.jpg" class="img-rounded"/>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <%--活动的区域--%>
+    <div class="row">
+        <div id="building-activities" class="col-lg-12 col-md-4  col-sm-4 "
+             style="margin-top: 30px; border: solid orangered 1px;">
+            <a style="color: #ac2925;font-size: 18px;">活动区</a>
+            <div id="buildings-img" class="container" style="float: left;margin-left: -20px;">
+                <div class="row" style="margin-left: 30px;">
+                    <div class="col-md-4">
+                        <img src="<%=path%>/public/images/ye/buildings-img/buildings01.jpg" style="width:300px; " class="img-rounded"/>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="<%=path%>/public/images/buildings01.jpg" style="width:300px; " class="img-rounded"/>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="<%=path%>/public/images/buildings01.jpg" style="width:300px; " class="img-rounded"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <%--版权信息--%>
+        <div>
+            <jsp:include page="include_page/footer.jsp" flush="true"></jsp:include>
+        </div>
+
+</div>
+<script type="text/javascript">
+    function zan() {
+        alert("点赞成功！");
+    }
+</script>
+<script src="<%=path%>/public/js/ye/index-js/jquery.min.js"></script>
+<script src="<%=path%>/public/js/ye/index-js/bootstrap.min.js"></script>
+<script src="<%=path%>/public/js/ye/index-js/areaSelect.js"></script>
+<script src="<%=path%>/public/js/ye/index-js/distpicker.data.js"></script>
+<script src="<%=path%>/public/js/ye/index-js/distpicker.js"></script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+/**
+ * 预约相关js
+ */
+
+function formatHouse(value) {
+    return value.name;
+}
+function formatName(value) {
+    return value.name;
+}
+function formatUser(value) {
+    return value.name;
+}
+
+
+function formatEmployee(value) {
+    return value.basic_salary;
+}
+
+function showAppEdit() {
+    var jsonStr = '{"appointment.app_status":"app_status_value","appointment.id":"id_value"}';
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        jsonStr = jsonStr.replace("app_status_value", row.app_status).replace("id_value", row.id);
+        $("#editAppForm").form("load", JSON.parse(jsonStr));
+        openWin("editApp");
+    }else {
+        showAlert("请选择需要修改的栏目！");
+    }
+}
+
+//更新购房预约状态
+function updateAppStatus() {
+        $.post(contextPath + "/appointment/appStatusAppointment",
+            $("#editAppForm").serialize(),
+            function(data) {
+                    $("#list").datagrid("reload");
+                    $("#editAppForm").form("clear");
+            }, 'json'
+        );
+        closeWin("editApp");
+
+}
+
+/**
+ * 员工相关的js
+ */
+function showEmpEdit() {
+    $('input').attr('readonly',false);
+    $('input').removeAttr("disabled");
+    $('#editbtn').attr('style', '');
+    $('input').css('background-color','#def6ff');
+    $('#editInfo').css('display','none');
+    $('#phoneid').css('display','none');
+    $('#basic_salaryid').css('display','none');
+}
+
+
+/**
+ * 修改员工的信息
+ */
+function updateEmpInfo() {
+    if (formValidate("editEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmployeeSelf",
+            $("#editEmpForm").serialize(),
+            function (data) {
+                showAlert(data.controllerResult.message);
+                top.location.reload();
+            },
+            "json"
+        );
+    }
+}
+
+/**
+ * 修改员工密码
+ */
+
+function updateEmpPwd() {
+    if (formValidate("pwdEmpForm")) {
+        $.post(
+            contextPath+"/employee/updateEmpPwd",
+            $("#pwdEmpForm").serialize(),
+            function (data) {
+                if (data.controllerResult.result=="success"){
+                    alert(data.controllerResult.message);
+                    window.location.reload();
+                }else{
+                    showAlert(data.controllerResult.message);
+                }
+            },
+            "json"
+        );
+    }
+}
+
+/**
+ *上传头像
+ */
+function uploadHeadIcon() {
+    alert("upload");
+    $.post(
+        contextPath+"/employee/uploadHeadIcon",
+        $("#uploadFrom").serialize(),
+        function (data) {
+
+        },
+        "json"
+    );
+}
+
+/**
+ *销售记录管理
+ */
+/**
+ *激活与冻结记录
+ */
+function updateStatusSale(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        if(row.status==status){
+            showAlert("无需"+(status=='1'?"激活":"冻结")+"该记录！");
+            return;
+        }
+        var json;
+        if(status=='1'){//激活
+            json = {
+                "status": '1',
+                "id": row.id
+            }
+        }else if(status=='0'){//冻结
+            json = {
+                "status": '0',
+                "id": row.id
+            }
+        }
+        $.post(
+            contextPath+"/sale/statusSale",
+            json,
+            function (data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                } else {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                }
+            },
+            "json"
+        );
+    }else {
+        showAlert("请选择需要操作的栏目！");
+    }
+}
+/**
+ * 销售记录的修改
+ */
+function showSaleEdit() {
+    var jsonStr = '{"sale.id":"id_value","sale.unit_price":"unit_value","sale.discount":"discount_value",' +
+        '"sale.total_cost":"cost_value","sale.sale_time":"sale_time_value","sale.created_time":"ctime_value"}';
+    var row = $("#list").datagrid("getSelected");
+    if (row){
+        jsonStr = jsonStr.replace("id_value",row.id).replace("unit_value", row.unit_price).replace("discount_value", row.discount).replace("cost_value",row.total_cost)
+            .replace("sale_time_value",row.sale_time).replace("ctime_value",row.created_time);
+        $("#editSaleForm").form("load", JSON.parse(jsonStr));
+        openWin("editSale");
+    }else {
+        showAlert("请选择需要修改的栏目！");
+    }
+}
+function updateSale() {
+    $.post(
+        contextPath+"/sale/updateSale",
+        $("#editSaleForm").serialize(),
+        function (data) {
+            $("#list").datagrid("reload");
+            showAlert(data.controllerResult.message);
+        },
+        "json"
+    );
+    closeWin("editSale");
+}
+/**
+ *客户信息
+ */
+function showCustomer() {
+    var row = $("#list").datagrid("getSelected");
+    if(row){
+        alert("客户姓名："+row.customer.name+"\n联系电话："+row.customer.phone+
+        "\n房号："+row.room.name);
+
+    }else{
+        showAlert("请选择需要操作的栏目！");
+    }
+
+}
+/**
+ *添加销售记录
+ */
+function saveSale() {
+    $.get(
+        contextPath+"/sale/saveSale",
+        $("#saveSaleForm").serialize(),
+        function (data) {
+            alert(data.controllerResult.message);
+            window.location.reload();
+        },
+        "json"
+    );
+}
+function setCustomers(id) {
+    $.post(
+        contextPath+"/customer/pagerCustomerEmployeeVO?emp_id=" + id,
+        function (data) {
+            if (data) {
+                var customerSelect = $("#customers");
+                $.each(data.nameIdVOList, function (index, customers) {
+                    customerSelect.append('<option value="' + customers.id + '"> ' + customers.name + '</option>');
+                });
+            }
+        }, "json"
+    );
+}
+function setRooms() {
+    $.post(
+        contextPath+"/room/getRoomId",
+        function (data) {
+            if (data) {
+                var roomSelect = $("#rooms");
+                $.each(data.nameIdVOList, function (index, rooms) {
+                    roomSelect.append('<option value="' + rooms.id + '"> ' + rooms.name + '</option>');
+                });
+            }
+        },
+        "json"
+    );
+}

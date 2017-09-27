@@ -1,0 +1,75 @@
+//显示员工
+function showActivityDetail() {
+    var row = $("#list").datagrid("getSelected"); // 获取数据网格中被选择的单行 getSelections获取数据网格中选中的多行
+    if (row) {
+       window.location.href = contextPath +"/activity/adminActivityDetail?id=" +row.id;
+    } else {
+        showAlert("请选择需要查看的活动！");
+    }
+
+}
+
+function editsActivity() {
+    var row = $("#list").datagrid("getSelected"); // 获取数据网格中被选择的单行 getSelections获取数据网格中选中的多行
+    if (row) {
+        window.location.href = contextPath+"/activity/adminEditActivity?id="+row.id;
+    } else {
+        showAlert("请选择需要修改的活动！");
+    }
+
+}
+
+//修改员工
+function editActivity() {
+    if (formValidate("editForm")) {
+        $.post(contextPath + "/activity/updateActivity",
+            $("#editForm").serialize(),
+            function(data) {
+                if (data.controllerResult.result == "success") {
+                    showAlert(data.controllerResult.message);
+                    $("#list").datagrid("reload");
+                    $("#editForm").form("clear");
+                } else {
+                    showAlert(data.controllerResult.message);
+                }
+            }, 'json'
+        );
+        closeWin("editWin");
+    }
+}
+
+//验证员工是否可用
+function validActivity(status) {
+    var row = $("#list").datagrid("getSelected");
+    if (row) {
+        if (row.status == status) {
+            showAlert("该活动已被" + (status == 1 ? "激活" : "冻结"));
+            return;
+        }
+        var json;
+        if (status == 1) {
+            // 激活
+            json = {
+                "status": 1,
+                "id": row.id
+            }
+        } else if (status == 0) {
+            // 冻结
+            json = {
+                "status": 0,
+                "id": row.id
+            }
+        }
+        $.post(contextPath + "/activity/statusActivity",
+            json,
+            function (data) {
+                showAlert(data.controllerResult.message);
+                if (data.controllerResult.result == "success") {
+                    $("#list").datagrid("reload");
+                }
+            }, "json"
+        );
+    } else {
+        showAlert("请选择需要" + (status == 1 ? "激活" : "冻结") + "的活动！");
+    }
+}
